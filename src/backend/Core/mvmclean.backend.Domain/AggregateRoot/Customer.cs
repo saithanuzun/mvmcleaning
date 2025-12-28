@@ -4,8 +4,8 @@ namespace mvmclean.backend.Domain.AggregateRoot;
 
 public class Customer : Common.AggregateRoot
 {
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
+    public string? FirstName { get; private set; }
+    public string? LastName { get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }
     public string? Email { get; private set; }
     private readonly List<Address> _addresses = new();
@@ -13,7 +13,8 @@ public class Customer : Common.AggregateRoot
 
     private Customer() { }
 
-    public static Customer Create(string firstName, string lastName, PhoneNumber phoneNumber, string? email = null)
+    public static Customer Create(PhoneNumber phoneNumber, string? email = null,
+        string firstName = null, string lastName = null)
     {
         return new Customer
         {
@@ -30,15 +31,6 @@ public class Customer : Common.AggregateRoot
         {
             _addresses.Add(address);
         }
-    }
-
-    public void UpdateContactInfo(string firstName, string lastName, PhoneNumber phoneNumber, string? email)
-    {
-        FirstName = firstName;
-        LastName = lastName;
-        PhoneNumber = phoneNumber;
-        Email = email;
-        UpdatedAt = DateTime.UtcNow;
     }
 
     public string FullName => $"{FirstName} {LastName}";

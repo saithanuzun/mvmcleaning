@@ -12,6 +12,7 @@ public class BookingConfirmedEvent : IDomainEvent
 
     public BookingConfirmedEvent(Guid bookingId, Guid employeeId)
     {
+        EventId = Guid.NewGuid();
         BookingId = bookingId;
         EmployeeId = employeeId;
         OccurredOn = DateTime.UtcNow;

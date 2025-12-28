@@ -9,10 +9,11 @@ public class BookingCreatedEvent : IDomainEvent
     public DateTime OccurredOn { get; }
     public Guid EventId { get; }
 
-    public BookingCreatedEvent(Guid bookingId, Guid customerId)
+    public BookingCreatedEvent(Guid bookingId, Guid customerId )
     {
         BookingId = bookingId;
         CustomerId = customerId;
+        EventId = Guid.NewGuid();
         OccurredOn = DateTime.UtcNow;
     }
 }

@@ -6,4 +6,15 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Caching\" />
+      <Folder Include="FileStorage\" />
+      <Folder Include="Identity\" />
+      <Folder Include="Messaging\" />
+      <Folder Include="Persistence\Configurations\" />
+      <Folder Include="Persistence\Migrations\" />
+      <Folder Include="Persistence\Repositories\" />
+      <Folder Include="Services\" />
+    </ItemGroup>
+
 </Project>

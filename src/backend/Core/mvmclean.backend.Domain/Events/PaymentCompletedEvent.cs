@@ -12,6 +12,7 @@ public class PaymentCompletedEvent : IDomainEvent
 
     public PaymentCompletedEvent(Guid bookingId, Guid paymentId, decimal amount)
     {
+        EventId = Guid.NewGuid();
         BookingId = bookingId;
         PaymentId = paymentId;
         Amount = amount;

@@ -12,6 +12,7 @@ public class EmployeeAssignedEvent : IDomainEvent
 
     public EmployeeAssignedEvent(Guid bookingId, Guid employeeId)
     {
+        EventId = Guid.NewGuid();
         BookingId = bookingId;
         EmployeeId = employeeId;
         OccurredOn = DateTime.UtcNow;

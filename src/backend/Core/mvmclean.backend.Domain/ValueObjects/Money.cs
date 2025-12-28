@@ -37,4 +37,9 @@ public class Money : ValueObject
     }
 
     public override string ToString() => $"{Currency} {Amount:F2}";
+
+    public Money Subtract(Money basePrice)
+    {
+        return Create(this.Amount-basePrice.Amount, Currency);
+    }
 }
