@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mvmclean.backend.Applicatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mvmclean.backend.Infrastructure", "src\backend\Infrastructure\mvmclean.backend.Infrastructure\mvmclean.backend.Infrastructure.csproj", "{36C8B39D-FC8E-438F-9E9C-AE867DBB6183}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mvmclean.backend.WebApp", "src\backend\Presentation\mvmclean.backend.WebApp\mvmclean.backend.WebApp.csproj", "{31DAFD30-689A-49E2-BED2-8DF344D89CE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,7 @@ Global
 		{3FBE5B49-DE77-4F67-8CD7-814F8A0FCB2B} = {C64DF8F2-394D-45B1-AB01-15EDDE0F9A8D}
 		{B83F3C1F-2320-4AE7-83FF-E0BE926DFAF5} = {C64DF8F2-394D-45B1-AB01-15EDDE0F9A8D}
 		{36C8B39D-FC8E-438F-9E9C-AE867DBB6183} = {AA441227-78B6-4248-9E7C-C969E30270D5}
+		{31DAFD30-689A-49E2-BED2-8DF344D89CE4} = {52502B73-1CFD-4499-B892-E9D131E7162A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3FBE5B49-DE77-4F67-8CD7-814F8A0FCB2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -43,5 +46,9 @@ Global
 		{36C8B39D-FC8E-438F-9E9C-AE867DBB6183}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36C8B39D-FC8E-438F-9E9C-AE867DBB6183}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36C8B39D-FC8E-438F-9E9C-AE867DBB6183}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31DAFD30-689A-49E2-BED2-8DF344D89CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31DAFD30-689A-49E2-BED2-8DF344D89CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31DAFD30-689A-49E2-BED2-8DF344D89CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31DAFD30-689A-49E2-BED2-8DF344D89CE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
