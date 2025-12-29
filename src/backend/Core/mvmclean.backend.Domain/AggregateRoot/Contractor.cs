@@ -11,6 +11,9 @@ public class Contractor : Common.AggregateRoot
     public PhoneNumber PhoneNumber { get; private set; }
     public string Email { get; private set; }
     public bool IsActive { get; private set; }
+    private readonly List<Review> _reviews = new();
+
+    public IReadOnlyCollection<Review> Reviews => _reviews.AsReadOnly();
 
     private readonly List<WorkingHours> _workingHours = new();
     public IReadOnlyCollection<WorkingHours> WorkingHours => _workingHours.AsReadOnly();
@@ -101,4 +104,10 @@ public class Contractor : Common.AggregateRoot
     public void Deactivate() => IsActive = false;
 
     public string FullName => $"{FirstName?.Trim()} {LastName?.Trim()}".Trim();
+    
+    public void AddReview(Review review)
+    {
+        _reviews.Add(review);
+    }
+
 }

@@ -5,7 +5,7 @@ namespace mvmclean.backend.Domain.Entities;
 
 public class ContractorCoverage : Entity
 {
-    public Guid EmployeeId { get; private set; }
+    public Guid ContractorId { get; private set; }
     public Postcode Postcode { get; private set; }
     public bool IsActive { get; private set; }
 
@@ -15,7 +15,7 @@ public class ContractorCoverage : Entity
     {
         return new ContractorCoverage
         {
-            EmployeeId = employeeId,
+            ContractorId = employeeId,
             Postcode = postcode,
             IsActive = true
         };

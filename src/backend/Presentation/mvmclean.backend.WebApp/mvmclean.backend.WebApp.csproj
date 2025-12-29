@@ -6,4 +6,18 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Areas\Admin\Controllers\" />
+      <Folder Include="Areas\Admin\Models\" />
+      <Folder Include="Areas\Admin\Views\" />
+      <Folder Include="Areas\Admin\wwwroot\" />
+      <Folder Include="Areas\Contractor\Controllers\" />
+      <Folder Include="Areas\Contractor\Models\" />
+      <Folder Include="Areas\Contractor\Views\" />
+      <Folder Include="Areas\Contractor\wwwroot\" />
+      <Folder Include="Views\Booking\" />
+      <Folder Include="Views\Services\" />
+      <Folder Include="Views\Shared\Components\" />
+    </ItemGroup>
+
 </Project>

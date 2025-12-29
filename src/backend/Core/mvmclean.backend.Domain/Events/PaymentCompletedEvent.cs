@@ -2,20 +2,16 @@ using mvmclean.backend.Domain.Common;
 
 namespace mvmclean.backend.Domain.Events;
 
-public class PaymentCompletedEvent : IDomainEvent
+public class PaymentCompletedEvent : DomainEvent
 {
     public Guid BookingId { get; }
     public Guid PaymentId { get; }
     public decimal Amount { get; }
-    public DateTime OccurredOn { get; }
-    public Guid EventId { get; }
 
-    public PaymentCompletedEvent(Guid bookingId, Guid paymentId, decimal amount)
+    public PaymentCompletedEvent(Guid bookingId, Guid paymentId, decimal amount): base()
     {
-        EventId = Guid.NewGuid();
         BookingId = bookingId;
         PaymentId = paymentId;
         Amount = amount;
-        OccurredOn = DateTime.UtcNow;
     }
 }

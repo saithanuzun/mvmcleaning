@@ -2,19 +2,14 @@ using mvmclean.backend.Domain.Common;
 
 namespace mvmclean.backend.Domain.Events;
 
-public class EmployeeAssignedEvent : IDomainEvent
+public class EmployeeAssignedEvent : DomainEvent
 {
     public Guid BookingId { get; }
     public Guid EmployeeId { get; }
-    public DateTime OccurredOn { get; }
     
-    public Guid EventId { get; }
-
-    public EmployeeAssignedEvent(Guid bookingId, Guid employeeId)
+    public EmployeeAssignedEvent(Guid bookingId, Guid employeeId): base()
     {
-        EventId = Guid.NewGuid();
         BookingId = bookingId;
         EmployeeId = employeeId;
-        OccurredOn = DateTime.UtcNow;
     }
 }

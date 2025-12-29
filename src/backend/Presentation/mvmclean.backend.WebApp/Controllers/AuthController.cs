@@ -1,6 +1,6 @@
 namespace mvmclean.backend.WebApp.Controllers;
 
-public class HomeController : BaseController
+public class AuthController
 {
     
 }

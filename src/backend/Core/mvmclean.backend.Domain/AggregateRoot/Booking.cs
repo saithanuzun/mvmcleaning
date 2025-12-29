@@ -29,7 +29,7 @@ public class Booking : Common.AggregateRoot
     {
     }
 
-    public static Booking Create(Customer customer, Address serviceAddress, TimeSlot scheduledSlot, IPricingService pricingService = null)
+    public static Booking Create(Customer customer, Address serviceAddress, TimeSlot scheduledSlot, IPricingService pricingService )
     {
         var booking = new Booking
         {
@@ -43,7 +43,6 @@ public class Booking : Common.AggregateRoot
             PostcodeSurcharge = Money.Create(0)
         };
 
-        // Calculate initial postcode surcharge if pricing service provided
         if (pricingService != null)
         {
             booking.UpdatePostcodePricing(pricingService);
@@ -61,8 +60,8 @@ public class Booking : Common.AggregateRoot
         {
             ServiceId = service.Id,
             Service = service,
-            BasePrice = basePrice, // Store base price
-            AdjustedPrice = adjustedPrice, // Store postcode-adjusted price
+            BasePrice = basePrice, 
+            AdjustedPrice = adjustedPrice, 
             Quantity = quantity
         };
         
@@ -70,14 +69,13 @@ public class Booking : Common.AggregateRoot
         RecalculateTotalPrice();
     }
 
-    // Alternative method if you want to calculate price outside
     public void AddServiceWithAdjustedPrice(Service service, Money adjustedPrice, int quantity = 1)
     {
         var item = new BookingItem
         {
             ServiceId = service.Id,
             Service = service,
-            BasePrice = adjustedPrice, // In this case, price is already adjusted
+            BasePrice = adjustedPrice, 
             AdjustedPrice = adjustedPrice,
             Quantity = quantity
         };
@@ -93,7 +91,6 @@ public class Booking : Common.AggregateRoot
             (total, item) => total.Add(item.AdjustedPrice.Multiply(item.Quantity))
         );
         
-        // Calculate base price and surcharge
         BasePrice = _items.Aggregate(
             Money.Create(0),
             (total, item) => total.Add(item.BasePrice.Multiply(item.Quantity))
@@ -102,9 +99,8 @@ public class Booking : Common.AggregateRoot
         PostcodeSurcharge = TotalPrice.Subtract(BasePrice);
     }
 
-    // Update pricing if postcode changes or service list changes
     public void UpdatePostcodePricing(IPricingService pricingService)
-    {
+    {                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
         foreach (var item in _items)
         {
             // Only recalculate if we have the base price
@@ -114,9 +110,8 @@ public class Booking : Common.AggregateRoot
             }
         }
         RecalculateTotalPrice();
-    }
+    }                                                           
 
-    // Method to change service address with pricing update
     public void UpdateServiceAddress(Address newAddress, IPricingService pricingService)
     {
         ServiceAddress = newAddress;
@@ -124,7 +119,6 @@ public class Booking : Common.AggregateRoot
         UpdatedAt = DateTime.UtcNow;
     }
 
-    // Rest of the methods remain the same...
     public void AssignEmployee(Contractor contractor)
     {
         if (!contractor.IsAvailableAt(ScheduledSlot, ServiceAddress.Postcode))
