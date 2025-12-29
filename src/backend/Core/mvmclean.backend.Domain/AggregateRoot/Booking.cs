@@ -10,8 +10,8 @@ public class Booking : Common.AggregateRoot
 {
     public Guid CustomerId { get; private set; }
     public Customer Customer { get; private set; }
-    public Guid? EmployeeId { get; private set; }
-    public Employee? Employee { get; private set; }
+    public Guid? ContractorId { get; private set; }
+    public Contractor? Contractor { get; private set; }
     public Address ServiceAddress { get; private set; }
     public TimeSlot ScheduledSlot { get; private set; }
     public BookingStatus Status { get; private set; }
@@ -125,18 +125,18 @@ public class Booking : Common.AggregateRoot
     }
 
     // Rest of the methods remain the same...
-    public void AssignEmployee(Employee employee)
+    public void AssignEmployee(Contractor contractor)
     {
-        if (!employee.IsAvailableAt(ScheduledSlot, ServiceAddress.Postcode))
+        if (!contractor.IsAvailableAt(ScheduledSlot, ServiceAddress.Postcode))
         {
             throw new InvalidOperationException("Employee is not available for this time slot");
         }
 
-        EmployeeId = employee.Id;
-        Employee = employee;
+        ContractorId = contractor.Id;
+        Contractor = contractor;
         UpdatedAt = DateTime.UtcNow;
 
-        AddDomainEvent(new EmployeeAssignedEvent(Id, employee.Id));
+        AddDomainEvent(new EmployeeAssignedEvent(Id, contractor.Id));
     }
 
     public void Confirm()
@@ -144,13 +144,13 @@ public class Booking : Common.AggregateRoot
         if (Status != BookingStatus.Pending)
             throw new InvalidOperationException("Only pending bookings can be confirmed");
 
-        if (EmployeeId == null)
+        if (ContractorId == null)
             throw new InvalidOperationException("Cannot confirm booking without assigned employee");
 
         Status = BookingStatus.Confirmed;
         UpdatedAt = DateTime.UtcNow;
 
-        AddDomainEvent(new BookingConfirmedEvent(Id, EmployeeId.Value));
+        AddDomainEvent(new BookingConfirmedEvent(Id, ContractorId.Value));
     }
 
     public void Start()

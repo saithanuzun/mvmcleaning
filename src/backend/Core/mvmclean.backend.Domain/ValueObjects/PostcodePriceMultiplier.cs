@@ -13,7 +13,7 @@ public class PostcodePriceMultiplier : ValueObject
         PostcodePrefix = postcodePrefix;
         Multiplier = multiplier;
         AdditionalFee = additionalFee;
-    }
+    }        
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

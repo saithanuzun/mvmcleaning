@@ -4,7 +4,7 @@ using WorkingHours = mvmclean.backend.Domain.ValueObjects.WorkingHours;
 
 namespace mvmclean.backend.Domain.AggregateRoot;
 
-public class Employee : Common.AggregateRoot
+public class Contractor : Common.AggregateRoot
 {
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
@@ -15,19 +15,19 @@ public class Employee : Common.AggregateRoot
     private readonly List<WorkingHours> _workingHours = new();
     public IReadOnlyCollection<WorkingHours> WorkingHours => _workingHours.AsReadOnly();
 
-    private readonly List<EmployeeCoverage> _coverageAreas = new();
-    public IReadOnlyCollection<EmployeeCoverage> CoverageAreas => _coverageAreas.AsReadOnly();
+    private readonly List<ContractorCoverage> _coverageAreas = new();
+    public IReadOnlyCollection<ContractorCoverage> CoverageAreas => _coverageAreas.AsReadOnly();
     
     private readonly List<TimeSlot> _unavailableSlots = new();
     public IReadOnlyCollection<TimeSlot> UnavailableSlots => _unavailableSlots.AsReadOnly();
 
-    private Employee()
+    private Contractor()
     {
     }
 
-    public static Employee Create(string firstName, string lastName, PhoneNumber phoneNumber, string email)
+    public static Contractor Create(string firstName, string lastName, PhoneNumber phoneNumber, string email)
     {
-        return new Employee
+        return new Contractor
         {
             FirstName = firstName,
             LastName = lastName,
@@ -52,7 +52,7 @@ public class Employee : Common.AggregateRoot
     {
         if (!_coverageAreas.Any(c => c.Postcode.Equals(postcode) && c.IsActive))
         {
-            _coverageAreas.Add(EmployeeCoverage.Create(Id, postcode));
+            _coverageAreas.Add(ContractorCoverage.Create(Id, postcode));
         }
     }
 

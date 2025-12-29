@@ -53,16 +53,14 @@ public class PricingService: IPricingService
         if (string.IsNullOrWhiteSpace(postcode.Value))
             return _postcodeMultipliers["DEFAULT"];
 
-        var normalizedPostcode = postcode.Value;
+        var normalizedPostcode = postcode.Value.Normalize();
         
-        // Check for exact prefix matches
         foreach (var prefix in _postcodeMultipliers.Keys.Where(k => k != "DEFAULT"))
         {
             if (normalizedPostcode.StartsWith(prefix))
                 return _postcodeMultipliers[prefix];
         }
 
-        // Check area codes (first letter for UK postcodes)
         if (normalizedPostcode.Length > 0)
         {
             var areaCode = normalizedPostcode[0].ToString();

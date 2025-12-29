@@ -3,17 +3,17 @@ using mvmclean.backend.Domain.ValueObjects;
 
 namespace mvmclean.backend.Domain.Entities;
 
-public class EmployeeCoverage : Entity
+public class ContractorCoverage : Entity
 {
     public Guid EmployeeId { get; private set; }
     public Postcode Postcode { get; private set; }
     public bool IsActive { get; private set; }
 
-    private EmployeeCoverage() { }
+    private ContractorCoverage() { }
 
-    public static EmployeeCoverage Create(Guid employeeId, Postcode postcode)
+    public static ContractorCoverage Create(Guid employeeId, Postcode postcode)
     {
-        return new EmployeeCoverage
+        return new ContractorCoverage
         {
             EmployeeId = employeeId,
             Postcode = postcode,
