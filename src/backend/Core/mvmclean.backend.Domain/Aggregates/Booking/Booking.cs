@@ -1,0 +1,199 @@
+using mvmclean.backend.Domain.Aggregates.Booking.Entities;
+using mvmclean.backend.Domain.Aggregates.Booking.Enums;
+using mvmclean.backend.Domain.Aggregates.Booking.Events;
+using mvmclean.backend.Domain.Aggregates.Booking.Services;
+using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
+using mvmclean.backend.Domain.SharedKernel.ValueObjects;
+
+namespace mvmclean.backend.Domain.Aggregates.Booking;
+
+public class Booking : Core.BaseClasses.AggregateRoot
+{
+    public Guid CustomerId { get; private set; }
+    public Customer.Customer Customer { get; private set; }
+    public Guid? ContractorId { get; private set; }
+    public Contractor.Contractor? Contractor { get; private set; }
+    public Address ServiceAddress { get; private set; }
+    public TimeSlot ScheduledSlot { get; private set; }
+    public BookingStatus Status { get; private set; }
+    public Money TotalPrice { get; private set; }
+    public Money BasePrice { get; private set; } // Price before postcode adjustments
+    public Money PostcodeSurcharge { get; private set; } // Additional charge for postcode
+
+    private readonly List<BookingItem> _items = new();
+    public IReadOnlyCollection<BookingItem> Items => _items.AsReadOnly();
+
+    public Guid? PaymentId { get; private set; }
+    public Payment? Payment { get; private set; }
+
+    private Booking()
+    {
+    }
+
+    public static Booking Create(Customer.Customer customer, Address serviceAddress, TimeSlot scheduledSlot, IPricingService pricingService )
+    {
+        var booking = new Booking
+        {
+            CustomerId = customer.Id,
+            Customer = customer,
+            ServiceAddress = serviceAddress,
+            ScheduledSlot = scheduledSlot,
+            Status = BookingStatus.Pending,
+            TotalPrice = Money.Create(0),
+            BasePrice = Money.Create(0),
+            PostcodeSurcharge = Money.Create(0)
+        };
+
+        if (pricingService != null)
+        {
+            booking.UpdatePostcodePricing(pricingService);
+        }
+
+        booking.AddDomainEvent(new BookingCreatedEvent(booking.Id, customer.Id));
+        return booking;
+    }
+
+    public void AddService(Service service, Money basePrice, IPricingService pricingService, int quantity = 1)
+    {
+        var adjustedPrice = pricingService.CalculatePrice(basePrice, ServiceAddress.Postcode);
+        
+        var item = new BookingItem
+        {
+            ServiceId = service.Id,
+            Service = service,
+            BasePrice = basePrice, 
+            AdjustedPrice = adjustedPrice, 
+            Quantity = quantity
+        };
+        
+        _items.Add(item);
+        RecalculateTotalPrice();
+    }
+
+    public void AddServiceWithAdjustedPrice(Service service, Money adjustedPrice, int quantity = 1)
+    {
+        var item = new BookingItem
+        {
+            ServiceId = service.Id,
+            Service = service,
+            BasePrice = adjustedPrice, 
+            AdjustedPrice = adjustedPrice,
+            Quantity = quantity
+        };
+        
+        _items.Add(item);
+        RecalculateTotalPrice();
+    }
+
+    private void RecalculateTotalPrice()
+    {
+        TotalPrice = _items.Aggregate(
+            Money.Create(0),
+            (total, item) => total.Add(item.AdjustedPrice.Multiply(item.Quantity))
+        );
+        
+        BasePrice = _items.Aggregate(
+            Money.Create(0),
+            (total, item) => total.Add(item.BasePrice.Multiply(item.Quantity))
+        );
+        
+        PostcodeSurcharge = TotalPrice.Subtract(BasePrice);
+    }
+
+    public void UpdatePostcodePricing(IPricingService pricingService)
+    {                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+        foreach (var item in _items)
+        {
+            // Only recalculate if we have the base price
+            if (item.BasePrice != null && item.BasePrice.Amount > 0)
+            {
+                item.AdjustedPrice = pricingService.CalculatePrice(item.BasePrice, ServiceAddress.Postcode);
+            }
+        }
+        RecalculateTotalPrice();
+    }                                                           
+
+    public void UpdateServiceAddress(Address newAddress, IPricingService pricingService)
+    {
+        ServiceAddress = newAddress;
+        UpdatePostcodePricing(pricingService);
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void AssignEmployee(Contractor.Contractor contractor)
+    {
+        if (!contractor.IsAvailableAt(ScheduledSlot, ServiceAddress.Postcode))
+        {
+            throw new InvalidOperationException("Employee is not available for this time slot");
+        }
+
+        ContractorId = contractor.Id;
+        Contractor = contractor;
+        UpdatedAt = DateTime.UtcNow;
+
+        AddDomainEvent(new ContractorAssignedEvent());
+    }
+
+    public void Confirm()
+    {
+        if (Status != BookingStatus.Pending)
+            throw new InvalidOperationException("Only pending bookings can be confirmed");
+
+        if (ContractorId == null)
+            throw new InvalidOperationException("Cannot confirm booking without assigned employee");
+
+        Status = BookingStatus.Confirmed;
+        UpdatedAt = DateTime.UtcNow;
+
+        AddDomainEvent(new BookingConfirmedEvent(Id, ContractorId.Value));
+    }
+
+    public void Start()
+    {
+        if (Status != BookingStatus.Confirmed)
+            throw new InvalidOperationException("Only confirmed bookings can be started");
+
+        Status = BookingStatus.InProgress;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void Complete()
+    {
+        if (Status != BookingStatus.InProgress)
+            throw new InvalidOperationException("Only in-progress bookings can be completed");
+
+        Status = BookingStatus.Completed;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void Cancel()
+    {
+        if (Status == BookingStatus.Completed)
+            throw new InvalidOperationException("Cannot cancel completed bookings");
+
+        Status = BookingStatus.Cancelled;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void AttachPayment(Payment payment)
+    {
+        PaymentId = payment.Id;
+        Payment = payment;
+    }
+
+    public void MarkAsFailed(string reason)
+    {
+        Status = BookingStatus.Failed;
+        UpdatedAt = DateTime.UtcNow;
+    }
+}
+
+
+public class BookingItem
+{
+    public Guid ServiceId { get; set; }
+    public Service Service { get; set; }
+    public Money BasePrice { get; set; } // Original price without postcode adjustment
+    public Money AdjustedPrice { get; set; } // Price after postcode adjustment
+    public int Quantity { get; set; }
+}

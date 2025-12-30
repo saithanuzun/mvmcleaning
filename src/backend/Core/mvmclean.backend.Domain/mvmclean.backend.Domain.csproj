@@ -7,11 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Repositories\Contractor\" />
-      <Folder Include="Repositories\Customer\" />
-      <Folder Include="Repositories\Invoice\" />
-      <Folder Include="Repositories\Promotion\" />
-      <Folder Include="Repositories\SupportTicket\" />
+      <Folder Include="Aggregates\" />
+      <Folder Include="Core\" />
+      <Folder Include="SharedKernel\Entities\" />
     </ItemGroup>
 
 </Project>
