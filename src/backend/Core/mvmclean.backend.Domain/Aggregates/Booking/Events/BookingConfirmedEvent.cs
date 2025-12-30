@@ -5,11 +5,11 @@ namespace mvmclean.backend.Domain.Aggregates.Booking.Events;
 public class BookingConfirmedEvent : DomainEvent
 {
     public Guid BookingId { get; }
-    public Guid EmployeeId { get; }
+    public Guid ContractorId { get; }
     
-    public BookingConfirmedEvent(Guid bookingId, Guid employeeId): base()
+    public BookingConfirmedEvent(Guid bookingId, Guid contractorId): base()
     {
         BookingId = bookingId;
-        EmployeeId = employeeId;
+        ContractorId = contractorId;
     }
 }

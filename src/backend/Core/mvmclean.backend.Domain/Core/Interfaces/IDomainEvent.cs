@@ -1,6 +1,8 @@
+using MediatR;
+
 namespace mvmclean.backend.Domain.Core.Interfaces;
 
-public interface IDomainEvent
+public interface IDomainEvent : INotification //Mediatr
 {
     /// <summary>
     /// When the event occurred

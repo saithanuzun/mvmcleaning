@@ -10,15 +10,13 @@ namespace mvmclean.backend.Domain.Aggregates.Booking;
 public class Booking : Core.BaseClasses.AggregateRoot
 {
     public Guid CustomerId { get; private set; }
-    public Customer.Customer Customer { get; private set; }
     public Guid? ContractorId { get; private set; }
-    public Contractor.Contractor? Contractor { get; private set; }
     public Address ServiceAddress { get; private set; }
     public TimeSlot ScheduledSlot { get; private set; }
     public BookingStatus Status { get; private set; }
     public Money TotalPrice { get; private set; }
-    public Money BasePrice { get; private set; } // Price before postcode adjustments
-    public Money PostcodeSurcharge { get; private set; } // Additional charge for postcode
+    public Money BasePrice { get; private set; } 
+    public Money PostcodeSurcharge { get; private set; } 
 
     private readonly List<BookingItem> _items = new();
     public IReadOnlyCollection<BookingItem> Items => _items.AsReadOnly();
@@ -26,32 +24,40 @@ public class Booking : Core.BaseClasses.AggregateRoot
     public Guid? PaymentId { get; private set; }
     public Payment? Payment { get; private set; }
 
-    private Booking()
+    private Booking(Guid customerId, Address serviceAddress, TimeSlot scheduledSlot)
     {
+        CustomerId = customerId;
+        ServiceAddress = serviceAddress;
+        ScheduledSlot = scheduledSlot;
+
+        Status = BookingStatus.Pending;
+        BasePrice = Money.Zero();
+        PostcodeSurcharge = Money.Zero();
+        TotalPrice = Money.Zero();
     }
 
-    public static Booking Create(Customer.Customer customer, Address serviceAddress, TimeSlot scheduledSlot, IPricingService pricingService )
+
+    public static Booking Create(Guid customerId, Address serviceAddress, TimeSlot scheduledSlot, IPricingService pricingService)
     {
-        var booking = new Booking
-        {
-            CustomerId = customer.Id,
-            Customer = customer,
-            ServiceAddress = serviceAddress,
-            ScheduledSlot = scheduledSlot,
-            Status = BookingStatus.Pending,
-            TotalPrice = Money.Create(0),
-            BasePrice = Money.Create(0),
-            PostcodeSurcharge = Money.Create(0)
-        };
+        if (pricingService == null)
+            throw new ArgumentNullException(nameof(pricingService));
 
-        if (pricingService != null)
-        {
-            booking.UpdatePostcodePricing(pricingService);
-        }
+        var booking = new Booking(
+            customerId,
+            serviceAddress,
+            scheduledSlot
+        );
 
-        booking.AddDomainEvent(new BookingCreatedEvent(booking.Id, customer.Id));
+        booking.UpdatePostcodePricing(pricingService);
+        booking.RecalculateTotalPrice();
+
+        booking.AddDomainEvent(
+            new BookingCreatedEvent(booking.Id, customerId)
+        );
+
         return booking;
     }
+
 
     public void AddService(Service service, Money basePrice, IPricingService pricingService, int quantity = 1)
     {
@@ -128,7 +134,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
         }
 
         ContractorId = contractor.Id;
-        Contractor = contractor;
         UpdatedAt = DateTime.UtcNow;
 
         AddDomainEvent(new ContractorAssignedEvent());
@@ -186,14 +191,4 @@ public class Booking : Core.BaseClasses.AggregateRoot
         Status = BookingStatus.Failed;
         UpdatedAt = DateTime.UtcNow;
     }
-}
-
-
-public class BookingItem
-{
-    public Guid ServiceId { get; set; }
-    public Service Service { get; set; }
-    public Money BasePrice { get; set; } // Original price without postcode adjustment
-    public Money AdjustedPrice { get; set; } // Price after postcode adjustment
-    public int Quantity { get; set; }
 }

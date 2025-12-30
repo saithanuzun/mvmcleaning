@@ -17,7 +17,6 @@ public class Invoice : Core.BaseClasses.AggregateRoot
     public DateTime? PaidDate { get; private set; }
     
     public Money Subtotal { get; private set; }
-    public Money TaxAmount { get; private set; }
     public Money DiscountAmount { get; private set; }
     public Money TotalAmount { get; private set; }
     
@@ -26,11 +25,7 @@ public class Invoice : Core.BaseClasses.AggregateRoot
     
     private readonly List<InvoiceLineItem> _lineItems = new();
     public IReadOnlyCollection<InvoiceLineItem> LineItems => _lineItems.AsReadOnly();
-    
-    // For recurring invoices
-    public bool IsRecurring { get; private set; }
-    public Guid? ParentInvoiceId { get; private set; }
-    
+
     private Invoice() { }
     
     public static Invoice CreateForBooking(Booking.Booking booking, PaymentTerms paymentTerms)
@@ -43,7 +38,6 @@ public class Invoice : Core.BaseClasses.AggregateRoot
             IssueDate = DateTime.UtcNow,
             DueDate = DateTime.UtcNow.AddDays(paymentTerms.DaysToPay),
             Subtotal = booking.TotalPrice,
-            TaxAmount = CalculateTax(booking.TotalPrice),
             DiscountAmount = Money.Create(0),
             Status = InvoiceStatus.Draft,
             PaymentTerms = paymentTerms
@@ -124,20 +118,12 @@ public class Invoice : Core.BaseClasses.AggregateRoot
     private void CalculateTotal()
     {
         TotalAmount = Subtotal
-            .Subtract(DiscountAmount)
-            .Add(TaxAmount);
+            .Subtract(DiscountAmount);
     }
     
     private static string GenerateInvoiceNumber()
     {
         return $"INV-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper()}";
-    }
-    
-    private static Money CalculateTax(Money amount)
-    {
-        // Implement your tax calculation logic
-        var taxRate = 0.2m; // 20% VAT example
-        return amount.Multiply(taxRate);
     }
 }
 

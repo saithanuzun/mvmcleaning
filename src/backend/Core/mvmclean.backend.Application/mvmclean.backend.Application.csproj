@@ -7,7 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Features\" />
+      <PackageReference Include="MediatR" Version="14.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\mvmclean.backend.Domain\mvmclean.backend.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Contractor\" />
+      <Folder Include="Features\Customer\" />
+      <Folder Include="Features\Invoice\" />
+      <Folder Include="Features\Promotion\" />
+      <Folder Include="Features\SupportTicket\" />
     </ItemGroup>
 
 </Project>

@@ -7,8 +7,8 @@ namespace mvmclean.backend.Domain.Aggregates.Contractor;
 
 public class Contractor : Core.BaseClasses.AggregateRoot
 {
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
+    public string? FirstName { get; private set; }
+    public string? LastName { get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }
     public Email Email { get; private set; }
     public bool IsActive { get; private set; }
@@ -29,13 +29,13 @@ public class Contractor : Core.BaseClasses.AggregateRoot
     {
     }
 
-    public static Contractor Create(string firstName, string lastName, PhoneNumber phoneNumber, string email)
+    public static Contractor Create(string? firstName, string? lastName, string? phoneNumber, string? email)
     {
         return new Contractor
         {
             FirstName = firstName,
             LastName = lastName,
-            PhoneNumber = phoneNumber,
+            PhoneNumber = PhoneNumber.Create(phoneNumber),
             Email = Email.Create(email),
             IsActive = true
         };

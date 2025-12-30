@@ -1,6 +1,6 @@
 using mvmclean.backend.Domain.Core.BaseClasses;
 
-namespace mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
+namespace mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 public class TimeSlot : ValueObject
 {
