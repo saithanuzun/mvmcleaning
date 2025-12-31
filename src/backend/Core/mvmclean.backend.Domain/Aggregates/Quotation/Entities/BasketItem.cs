@@ -7,19 +7,17 @@ namespace mvmclean.backend.Domain.Aggregates.Quotation.Entities;
 public class BasketItem : Entity
 {
     public Guid ServiceId { get; private set; }
-    public Service Service { get; private set; }
     public Money Price { get; private set; }
     public int Quantity { get; private set; }
 
     private BasketItem() { } // EF Core
 
-    public BasketItem(Service service, Money price, int quantity)
+    public BasketItem(Guid serviceId, Money price, int quantity)
     {
         if (quantity <= 0)
             throw new ArgumentException("Quantity must be greater than zero.");
 
-        Service = service;
-        ServiceId = service.Id;
+        ServiceId = ServiceId;
         Price = price;
         Quantity = quantity;
     }

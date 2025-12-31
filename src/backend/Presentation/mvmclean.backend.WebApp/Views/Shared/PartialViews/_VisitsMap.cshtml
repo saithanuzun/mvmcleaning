@@ -1,0 +1,377 @@
+@* _VisitsMap.cshtml - Free Map Solution *@
+
+<div class="container-fluid pt-5 pb-3">
+    <div class="container">
+        <div class="row align-items-center">
+            
+            <!-- LEFT SIDE -->
+            <div class="col-lg-5 col-md-12 mb-4">
+                <h6 class="text-secondary text-uppercase font-weight-medium mb-3">Our Coverage</h6>
+                <h2 class="display-4 mb-4">Professional Cleaning Across Leicestershire</h2>
+                <p class="mb-3">
+                    At <strong>MVM Cleaning</strong>, we proudly serve homes and businesses throughout Leicestershire. 
+                    <strong>Carpet cleaning</strong>, <strong>sofa cleaning</strong>, and <strong>jet washing</strong> are just some of the services we provide, ensuring every space looks and feels fresh.
+                </p>
+                <p class="mb-4">
+                    The map on the right shows our service coverage with <strong>example visit markers</strong> highlighting the areas we frequently attend in Leicester and surrounding communities.
+                    Whether you need a deep clean for your home or commercial space, our team is ready to deliver reliable, high-quality results.
+                </p>
+                <a href="/get-a-quote" class="btn btn-primary py-2 px-4">Book a Cleaning</a>
+            </div>
+
+
+            <!-- RIGHT SIDE MAP -->
+            <div class="col-lg-7 col-md-12">
+                <div id="visitsMap" style="width:100%; height:450px; border-radius: 8px; border: 1px solid #dee2e6;"></div>
+                <div class="mt-2 text-center text-muted small">
+                    <i class="bi bi-info-circle"></i> Click on markers to see booking details
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+<!-- Leaflet Marker Cluster for better performance -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+<!-- Bootstrap Icons for additional UI elements -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+<script>
+    let map;
+    let currentLayer;
+    let markersCluster;
+    let isMarkersVisible = true;
+    
+    // Tile layer options
+    const tileLayers = {
+        light: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap & CARTO',
+            maxZoom: 20,
+            subdomains: 'abcd'
+        }),
+        
+        
+    };
+
+    // Define the cleaning icon using your carIcon.png
+    const createCleaningIcon = () => {
+        return L.icon({
+            iconUrl: '/img/CarIcon2.png', // corrected path
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32],
+            className: 'custom-car-icon'
+        });
+    };
+
+
+    function initMap() {
+        // Center on Leicestershire
+        const center = [52.6369, -1.1398];
+        
+        // Initialize map
+        map = L.map('visitsMap', {
+            center: center,
+            zoom: 10,
+            zoomControl: true,
+            scrollWheelZoom: true
+        });
+
+        // Set default layer
+        currentLayer = tileLayers.light;
+        currentLayer.addTo(map);
+
+        // Initialize marker cluster
+        markersCluster = L.markerClusterGroup({
+            maxClusterRadius: 60,
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            spiderLegPolylineOptions: {
+                weight: 1.5,
+                color: '#0d6efd',
+                opacity: 0.8
+            }
+        });
+
+        // Add scale control
+        L.control.scale({ imperial: false }).addTo(map);
+        
+        // Load markers
+        loadBookingsMarkers();
+        
+        // Set up event listeners for controls
+        setupEventListeners();
+    }
+
+    async function loadBookingsMarkers() {
+        let bookings = [];
+
+        try {
+            const response = await fetch('/bookings-csv'); // path in wwwroot
+            const csvText = await response.text();
+
+            // Parse CSV
+            const parsed = Papa.parse(csvText, {
+                header: true,
+                skipEmptyLines: true
+            });
+
+            bookings = parsed.data.map(row => ({
+                Id: row.Id,
+                Address: row.Address,
+                Latitude: parseFloat(row.Latitude),
+                Longitude: parseFloat(row.Longitude),
+                Date: row.Date,
+                ServiceType: row.ServiceType,
+                Rating: row.Rating
+            }));
+
+        } catch (error) {
+            console.error("Error loading CSV:", error);
+            return;
+        }
+
+        // Create the icon
+        const cleaningIcon = createCleaningIcon();
+
+        // Clear existing markers
+        markersCluster.clearLayers();
+
+        // Add markers
+        bookings.forEach((booking) => {
+            const marker = L.marker([booking.Latitude, booking.Longitude], {
+                icon: cleaningIcon,
+                title: `Booking #${booking.Id}`
+            });
+
+            const popupContent = `
+            <div style="min-width: 220px;">
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <div style="margin-right: 10px;">
+                        <img src="/img/CarIcon2.png" alt="Car Icon" style="width: 48px; height: 48px;">
+                    </div>
+                    <div>
+                        <h6 style="color: #194376; margin: 0; font-weight: 600;">Booking #${booking.Id}</h6>
+                        <small style="color: #666;">${booking.Date}</small>
+                    </div>
+                </div>
+                <hr style="margin: 8px 0;">
+                <p style="margin: 0 0 5px 0;"><strong><i class="bi bi-geo-alt"></i> Address:</strong><br>${booking.Address}</p>
+                <p style="margin: 0 0 5px 0;"><strong><i class="bi bi-brush"></i> Service:</strong> ${booking.ServiceType}</p>
+                <p style="margin: 0 0 8px 0;"><strong><i class="bi bi-star"></i> Rating:</strong> ${booking.Rating}</p>
+            </div>
+        `;
+
+            marker.bindPopup(popupContent);
+
+            marker.on('mouseover', function () { this.openPopup(); });
+            marker.on('mouseout', function () { this.closePopup(); });
+
+            markersCluster.addLayer(marker);
+        });
+
+        // Add markers to map
+        map.addLayer(markersCluster);
+
+        if (markersCluster.getBounds().isValid()) {
+            map.fitBounds(markersCluster.getBounds().pad(0.15));
+        }
+
+        updateStats(bookings.length);
+    }
+
+    function generateMockBookings(count) {
+        const bookings = [];
+
+        const serviceTypes = ['Carpet Cleaning', 'Sofa Cleaning', 'Jet Washing'];
+
+        // Areas with approximate center coordinates
+        const areas = [
+            { name: 'Leicester City Centre', lat: 52.6369, lng: -1.1398 },
+            { name: 'Oadby', lat: 52.6075, lng: -1.0895 },
+            { name: 'Wigston', lat: 52.5853, lng: -1.1168 },
+            { name: 'Syston', lat: 52.6702, lng: -1.0918 },
+            { name: 'Birstall', lat: 52.6762, lng: -1.1181 },
+            { name: 'Loughborough', lat: 52.7719, lng: -1.2051 },
+            { name: 'Market Harborough', lat: 52.4873, lng: -0.9205 },
+            { name: 'Melton Mowbray', lat: 52.7667, lng: -0.8880 },
+            { name: 'Coalville', lat: 52.7348, lng: -1.3636 }
+        ];
+
+        // Some common street names for realism
+        const streets = ['High Street', 'Church Road', 'Station Road', 'King Street', 'Victoria Road', 'Queen Street', 'Main Street', 'Park Lane', 'Elm Street', 'Oak Avenue'];
+
+        for (let i = 1; i <= count; i++) {
+            const area = areas[Math.floor(Math.random() * areas.length)];
+
+            // Randomize coordinates within ~0.01 degrees of the area center
+            const lat = area.lat + (Math.random() - 0.5) * 0.02;
+            const lng = area.lng + (Math.random() - 0.5) * 0.02;
+
+            // Randomize booking date within the last 6 months
+            const randomDaysAgo = Math.floor(Math.random() * 180);
+            const date = new Date();
+            date.setDate(date.getDate() - randomDaysAgo);
+
+            const street = streets[Math.floor(Math.random() * streets.length)];
+            const houseNumber = Math.floor(Math.random() * 200) + 1;
+
+            bookings.push({
+                id: 1000 + i,
+                latitude: lat,
+                longitude: lng,
+                address: `${houseNumber} ${street}, ${area.name}`,
+                serviceType: serviceTypes[Math.floor(Math.random() * serviceTypes.length)],
+                date: date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+                rating: '★★★★★'
+            });
+        }
+
+        return bookings;
+    }
+
+    function setupEventListeners() {
+        // Toggle map theme
+        const toggleBtn = document.getElementById('toggleMapStyle');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function() {
+                const isLight = currentLayer === tileLayers.light;
+                
+                // Remove current layer
+                map.removeLayer(currentLayer);
+                
+                // Add new layer
+                currentLayer = isLight ? tileLayers.dark : tileLayers.light;
+                currentLayer.addTo(map);
+                
+                // Update button text and icon
+                const iconClass = isLight ? 'bi-moon' : 'bi-sun';
+                const text = isLight ? 'Switch to Light Theme' : 'Switch to Dark Theme';
+                this.innerHTML = `<i class="bi ${iconClass}"></i> ${text}`;
+            });
+        }
+        
+        // Toggle markers visibility
+        const toggleMarkersBtn = document.getElementById('toggleMarkers');
+        if (toggleMarkersBtn) {
+            toggleMarkersBtn.addEventListener('click', function() {
+                isMarkersVisible = !isMarkersVisible;
+                
+                if (isMarkersVisible) {
+                    map.addLayer(markersCluster);
+                    this.innerHTML = '<i class="bi bi-eye-slash"></i> Hide Markers';
+                } else {
+                    map.removeLayer(markersCluster);
+                    this.innerHTML = '<i class="bi bi-eye"></i> Show Markers';
+                }
+            });
+        }
+        
+        // Reset view
+        const resetViewBtn = document.getElementById('resetView');
+        if (resetViewBtn) {
+            resetViewBtn.addEventListener('click', function() {
+                if (markersCluster.getBounds().isValid()) {
+                    map.fitBounds(markersCluster.getBounds().pad(0.15));
+                } else {
+                    map.setView([52.6369, -1.1398], 10);
+                }
+            });
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            map.invalidateSize();
+        });
+    }
+
+    function updateStats(count) {
+        // You could update statistics on the page here
+        console.log(`${count} markers loaded on the map.`);
+    }
+
+    // Initialize map when ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMap);
+    } else {
+        initMap();
+    }
+</script>
+
+<style>
+    #visitsMap {
+        min-height: 450px;
+        transition: all 0.3s ease;
+    }
+    
+    #visitsMap:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    
+    .marker-cluster-small div {
+        background-color: rgba(25, 67, 118);
+        color: white;
+        font-weight: bold;
+    }
+    
+    
+    .marker-cluster-medium div {
+        background-color: rgba(70, 198, 206);
+        color: white;
+        font-weight: bold;
+    }
+    
+    
+    .marker-cluster-large div {
+        background-color: rgba(255, 194, 91);
+        color: #212529;
+        font-weight: bold;
+    }
+    
+    
+    @@keyframes pulse {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(25, 67, 118);
+        }
+        70% {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 10px rgba(13, 110, 253, 0);
+        }
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(13, 110, 253, 0);
+        }
+    }
+    
+    /* Control buttons */
+    .btn-group .btn {
+        border-radius: 4px !important;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+    
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        #visitsMap {
+            height: 350px;
+        }
+        
+        
+        .btn-group .btn {
+            flex: 1;
+            min-width: 120px;
+        }
+    }
+</style>

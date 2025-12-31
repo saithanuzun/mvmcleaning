@@ -1,0 +1,80 @@
+using mvmclean.backend.Domain.Aggregates.Service;
+using mvmclean.backend.Domain.Core.BaseClasses;
+using mvmclean.backend.Domain.SharedKernel.ValueObjects;
+
+
+public class PostcodePricing : Entity
+{
+    public Service Service { get; private set; }
+    public Guid ServiceId { get; private set; }
+
+    public Postcode Postcode { get; private set; }
+    public decimal Multiplier { get; private set; } // e.g., 1.1 for 10% increase
+    public decimal FixedAdjustment { get; private set; }
+
+   
+    private PostcodePricing() { }
+
+    // Factory method
+    public static PostcodePricing Create(
+        Guid serviceId, 
+        Postcode postcode, 
+        decimal multiplier, 
+        decimal fixedAdjustment, 
+        DateTime? effectiveFrom = null,
+        DateTime? effectiveTo = null)
+    {
+        if (serviceId == Guid.Empty)
+            throw new Exception("Service ID is required");
+        
+        if (postcode == null)
+            throw new Exception("Postcode is required");
+        
+        if (multiplier < 0)
+            throw new Exception("Multiplier cannot be negative");
+        
+        if (multiplier > 3.0m)
+            throw new Exception("Multiplier cannot exceed 300%");
+        
+        if (effectiveTo.HasValue && effectiveFrom.HasValue && effectiveTo.Value <= effectiveFrom.Value)
+            throw new Exception("EffectiveTo must be after EffectiveFrom");
+
+        return new PostcodePricing
+        {
+            Id = Guid.NewGuid(),
+            ServiceId = serviceId,
+            Postcode = postcode,
+            Multiplier = multiplier,
+            FixedAdjustment = fixedAdjustment,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+    }
+
+    // Business methods
+    public Money CalculateAdjustedPrice(Money basePrice)
+    {
+        var adjustedAmount = (basePrice.Amount * Multiplier) + FixedAdjustment;
+        
+        // Ensure minimum price if needed
+        if (adjustedAmount < 0)
+            adjustedAmount = 0;
+            
+        return Money.Create(adjustedAmount);
+    }
+    
+
+    public void UpdatePricing(decimal newMultiplier, decimal newFixedAdjustment)
+    {
+        if (newMultiplier < 0)
+            throw new Exception("Multiplier cannot be negative");
+        
+        if (newMultiplier > 3.0m)
+            throw new Exception("Multiplier cannot exceed 300%");
+
+        Multiplier = newMultiplier;
+        FixedAdjustment = newFixedAdjustment;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+}

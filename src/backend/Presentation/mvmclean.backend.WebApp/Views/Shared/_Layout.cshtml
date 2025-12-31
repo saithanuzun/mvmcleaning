@@ -12,7 +12,7 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 
-    
+
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -276,7 +276,7 @@
     <!-- CSS (load synchronously to restore original appearance) -->
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
 
-    
+
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
@@ -284,7 +284,7 @@
     <!-- Libraries Stylesheet (owl carousel) -->
     <!-- Libraries Stylesheet (owl carousel) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
-   
+
 
 
     <!-- Google tag (gtag.js) -->
@@ -307,17 +307,21 @@
 <body>
 
 <header class=" fixed-top">
-    @await Html.PartialAsync("_Header")
-    
+    @await Html.PartialAsync("PartialViews/_Header")
+
 </header>
 <div style="padding-top: 150px;">
     <main>
         @RenderBody()
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary back-to-top">
+            <i class="fa fa-angle-double-up"></i>
+        </a>
     </main>
 </div>
 
 <footer>
-    @await Html.PartialAsync("_Footer")
+    @await Html.PartialAsync("PartialViews/_Footer")
 </footer>
 
 

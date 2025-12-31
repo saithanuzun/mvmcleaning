@@ -22,7 +22,7 @@ public class Promotion : Core.BaseClasses.AggregateRoot
     
     // Targeting
     public List<Postcode> ApplicablePostcodes { get; private set; }
-    public List<Service> ApplicableServices { get; private set; }
+    public List<Guid> ApplicableServices { get; private set; }
     
     private Promotion() { }
     
@@ -42,7 +42,7 @@ public class Promotion : Core.BaseClasses.AggregateRoot
             IsActive = true,
             MinimumOrderAmount = Money.Create(0),
             ApplicablePostcodes = new List<Postcode>(),
-            ApplicableServices = new List<Service>()
+            ApplicableServices = new List<Guid>()
         };
     }
     
@@ -84,7 +84,7 @@ public class Promotion : Core.BaseClasses.AggregateRoot
         ApplicablePostcodes.Add(postcodePrefix);
     }
     
-    public void AddApplicableService(Service serviceId)
+    public void AddApplicableService(Guid serviceId)
     {
         ApplicableServices.Add(serviceId);
     }

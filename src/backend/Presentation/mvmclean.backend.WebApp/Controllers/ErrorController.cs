@@ -6,6 +6,8 @@ using mvmclean.backend.WebApp.Models;
 
 namespace mvmclean.backend.WebApp.Controllers;
 
+[AllowAnonymous]
+[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 public class ErrorController : Controller
 {
     private readonly ILogger<ErrorController> _logger;
@@ -15,96 +17,51 @@ public class ErrorController : Controller
         _logger = logger;
     }
 
-    // GET: /Error
+    // Handles unhandled exceptions
     [Route("/Error")]
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    [AllowAnonymous]
     public IActionResult Index()
     {
-        var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-        
-        if (exceptionHandlerPathFeature?.Error != null)
+        var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+        if (exceptionFeature?.Error != null)
         {
-            var exception = exceptionHandlerPathFeature.Error;
-            var path = exceptionHandlerPathFeature.Path;
-            
-            _logger.LogError(exception, "Unhandled exception occurred at {Path}", path);
-            
-        }
-
-        var model = new ErrorViewModel
-        {
-            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
-        };
-
-        return View(model);
-    }
-
-    // GET: /Error/404
-    [Route("/Error/404")]
-    [AllowAnonymous]
-    public IActionResult NotFoundError()
-    {
-        Response.StatusCode = 404;
-        
-        var originalPath = "unknown";
-        if (HttpContext.Items.ContainsKey("originalPath"))
-        {
-            originalPath = HttpContext.Items["originalPath"] as string;
-            _logger.LogWarning("404 error for path: {OriginalPath}", originalPath);
-        }
-
-        return View("NotFound");
-    }
-
-    // GET: /Error/403
-    [Route("/Error/403")]
-    [AllowAnonymous]
-    public IActionResult AccessDeniedError()
-    {
-        Response.StatusCode = 403;
-        
-        var user = User.Identity?.Name ?? "Anonymous";
-        var path = HttpContext.Request.Path;
-        _logger.LogWarning("Access denied for user {User} at path {Path}", user, path);
-        
-        return View("AccessDenied");
-    }
-
-    // GET: /Error/500
-    [Route("/Error/500")]
-    [AllowAnonymous]
-    public IActionResult InternalServerError()
-    {
-        Response.StatusCode = 500;
-        return View("InternalServerError");
-    }
-
-    // GET: /Error/Status/{code}
-    [Route("/Error/Status/{code:int}")]
-    [AllowAnonymous]
-    public IActionResult StatusCodeError(int code)
-    {
-        Response.StatusCode = code;
-        
-        var statusCodeReExecuteFeature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
-        if (statusCodeReExecuteFeature != null)
-        {
-            _logger.LogWarning(
-                "Status code {StatusCode} for original path {OriginalPath}",
-                code,
-                statusCodeReExecuteFeature.OriginalPath
+            _logger.LogError(
+                exceptionFeature.Error,
+                "Unhandled exception at path {Path}",
+                exceptionFeature.Path
             );
         }
 
-        return code switch
+        return View(new ErrorViewModel
         {
-            400 => View("BadRequest"),
-            401 => View("Unauthorized"),
-            403 => View("AccessDenied"),
-            404 => View("NotFound"),
-            500 => View("InternalServerError"),
-            _ => View("Error")
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+        });
+    }
+
+    // Handles HTTP status codes
+    [Route("/Error/Status/{statusCode:int}")]
+    public IActionResult Status(int statusCode)
+    {
+        Response.StatusCode = statusCode;
+
+        var reExecuteFeature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
+        if (reExecuteFeature != null)
+        {
+            _logger.LogWarning(
+                "HTTP {StatusCode} for path {OriginalPath}",
+                statusCode,
+                reExecuteFeature.OriginalPath
+            );
+        }
+
+        return statusCode switch
+        {
+            400 => View("Errors/BadRequest"),
+            401 => View("Errors/Unauthorized"),
+            403 => View("Errors/AccessDenied"),
+            404 => View("Errors/NotFound"),
+            500 => View("Errors/InternalServerError"),
+            _   => View("Errors/Error")
         };
     }
 }

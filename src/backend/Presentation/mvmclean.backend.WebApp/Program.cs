@@ -13,6 +13,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseExceptionHandler("/Error");
+app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

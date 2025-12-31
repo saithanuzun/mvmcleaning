@@ -15,8 +15,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
     public TimeSlot ScheduledSlot { get; private set; }
     public BookingStatus Status { get; private set; }
     public Money TotalPrice { get; private set; }
-    public Money BasePrice { get; private set; } 
-    public Money PostcodeSurcharge { get; private set; } 
 
     private readonly List<BookingItem> _items = new();
     public IReadOnlyCollection<BookingItem> Items => _items.AsReadOnly();
@@ -31,17 +29,13 @@ public class Booking : Core.BaseClasses.AggregateRoot
         ScheduledSlot = scheduledSlot;
 
         Status = BookingStatus.Pending;
-        BasePrice = Money.Zero();
-        PostcodeSurcharge = Money.Zero();
         TotalPrice = Money.Zero();
     }
 
 
-    public static Booking Create(Guid customerId, Address serviceAddress, TimeSlot scheduledSlot, IPricingService pricingService)
+    public static Booking Create(Guid customerId, Address serviceAddress, TimeSlot scheduledSlot)
     {
-        if (pricingService == null)
-            throw new ArgumentNullException(nameof(pricingService));
-
+   
         var booking = new Booking(
             customerId,
             serviceAddress,
@@ -59,15 +53,12 @@ public class Booking : Core.BaseClasses.AggregateRoot
     }
 
 
-    public void AddService(Service service, Money basePrice, IPricingService pricingService, int quantity = 1)
+    public void AddService(Guid serviceId, Money basePrice, int quantity = 1)
     {
-        var adjustedPrice = pricingService.CalculatePrice(basePrice, ServiceAddress.Postcode);
         
         var item = new BookingItem
         {
-            ServiceId = service.Id,
-            Service = service,
-            BasePrice = basePrice, 
+            ServiceId = serviceId,
             AdjustedPrice = adjustedPrice, 
             Quantity = quantity
         };
@@ -81,8 +72,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
         var item = new BookingItem
         {
             ServiceId = service.Id,
-            Service = service,
-            BasePrice = adjustedPrice, 
             AdjustedPrice = adjustedPrice,
             Quantity = quantity
         };
@@ -98,12 +87,7 @@ public class Booking : Core.BaseClasses.AggregateRoot
             (total, item) => total.Add(item.AdjustedPrice.Multiply(item.Quantity))
         );
         
-        BasePrice = _items.Aggregate(
-            Money.Create(0),
-            (total, item) => total.Add(item.BasePrice.Multiply(item.Quantity))
-        );
-        
-        PostcodeSurcharge = TotalPrice.Subtract(BasePrice);
+
     }
 
     public void UpdatePostcodePricing(IPricingService pricingService)
@@ -138,6 +122,8 @@ public class Booking : Core.BaseClasses.AggregateRoot
 
         AddDomainEvent(new ContractorAssignedEvent());
     }
+    
+    #region BookingFlow
 
     public void Confirm()
     {
@@ -191,4 +177,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
         Status = BookingStatus.Failed;
         UpdatedAt = DateTime.UtcNow;
     }
+    #endregion Variables
+    
 }

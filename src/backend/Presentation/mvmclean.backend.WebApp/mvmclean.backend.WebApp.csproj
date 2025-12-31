@@ -11,13 +11,18 @@
       <Folder Include="Areas\Admin\Models\" />
       <Folder Include="Areas\Admin\Views\" />
       <Folder Include="Areas\Admin\wwwroot\" />
+      <Folder Include="Areas\Api\Models\" />
       <Folder Include="Areas\Contractor\Controllers\" />
       <Folder Include="Areas\Contractor\Models\" />
       <Folder Include="Areas\Contractor\Views\" />
       <Folder Include="Areas\Contractor\wwwroot\" />
-      <Folder Include="Views\Booking\" />
+      <Folder Include="ClientApp\" />
       <Folder Include="Views\Services\" />
       <Folder Include="Views\Shared\Components\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="wwwroot\img\.DS_Store" />
     </ItemGroup>
 
 </Project>

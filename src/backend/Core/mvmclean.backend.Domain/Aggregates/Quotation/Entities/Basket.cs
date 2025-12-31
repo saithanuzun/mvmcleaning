@@ -20,10 +20,10 @@ public class Basket : Entity
         return new Basket(new List<BasketItem>());
     }
 
-    public void AddItem(Service service, Money price, int quantity)
+    public void AddItem(Guid serviceId, Money price, int quantity)
     {
         var existingItem = BasketItems
-            .FirstOrDefault(x => x.ServiceId == service.Id);
+            .FirstOrDefault(x => x.ServiceId == serviceId);
 
         if (existingItem != null)
         {
@@ -31,7 +31,7 @@ public class Basket : Entity
             return;
         }
 
-        BasketItems.Add(new BasketItem(service, price, quantity));
+        BasketItems.Add(new BasketItem(serviceId, price, quantity));
     }
 
 }
