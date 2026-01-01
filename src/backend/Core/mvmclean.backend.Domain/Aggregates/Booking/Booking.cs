@@ -1,9 +1,7 @@
 using mvmclean.backend.Domain.Aggregates.Booking.Entities;
 using mvmclean.backend.Domain.Aggregates.Booking.Enums;
 using mvmclean.backend.Domain.Aggregates.Booking.Events;
-using mvmclean.backend.Domain.Aggregates.Booking.Services;
-using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
-using mvmclean.backend.Domain.SharedKernel.ValueObjects;
+\using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Domain.Aggregates.Booking;
 
@@ -20,6 +18,7 @@ public class Booking : Core.BaseClasses.AggregateRoot
     public IReadOnlyCollection<BookingItem> Items => _items.AsReadOnly();
 
     public Guid? PaymentId { get; private set; }
+    public PaymentType PaymentType { get; set; }
     public Payment? Payment { get; private set; }
 
     private Booking(Guid customerId, Address serviceAddress, TimeSlot scheduledSlot)
@@ -86,8 +85,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
             Money.Create(0),
             (total, item) => total.Add(item.AdjustedPrice.Multiply(item.Quantity))
         );
-        
-
     }
 
     public void UpdatePostcodePricing(IPricingService pricingService)
@@ -110,7 +107,7 @@ public class Booking : Core.BaseClasses.AggregateRoot
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void AssignEmployee(Contractor.Contractor contractor)
+    public void AssignContractor(Contractor.Contractor contractor)
     {
         if (!contractor.IsAvailableAt(ScheduledSlot, ServiceAddress.Postcode))
         {

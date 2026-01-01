@@ -7,22 +7,14 @@ public class PostcodePricing : Entity
 {
     public Service Service { get; private set; }
     public Guid ServiceId { get; private set; }
-
     public Postcode Postcode { get; private set; }
-    public decimal Multiplier { get; private set; } // e.g., 1.1 for 10% increase
+    public decimal Multiplier { get; private set; } 
     public decimal FixedAdjustment { get; private set; }
 
    
     private PostcodePricing() { }
 
-    // Factory method
-    public static PostcodePricing Create(
-        Guid serviceId, 
-        Postcode postcode, 
-        decimal multiplier, 
-        decimal fixedAdjustment, 
-        DateTime? effectiveFrom = null,
-        DateTime? effectiveTo = null)
+    public static PostcodePricing Create(Guid serviceId, Postcode postcode, decimal multiplier, decimal fixedAdjustment)
     {
         if (serviceId == Guid.Empty)
             throw new Exception("Service ID is required");
@@ -35,9 +27,6 @@ public class PostcodePricing : Entity
         
         if (multiplier > 3.0m)
             throw new Exception("Multiplier cannot exceed 300%");
-        
-        if (effectiveTo.HasValue && effectiveFrom.HasValue && effectiveTo.Value <= effectiveFrom.Value)
-            throw new Exception("EffectiveTo must be after EffectiveFrom");
 
         return new PostcodePricing
         {
@@ -50,8 +39,6 @@ public class PostcodePricing : Entity
             UpdatedAt = DateTime.UtcNow
         };
     }
-
-    // Business methods
     public Money CalculateAdjustedPrice(Money basePrice)
     {
         var adjustedAmount = (basePrice.Amount * Multiplier) + FixedAdjustment;

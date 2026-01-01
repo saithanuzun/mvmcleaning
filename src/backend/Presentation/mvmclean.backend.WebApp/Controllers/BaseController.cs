@@ -21,7 +21,6 @@ public abstract class BaseController : Controller
     protected string CurrentUserType => User.FindFirst("UserType")?.Value;
     protected string CurrentUserEmail => User.FindFirst(ClaimTypes.Email)?.Value;
 
-    // Add success/error messages
     protected void Success(string message) => TempData["Success"] = message;
     protected void Error(string message) => TempData["Error"] = message;
     protected void Info(string message) => TempData["Info"] = message;

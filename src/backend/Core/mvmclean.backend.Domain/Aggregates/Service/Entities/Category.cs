@@ -38,27 +38,7 @@ public class Category : Entity
         UpdatedAt = DateTime.UtcNow;
         
     }
-    
-    public void Activate() 
-    {
-        if (IsActive) return;
-        
-        IsActive = true;
-        UpdatedAt = DateTime.UtcNow;
-    }
-    
-    public void Deactivate()
-    {
-        if (!IsActive) return;
-        
-        IsActive = false;
-        UpdatedAt = DateTime.UtcNow;
-    }
-    
-    public bool HasActiveServices()
-    {
-        return _services.Any(s => s.IsActive);
-    }
+
     
     internal void AddService(Service service)
     {

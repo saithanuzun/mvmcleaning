@@ -11,15 +11,12 @@ public class Service : AggregateRoot
     public string Shortcut { get; private set; }
     public TimeSpan EstimatedDuration { get; private set; }
 
-    // Correct: One Service has MANY PostcodePricing rules
     private readonly List<PostcodePricing> _postcodePricings = new();
     public IReadOnlyCollection<PostcodePricing> PostcodePricings => _postcodePricings.AsReadOnly();
-
     public Category Category { get; private set; }
     public Guid CategoryId { get; private set; }
-
     public Money BasePrice { get; private set; } 
-    public bool IsActive { get; private set; }
+    
 
     private Service() { }
 
@@ -45,7 +42,6 @@ public class Service : AggregateRoot
             Description = description?.Trim(),
             Shortcut = shortcut?.Trim().ToUpper(),
             EstimatedDuration = estimatedDuration,
-            IsActive = true,
             Category = category,
             CategoryId = category.Id,
             BasePrice = Money.Create(basePrice), // Store base price as-is
@@ -54,12 +50,25 @@ public class Service : AggregateRoot
         };
     }
 
-    // Postcode pricing management
+    
+    public Money GetAdjustedPriceForPostcode(Postcode postcode)
+    {
+        var pricing = _postcodePricings.FirstOrDefault(p => p.Postcode == postcode);
+        if (pricing == null)
+            return BasePrice;
+        return pricing.CalculateAdjustedPrice(BasePrice);
+    }
+    
     public void AddPostcodePricing(Postcode postcode, decimal multiplier, decimal fixedAdjustment)
     {
-        // Check if pricing already exists for this postcode
         var existingPricing = _postcodePricings
-            .FirstOrDefault(p => p.Postcode == postcode );
+            .FirstOrDefault(p => p.Postcode == postcode);
+    
+        if (existingPricing != null)
+        {
+           existingPricing.UpdatePricing(multiplier,fixedAdjustment);
+           return;
+        }
 
         _postcodePricings.Add(PostcodePricing.Create(
             serviceId: Id,
@@ -67,29 +76,22 @@ public class Service : AggregateRoot
             multiplier: multiplier,
             fixedAdjustment: fixedAdjustment
         ));
-        
+    
         UpdatedAt = DateTime.UtcNow;
     }
     
 
-    // Price calculation method
     public Money CalculatePriceForPostcode(Postcode postcode)
     {
-        // Find applicable postcode pricing
         var pricing = _postcodePricings
             .FirstOrDefault(p => p.Postcode == postcode);
 
-        // If no specific pricing, return base price
         if (pricing == null)
             return BasePrice;
 
-        // Apply postcode adjustments
         return pricing.CalculateAdjustedPrice(BasePrice);
     }
 
-    public void Activate() => IsActive = true;
-    public void Deactivate() => IsActive = false;
-    
     public void UpdatePrice(decimal newPrice)
     {
         if (newPrice < 0)
