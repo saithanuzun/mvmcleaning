@@ -15,7 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Features\Contractor\" />
       <Folder Include="Features\Customer\" />
       <Folder Include="Features\Invoice\" />
       <Folder Include="Features\Promotion\" />

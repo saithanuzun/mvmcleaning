@@ -1,7 +1,6 @@
 // src/pages/TimeSlotsPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
     const [timeSlots, setTimeSlots] = useState([]);
@@ -9,13 +8,54 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
     const [selectedSlot, setSelectedSlot] = useState(bookingData.selectedTimeSlot || null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [currentMonth, setCurrentMonth] = useState(0); // 0 = current month, 1 = next month, etc.
     const navigate = useNavigate();
 
-    // Generate dates for the next 14 days
+    // Helper function to get month name
+    const getMonthName = (monthIndex) => {
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        return months[monthIndex % 12];
+    };
+
+    // Helper function to get calendar days for a specific month offset (0 = current month, 1 = next month, etc.)
+    const getCalendarDays = (monthOffset) => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + monthOffset;
+
+        // First day of the month
+        const firstDay = new Date(year, month, 1);
+        // Last day of the month
+        const lastDay = new Date(year, month + 1, 0);
+
+        // Day of week for first day (0 = Sunday, 6 = Saturday)
+        const firstDayOfWeek = firstDay.getDay();
+
+        const days = [];
+
+        // Add empty cells for days before the first day of the month
+        for (let i = 0; i < firstDayOfWeek; i++) {
+            days.push(null);
+        }
+
+        // Add days of the month
+        for (let day = 1; day <= lastDay.getDate(); day++) {
+            const date = new Date(year, month, day);
+            days.push(date);
+        }
+
+        return days;
+    };
+
+    // Generate dates for the next 2 months
     const generateDates = () => {
         const dates = [];
         const today = new Date();
-        for (let i = 0; i < 14; i++) {
+        // Get dates for next 60 days (approx 2 months)
+        for (let i = 0; i < 60; i++) {
             const date = new Date(today);
             date.setDate(today.getDate() + i);
             dates.push(date);
@@ -27,26 +67,59 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
 
     // Mock time slots - in real app, fetch based on selected date
     const mockTimeSlots = [
-        { id: 1, date: '2024-01-15', startTime: '08:00', endTime: '10:00', available: true },
-        { id: 2, date: '2024-01-15', startTime: '10:00', endTime: '12:00', available: true },
-        { id: 3, date: '2024-01-15', startTime: '12:00', endTime: '14:00', available: true },
-        { id: 4, date: '2024-01-15', startTime: '14:00', endTime: '16:00', available: true },
-        { id: 5, date: '2024-01-15', startTime: '16:00', endTime: '18:00', available: false },
-        { id: 6, date: '2024-01-16', startTime: '08:00', endTime: '10:00', available: true },
-        { id: 7, date: '2024-01-16', startTime: '10:00', endTime: '12:00', available: true },
-        { id: 8, date: '2024-01-16', startTime: '12:00', endTime: '14:00', available: false },
-        { id: 9, date: '2024-01-16', startTime: '14:00', endTime: '16:00', available: true },
-        { id: 10, date: '2024-01-16', startTime: '16:00', endTime: '18:00', available: true },
+        // Today
+        { id: 1, date: new Date().toISOString().split('T')[0], startTime: '08:00', endTime: '08:30', available: true },
+        { id: 2, date: new Date().toISOString().split('T')[0], startTime: '08:30', endTime: '09:00', available: true },
+        { id: 3, date: new Date().toISOString().split('T')[0], startTime: '09:00', endTime: '09:30', available: true },
+        { id: 4, date: new Date().toISOString().split('T')[0], startTime: '09:30', endTime: '10:00', available: true },
+        { id: 5, date: new Date().toISOString().split('T')[0], startTime: '10:00', endTime: '10:30', available: true },
+        { id: 6, date: new Date().toISOString().split('T')[0], startTime: '10:30', endTime: '11:00', available: true },
+        { id: 7, date: new Date().toISOString().split('T')[0], startTime: '11:00', endTime: '11:30', available: true },
+        { id: 8, date: new Date().toISOString().split('T')[0], startTime: '11:30', endTime: '12:00', available: true },
+        { id: 9, date: new Date().toISOString().split('T')[0], startTime: '12:00', endTime: '12:30', available: true },
+        { id: 10, date: new Date().toISOString().split('T')[0], startTime: '12:30', endTime: '13:00', available: true },
+        { id: 11, date: new Date().toISOString().split('T')[0], startTime: '13:00', endTime: '13:30', available: true },
+        { id: 12, date: new Date().toISOString().split('T')[0], startTime: '13:30', endTime: '14:00', available: true },
+        { id: 13, date: new Date().toISOString().split('T')[0], startTime: '14:00', endTime: '14:30', available: true },
+        { id: 14, date: new Date().toISOString().split('T')[0], startTime: '14:30', endTime: '15:00', available: true },
+        { id: 15, date: new Date().toISOString().split('T')[0], startTime: '15:00', endTime: '15:30', available: true },
+        { id: 16, date: new Date().toISOString().split('T')[0], startTime: '15:30', endTime: '16:00', available: true },
+        { id: 17, date: new Date().toISOString().split('T')[0], startTime: '16:00', endTime: '16:30', available: true },
+        { id: 18, date: new Date().toISOString().split('T')[0], startTime: '16:30', endTime: '17:00', available: true },
+        { id: 19, date: new Date().toISOString().split('T')[0], startTime: '17:00', endTime: '17:30', available: false },
+        { id: 20, date: new Date().toISOString().split('T')[0], startTime: '17:30', endTime: '18:00', available: false },
+        { id: 21, date: new Date().toISOString().split('T')[0], startTime: '18:00', endTime: '18:30', available: false },
+        { id: 22, date: new Date().toISOString().split('T')[0], startTime: '18:30', endTime: '19:00', available: false },
+
+        // Tomorrow
+        { id: 23, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '08:00', endTime: '08:30', available: true },
+        { id: 24, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '08:30', endTime: '09:00', available: true },
+        { id: 25, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '09:00', endTime: '09:30', available: true },
+        { id: 26, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '09:30', endTime: '10:00', available: true },
+        { id: 27, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '10:00', endTime: '10:30', available: true },
+        { id: 28, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '10:30', endTime: '11:00', available: true },
+        { id: 29, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '11:00', endTime: '11:30', available: true },
+        { id: 30, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '11:30', endTime: '12:00', available: true },
+        { id: 31, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '12:00', endTime: '12:30', available: false },
+        { id: 32, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '12:30', endTime: '13:00', available: false },
+        { id: 33, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '13:00', endTime: '13:30', available: true },
+        { id: 34, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '13:30', endTime: '14:00', available: true },
+        { id: 35, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '14:00', endTime: '14:30', available: true },
+        { id: 36, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '14:30', endTime: '15:00', available: true },
+        { id: 37, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '15:00', endTime: '15:30', available: true },
+        { id: 38, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '15:30', endTime: '16:00', available: true },
+        { id: 39, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '16:00', endTime: '16:30', available: true },
+        { id: 40, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '16:30', endTime: '17:00', available: true },
+        { id: 41, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '17:00', endTime: '17:30', available: true },
+        { id: 42, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '17:30', endTime: '18:00', available: true },
     ];
 
     useEffect(() => {
         setTimeout(() => {
             setTimeSlots(mockTimeSlots);
             setLoading(false);
-            // Auto-select first available date
-            if (availableDates.length > 0) {
-                setSelectedDate(availableDates[0]);
-            }
+            // Auto-select today's date
+            setSelectedDate(new Date());
         }, 1000);
     }, []);
 
@@ -108,6 +181,25 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
         return date.toDateString() === tomorrow.toDateString();
     };
 
+    const goToPreviousMonth = () => {
+        if (currentMonth > 0) {
+            setCurrentMonth(currentMonth - 1);
+        }
+    };
+
+    const goToNextMonth = () => {
+        if (currentMonth < 3) { // Show up to 4 months ahead (0-3)
+            setCurrentMonth(currentMonth + 1);
+        }
+    };
+
+    const getMonthYear = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + currentMonth;
+        return { month, year };
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-[60vh]">
@@ -123,13 +215,14 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
     }
 
     const slotsForSelectedDate = getTimeSlotsForDate(selectedDate);
+    const { month, year } = getMonthYear();
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 py-8 px-4">
+        <div className="min-h-screen bg-gray-50 py-8 px-4">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-10">
-                    <div className="inline-block px-4 py-2 bg-gradient-to-r from-[#194376]/10 to-[#46C6CE]/10 rounded-full mb-4">
+                    <div className="inline-block px-4 py-2 bg-blue-50 rounded-full mb-4">
                         <span className="text-[#194376] font-bold text-sm">Step 3 of 4</span>
                     </div>
                     <h1 className="text-4xl font-bold text-gray-800 mb-3">
@@ -157,17 +250,17 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                         <h3 className="text-xl font-bold text-gray-800">Booking Summary</h3>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-xl">
+                        <div className="bg-gray-50 p-4 rounded-xl">
                             <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Services</p>
                             <p className="font-bold text-gray-800 text-sm leading-tight">
                                 {bookingData.selectedServicesData?.map(s => s.name).join(', ') || 'No services'}
                             </p>
                         </div>
-                        <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-xl">
+                        <div className="bg-gray-50 p-4 rounded-xl">
                             <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Duration</p>
                             <p className="font-bold text-2xl text-[#194376]">{calculateTotalDuration()} mins</p>
                         </div>
-                        <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-xl">
+                        <div className="bg-gray-50 p-4 rounded-xl">
                             <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Total</p>
                             <p className="font-bold text-2xl text-[#194376]">£{bookingData.totalAmount?.toFixed(2) || '0.00'}</p>
                         </div>
@@ -186,67 +279,116 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                     </div>
                 )}
 
-                {/* Date Selection Calendar */}
+                {/* Date Selection Calendar - Single Month with Navigation */}
                 <div className="bg-white rounded-2xl p-6 mb-8 shadow-lg">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                        <svg className="w-6 h-6 mr-2 text-[#194376]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Select a Date
-                    </h2>
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-bold text-gray-800 flex items-center">
+                            <svg className="w-6 h-6 mr-2 text-[#194376]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Select a Date
+                        </h2>
 
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-3">
-                        {availableDates.map((date, index) => {
-                            const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
-                            const todayLabel = isToday(date);
-                            const tomorrowLabel = isTomorrow(date);
+                        <div className="flex items-center space-x-2">
+                            <button
+                                onClick={goToPreviousMonth}
+                                disabled={currentMonth === 0}
+                                className={`p-2 rounded-lg transition-all ${currentMonth === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-100 hover:shadow-sm'}`}
+                            >
+                                <svg className="w-5 h-5 text-[#194376]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
 
-                            return (
-                                <div
-                                    key={index}
-                                    onClick={() => {
-                                        setSelectedDate(date);
-                                        setSelectedSlot(null);
-                                        setError('');
-                                    }}
-                                    className={`
-                                        relative p-4 rounded-xl cursor-pointer transition-all duration-300 text-center
-                                        ${isSelected
-                                        ? 'shadow-xl transform scale-105'
-                                        : 'hover:shadow-md hover:scale-102'
-                                    }
-                                    `}
-                                    style={isSelected ? {
-                                        background: 'linear-gradient(135deg, #194376 0%, #46C6CE 100%)',
-                                        color: 'white'
-                                    } : {
-                                        background: 'linear-gradient(to bottom, #f9fafb, #f3f4f6)',
-                                        border: '2px solid #e5e7eb'
-                                    }}
-                                >
-                                    {(todayLabel || tomorrowLabel) && (
-                                        <div
-                                            className="absolute -top-2 left-1/2 transform -translate-x-1/2 px-2 py-0.5 rounded-full text-xs font-bold"
-                                            style={{
-                                                backgroundColor: isSelected ? 'white' : '#46C6CE',
-                                                color: isSelected ? '#194376' : 'white'
-                                            }}
-                                        >
-                                            {todayLabel ? 'Today' : 'Tomorrow'}
-                                        </div>
-                                    )}
-                                    <div className={`text-xs font-semibold mb-1 ${isSelected ? 'text-white/90' : 'text-gray-500'}`}>
-                                        {date.toLocaleDateString('en-GB', { weekday: 'short' })}
-                                    </div>
-                                    <div className={`text-2xl font-bold ${isSelected ? 'text-white' : 'text-gray-800'}`}>
-                                        {date.getDate()}
-                                    </div>
-                                    <div className={`text-xs font-medium ${isSelected ? 'text-white/90' : 'text-gray-600'}`}>
-                                        {date.toLocaleDateString('en-GB', { month: 'short' })}
-                                    </div>
+                            <div className="text-lg font-semibold text-gray-700 min-w-[180px] text-center">
+                                {getMonthName(month % 12)} {year}
+                            </div>
+
+                            <button
+                                onClick={goToNextMonth}
+                                disabled={currentMonth === 3}
+                                className={`p-2 rounded-lg transition-all ${currentMonth === 3 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-100 hover:shadow-sm'}`}
+                            >
+                                <svg className="w-5 h-5 text-[#194376]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Month Display */}
+                    <div>
+                        <div className="grid grid-cols-7 gap-1.5 mb-2">
+                            {/* Day headers */}
+                            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                                <div key={day} className="text-center text-xs font-semibold text-gray-500 py-2">
+                                    {day}
                                 </div>
-                            );
-                        })}
+                            ))}
+                        </div>
+
+                        <div className="grid grid-cols-7 gap-1.5">
+                            {/* Calendar days for current month */}
+                            {getCalendarDays(currentMonth).map((date, index) => {
+                                const isSelected = selectedDate && date && date.toDateString() === selectedDate.toDateString();
+                                const todayLabel = date && isToday(date);
+                                const tomorrowLabel = date && isTomorrow(date);
+                                const isCurrentMonth = date && date.getMonth() === month % 12;
+
+                                return (
+                                    <div
+                                        key={`month-${index}`}
+                                        onClick={() => {
+                                            if (date && isCurrentMonth) {
+                                                setSelectedDate(date);
+                                                setSelectedSlot(null);
+                                                setError('');
+                                            }
+                                        }}
+                                        className={`
+                                            relative p-2.5 rounded-lg text-center min-h-[70px]
+                                            ${date && isCurrentMonth ? 'cursor-pointer hover:bg-gray-50 hover:shadow-sm' : ''}
+                                            ${isSelected ? 'bg-blue-50 border border-[#194376] shadow-sm' : 'border border-gray-100'}
+                                            ${!date || !isCurrentMonth ? 'opacity-40' : ''}
+                                        `}
+                                    >
+                                        {(todayLabel || tomorrowLabel) && date && isCurrentMonth && (
+                                            <div className="absolute -top-1.5 left-1/2 transform -translate-x-1/2 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#46C6CE] text-white">
+                                                {todayLabel ? 'Today' : 'Tomorrow'}
+                                            </div>
+                                        )}
+                                        {date && (
+                                            <>
+                                                <div className={`text-[10px] font-medium mb-0.5 ${isSelected ? 'text-[#194376]' : 'text-gray-500'}`}>
+                                                    {date.getDate() === 1 ? date.toLocaleDateString('en-GB', { month: 'short' }) : ''}
+                                                </div>
+                                                <div className={`text-base font-bold ${isSelected ? 'text-[#194376]' : isCurrentMonth ? 'text-gray-800' : 'text-gray-400'}`}>
+                                                    {date.getDate()}
+                                                </div>
+                                                <div className={`text-[10px] ${isSelected ? 'text-[#194376]' : isCurrentMonth ? 'text-gray-600' : 'text-gray-400'}`}>
+                                                    {date.toLocaleDateString('en-GB', { weekday: 'short' }).substring(0, 1)}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* Month Navigation Indicator */}
+                    <div className="flex justify-center items-center mt-6 space-x-2">
+                        {[0, 1, 2, 3].map((monthIndex) => (
+                            <button
+                                key={monthIndex}
+                                onClick={() => setCurrentMonth(monthIndex)}
+                                className={`h-2 rounded-full transition-all ${
+                                    currentMonth === monthIndex
+                                        ? 'w-8 bg-[#194376]'
+                                        : 'w-2 bg-gray-300 hover:bg-gray-400'
+                                }`}
+                            />
+                        ))}
                     </div>
                 </div>
 
@@ -283,13 +425,10 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                                                 ${!slot.available
                                                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-2 border-gray-200'
                                                 : isSelected
-                                                    ? 'text-white shadow-xl transform scale-105'
+                                                    ? 'bg-[#194376] text-white shadow-xl transform scale-105'
                                                     : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-[#46C6CE] hover:shadow-lg hover:scale-105'
                                             }
                                             `}
-                                            style={isSelected && slot.available ? {
-                                                background: 'linear-gradient(135deg, #194376 0%, #46C6CE 100%)'
-                                            } : {}}
                                         >
                                             <div className="text-sm mb-1">
                                                 {formatTime(slot.startTime)}
@@ -328,8 +467,7 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
                                 <div
-                                    className="w-12 h-12 rounded-xl flex items-center justify-center"
-                                    style={{ background: 'linear-gradient(135deg, #194376 0%, #46C6CE 100%)' }}
+                                    className="w-12 h-12 rounded-xl flex items-center justify-center bg-[#194376]"
                                 >
                                     <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -373,12 +511,9 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                             px-8 py-4 font-bold rounded-xl transition-all w-full sm:w-auto flex items-center justify-center gap-2
                             ${!selectedSlot
                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                            : 'text-white hover:shadow-2xl transform hover:scale-105 active:scale-95'
+                            : 'bg-[#46C6CE] text-white hover:shadow-2xl transform hover:scale-105 active:scale-95'
                         }
                         `}
-                        style={selectedSlot ? {
-                            background: 'linear-gradient(135deg, #194376 0%, #2a5a94 50%, #46C6CE 100%)'
-                        } : {}}
                     >
                         Continue to Payment
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

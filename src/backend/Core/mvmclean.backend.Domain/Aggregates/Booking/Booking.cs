@@ -1,29 +1,29 @@
 using mvmclean.backend.Domain.Aggregates.Booking.Entities;
 using mvmclean.backend.Domain.Aggregates.Booking.Enums;
 using mvmclean.backend.Domain.Aggregates.Booking.Events;
-\using mvmclean.backend.Domain.SharedKernel.ValueObjects;
+using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Domain.Aggregates.Booking;
 
 public class Booking : Core.BaseClasses.AggregateRoot
 {
     public Guid CustomerId { get; private set; }
+    public Customer Customer { get; set; }
     public Guid? ContractorId { get; private set; }
     public Address ServiceAddress { get; private set; }
     public TimeSlot ScheduledSlot { get; private set; }
     public BookingStatus Status { get; private set; }
     public Money TotalPrice { get; private set; }
 
-    private readonly List<BookingItem> _items = new();
-    public IReadOnlyCollection<BookingItem> Items => _items.AsReadOnly();
+    public IReadOnlyCollection<Guid> ServiceItemIds ;
 
     public Guid? PaymentId { get; private set; }
     public PaymentType PaymentType { get; set; }
     public Payment? Payment { get; private set; }
 
-    private Booking(Guid customerId, Address serviceAddress, TimeSlot scheduledSlot)
+    private Booking(Customer customer, Address serviceAddress, TimeSlot scheduledSlot)
     {
-        CustomerId = customerId;
+        CustomerId = customer.Id;
         ServiceAddress = serviceAddress;
         ScheduledSlot = scheduledSlot;
 
@@ -32,78 +32,28 @@ public class Booking : Core.BaseClasses.AggregateRoot
     }
 
 
-    public static Booking Create(Guid customerId, Address serviceAddress, TimeSlot scheduledSlot)
+    public static Booking Create(Customer customer, Address serviceAddress, TimeSlot scheduledSlot)
     {
    
         var booking = new Booking(
-            customerId,
+            customer,
             serviceAddress,
             scheduledSlot
         );
-
-        booking.UpdatePostcodePricing(pricingService);
-        booking.RecalculateTotalPrice();
-
+        
+        
         booking.AddDomainEvent(
-            new BookingCreatedEvent(booking.Id, customerId)
+            new BookingCreatedEvent(booking.Id, customer.Id)
         );
 
         return booking;
     }
+    
 
 
-    public void AddService(Guid serviceId, Money basePrice, int quantity = 1)
-    {
-        
-        var item = new BookingItem
-        {
-            ServiceId = serviceId,
-            AdjustedPrice = adjustedPrice, 
-            Quantity = quantity
-        };
-        
-        _items.Add(item);
-        RecalculateTotalPrice();
-    }
-
-    public void AddServiceWithAdjustedPrice(Service service, Money adjustedPrice, int quantity = 1)
-    {
-        var item = new BookingItem
-        {
-            ServiceId = service.Id,
-            AdjustedPrice = adjustedPrice,
-            Quantity = quantity
-        };
-        
-        _items.Add(item);
-        RecalculateTotalPrice();
-    }
-
-    private void RecalculateTotalPrice()
-    {
-        TotalPrice = _items.Aggregate(
-            Money.Create(0),
-            (total, item) => total.Add(item.AdjustedPrice.Multiply(item.Quantity))
-        );
-    }
-
-    public void UpdatePostcodePricing(IPricingService pricingService)
-    {                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-        foreach (var item in _items)
-        {
-            // Only recalculate if we have the base price
-            if (item.BasePrice != null && item.BasePrice.Amount > 0)
-            {
-                item.AdjustedPrice = pricingService.CalculatePrice(item.BasePrice, ServiceAddress.Postcode);
-            }
-        }
-        RecalculateTotalPrice();
-    }                                                           
-
-    public void UpdateServiceAddress(Address newAddress, IPricingService pricingService)
+    public void UpdateServiceAddress(Address newAddress)
     {
         ServiceAddress = newAddress;
-        UpdatePostcodePricing(pricingService);
         UpdatedAt = DateTime.UtcNow;
     }
 

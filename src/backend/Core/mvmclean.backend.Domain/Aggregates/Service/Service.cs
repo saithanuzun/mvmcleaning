@@ -53,7 +53,7 @@ public class Service : AggregateRoot
     
     public Money GetAdjustedPriceForPostcode(Postcode postcode)
     {
-        var pricing = _postcodePricings.FirstOrDefault(p => p.Postcode == postcode);
+        var pricing = _postcodePricings.FirstOrDefault(p => p.Postcode.Area == postcode.Area);
         if (pricing == null)
             return BasePrice;
         return pricing.CalculateAdjustedPrice(BasePrice);

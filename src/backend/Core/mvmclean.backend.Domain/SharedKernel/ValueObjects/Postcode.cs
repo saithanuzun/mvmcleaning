@@ -38,7 +38,6 @@ public class Postcode : ValueObject
 
     private static bool IsValidFormat(string postcode)
     {
-        // Simplified UK postcode validation
         return postcode.Length >= 5 && postcode.Length <= 8;
     }
 
