@@ -1,6 +1,6 @@
 namespace mvmclean.backend.Domain.Core.Interfaces;
 
-public interface IRepository
+public interface IGenericRepository
 {
     
 }

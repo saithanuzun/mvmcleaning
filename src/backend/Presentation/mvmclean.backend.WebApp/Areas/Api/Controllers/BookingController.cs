@@ -1,6 +1,18 @@
-namespace mvmclean.backend.WebApp.Areas.Api.Controllers;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
-public class BookingController
+namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
+
+public class BookingController : BaseApiController
 {
+    public BookingController(IMediator mediator) : base(mediator)
+    {
+        
+    }
+
+    public IActionResult CreateBooking()
+    {
+        return Ok();
+    }
     
 }

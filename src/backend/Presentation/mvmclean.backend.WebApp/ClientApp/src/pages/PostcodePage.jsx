@@ -64,7 +64,7 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
                         <div
                             className="px-8 pt-8 pb-6 relative overflow-hidden"
                             style={{
-                                background: 'linear-gradient(135deg, #194376 0%, #14325e 100%)'
+                                background: '#194376'
                             }}
                         >
                           
@@ -176,7 +176,7 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
                                     style={{
                                         background: loading
                                             ? '#9ca3af'
-                                            : 'linear-gradient(135deg, #194376 0%, #2a5a94 100%)'
+                                            : 'linear-gradient(135deg, #194376 0%, #14325e 100%)'
                                     }}
                                 >
                                     {loading ? (
@@ -237,7 +237,7 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
                     <div
                         className="lg:w-1/2 p-6 lg:p-10 flex flex-col justify-center items-center relative"
                         style={{
-                            background: 'linear-gradient(135deg, #194376 0%, #14325e 100%)'
+                            background: '#194376'
                         }}
                     >
                         {/* Background Pattern */}
