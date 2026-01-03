@@ -2,8 +2,7 @@ using mvmclean.backend.Domain.Core.Interfaces;
 
 namespace mvmclean.backend.Domain.Aggregates.Quotation;
 
-public interface IQuotationRepository : IRepository
+public interface IQuotationRepository : IGenericRepository<Quotation>
 {
-    Task AddAsync(string phoneNumber, string postcode);
-    Task<Quotation?> GetByIdAsync(Guid quotationId); 
+    
 }

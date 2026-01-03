@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
+namespace mvmclean.backend.WebApp.Areas.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

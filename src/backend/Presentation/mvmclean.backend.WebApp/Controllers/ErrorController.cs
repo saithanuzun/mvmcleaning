@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using mvmclean.backend.Infrastructure.Persistence;
 using mvmclean.backend.WebApp.Models;
 
 namespace mvmclean.backend.WebApp.Controllers;

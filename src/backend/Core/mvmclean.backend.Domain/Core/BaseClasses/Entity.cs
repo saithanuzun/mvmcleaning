@@ -2,24 +2,16 @@ using mvmclean.backend.Domain.Core.Interfaces;
 
 namespace mvmclean.backend.Domain.Core.BaseClasses;
 
-/// <summary>
-/// Base class for all entities in the domain.
-/// Entities have identity and lifecycle.
-/// Includes audit tracking and soft delete functionality.
-/// </summary>
 public abstract class Entity : IEquatable<Entity>, IAuditable, ISoftDeletable
 {
     private int? _requestedHashCode;
 
     public Guid Id { get; protected set; }
-    
-    // Audit properties
     public DateTime CreatedAt { get; protected set; }
     public string? CreatedBy { get; protected set; }
     public DateTime? UpdatedAt { get; protected set; }
     public string? UpdatedBy { get; protected set; }
     
-    // Soft delete properties
     public bool IsDeleted { get; private set; }
     public DateTime? DeletedAt { get; private set; }
     public string? DeletedBy { get; private set; }
@@ -28,6 +20,7 @@ public abstract class Entity : IEquatable<Entity>, IAuditable, ISoftDeletable
     {
         Id = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
         IsDeleted = false;
     }
 
@@ -35,46 +28,37 @@ public abstract class Entity : IEquatable<Entity>, IAuditable, ISoftDeletable
     {
         Id = id;
         CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
         IsDeleted = false;
     }
-
-    /// <summary>
-    /// Check if entity is transient (not persisted yet)
-    /// </summary>
+    
+    
     public bool IsTransient()
     {
         return Id == default;
     }
 
-    /// <summary>
-    /// Mark entity as updated with optional user tracking
-    /// </summary>
     protected void MarkAsUpdated(string? updatedBy = null)
     {
         UpdatedAt = DateTime.UtcNow;
         UpdatedBy = updatedBy;
     }
 
-    /// <summary>
-    /// Soft delete the entity
-    /// </summary>
+    
     public void Delete(string? deletedBy = null)
     {
         if (IsDeleted)
-            return; // Already deleted
+            return; 
 
         IsDeleted = true;
         DeletedAt = DateTime.UtcNow;
         DeletedBy = deletedBy;
     }
-
-    /// <summary>
-    /// Restore a soft-deleted entity
-    /// </summary>
+    
     public void Restore()
     {
         if (!IsDeleted)
-            return; // Not deleted
+            return;
 
         IsDeleted = false;
         DeletedAt = null;

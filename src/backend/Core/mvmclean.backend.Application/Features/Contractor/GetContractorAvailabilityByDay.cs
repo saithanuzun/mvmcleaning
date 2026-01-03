@@ -21,10 +21,17 @@ public class GetContractorAvailabilityByDayResponse
 public class GetContractorAvailabilityByDayHandler : IRequestHandler<GetContractorAvailabilityByDayRequest,List<GetContractorAvailabilityByDayResponse>>
 {
     private readonly IContractorRepository _contractorRepository;
-    
-    
+
+    public GetContractorAvailabilityByDayHandler(IContractorRepository contractorRepository)
+    {
+        _contractorRepository = contractorRepository;
+    }
+
     public Task<List<GetContractorAvailabilityByDayResponse>> Handle(GetContractorAvailabilityByDayRequest request, CancellationToken cancellationToken)
     {
+        
+        
+        
         throw new NotImplementedException();
     }
 }

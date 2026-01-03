@@ -1,7 +1,7 @@
 using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
 using mvmclean.backend.Domain.Aggregates.Contractor.Entities;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
-using WorkingHours = mvmclean.backend.Domain.Aggregates.Contractor.ValueObjects.WorkingHours;
+using WorkingHours = mvmclean.backend.Domain.Aggregates.Contractor.Entities.WorkingHours;
 
 namespace mvmclean.backend.Domain.Aggregates.Contractor;
 
@@ -9,9 +9,12 @@ public class Contractor : Core.BaseClasses.AggregateRoot
 {
     public string? FirstName { get; private set; }
     public string? LastName { get; private set; }
+    
+    public string? ImageUrl { get; set; }
     public PhoneNumber PhoneNumber { get; private set; }
     public Email Email { get; private set; }
     public bool IsActive { get; private set; }
+    
     private readonly List<Review> _reviews = new();
 
     public IReadOnlyCollection<Review> Reviews => _reviews.AsReadOnly();
@@ -29,7 +32,7 @@ public class Contractor : Core.BaseClasses.AggregateRoot
     {
     }
 
-    public static Contractor Create(string? firstName, string? lastName, string? phoneNumber, string? email)
+    public static Contractor Create(string firstName, string lastName, string phoneNumber, string email, string? imageUrl)
     {
         return new Contractor
         {
@@ -37,7 +40,8 @@ public class Contractor : Core.BaseClasses.AggregateRoot
             LastName = lastName,
             PhoneNumber = PhoneNumber.Create(phoneNumber),
             Email = Email.Create(email),
-            IsActive = true
+            IsActive = true,
+            ImageUrl = imageUrl
         };
     }
 
@@ -54,7 +58,7 @@ public class Contractor : Core.BaseClasses.AggregateRoot
 
     public void AddCoverageArea(Postcode postcode)
     {
-        if (!_coverageAreas.Any(c => c.Postcode.Equals(postcode) && c.IsActive))
+        if (_coverageAreas.All(c => c.Postcode.Area != postcode.Area))
         {
             _coverageAreas.Add(ContractorCoverage.Create(Id, postcode));
         }
@@ -62,16 +66,12 @@ public class Contractor : Core.BaseClasses.AggregateRoot
 
     public void RemoveCoverageArea(Postcode postcode)
     {
-        var coverage = _coverageAreas.FirstOrDefault(c => c.Postcode.Equals(postcode));
+        var coverage = _coverageAreas.FirstOrDefault(c => c.Postcode.Area == postcode.Area);
         coverage?.Deactivate();
     }
 
     public void MarkAsUnavailable(TimeSlot timeSlot)
     {
-        if (_unavailableSlots.Any(s => s.OverlapsWith(timeSlot)))
-        {
-            throw new InvalidOperationException("Time slot overlaps with existing unavailability");
-        }
 
         _unavailableSlots.Add(timeSlot);
     }
@@ -103,6 +103,7 @@ public class Contractor : Core.BaseClasses.AggregateRoot
 
     public void Activate() => IsActive = true;
     public void Deactivate() => IsActive = false;
+    public void SetImage(string imageUrl) => ImageUrl = imageUrl;
 
     public string FullName => $"{FirstName?.Trim()} {LastName?.Trim()}".Trim();
     

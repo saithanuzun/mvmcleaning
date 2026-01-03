@@ -1,4 +1,5 @@
 using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
+using mvmclean.backend.Domain.Aggregates.Invoice.Entity;
 using mvmclean.backend.Domain.Aggregates.Invoice.Enums;
 using mvmclean.backend.Domain.Aggregates.Invoice.Events;
 using mvmclean.backend.Domain.Aggregates.Invoice.ValueObjects;
@@ -47,7 +48,7 @@ public class Invoice : Core.BaseClasses.AggregateRoot
         return invoice;
     }
     
-    public void AddLineItem(string description, Money unitPrice, int quantity)
+    public void AddLineItem(string description, decimal unitPrice, int quantity)
     {
         var lineItem = new InvoiceLineItem(
             description, 
@@ -57,12 +58,6 @@ public class Invoice : Core.BaseClasses.AggregateRoot
         
         _lineItems.Add(lineItem);
         RecalculateTotals();
-    }
-    
-    public void ApplyDiscount(Promotion.Promotion discount)
-    {
-        DiscountAmount = discount.ApplyDiscount(Subtotal);
-        CalculateTotal();
     }
     
     
@@ -96,7 +91,7 @@ public class Invoice : Core.BaseClasses.AggregateRoot
         }
     }
     
-    public void AddLateFee(Money lateFee)
+    public void AddLateFee(decimal lateFee)
     {
         if (Status != InvoiceStatus.Overdue)
             throw new InvalidOperationException("Late fees can only be added to overdue invoices");

@@ -58,7 +58,7 @@ public class Service : AggregateRoot
             return BasePrice;
         return pricing.CalculateAdjustedPrice(BasePrice);
     }
-    
+
     public void AddPostcodePricing(Postcode postcode, decimal multiplier, decimal fixedAdjustment)
     {
         var existingPricing = _postcodePricings
@@ -81,16 +81,7 @@ public class Service : AggregateRoot
     }
     
 
-    public Money CalculatePriceForPostcode(Postcode postcode)
-    {
-        var pricing = _postcodePricings
-            .FirstOrDefault(p => p.Postcode == postcode);
-
-        if (pricing == null)
-            return BasePrice;
-
-        return pricing.CalculateAdjustedPrice(BasePrice);
-    }
+  
 
     public void UpdatePrice(decimal newPrice)
     {

@@ -12,7 +12,7 @@ public class Customer : Entity
     public Email? Email { get; private set; }
     public Address? Address { get; private set; }
 
-    private readonly List<Message> _messages = new();
+    private readonly List<Message> _messages = [];
     public IReadOnlyList<Message> Messages => _messages.AsReadOnly();
 
     private Customer()

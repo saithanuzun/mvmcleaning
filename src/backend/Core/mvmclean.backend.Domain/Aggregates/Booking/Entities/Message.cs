@@ -1,16 +1,15 @@
 using mvmclean.backend.Domain.Core.BaseClasses;
 
-namespace mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
+namespace mvmclean.backend.Domain.Aggregates.Booking.Entities;
 
-public class Message : ValueObject
+public class Message : Entity
 {
     public string Content { get; private set; }
     public DateTime SentAt { get; private set; }
 
-    private Message()
-    {
-    }
-
+    public Customer Customer { get; set; }
+    public Guid CustomerId { get; set; }
+    
     public Message(string content)
     {
         if (string.IsNullOrWhiteSpace(content))
@@ -20,8 +19,4 @@ public class Message : ValueObject
         SentAt = DateTime.UtcNow;
     }
 
-    protected override IEnumerable<object?> GetEqualityComponents()
-    {
-        throw new NotImplementedException();
-    }
 }

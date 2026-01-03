@@ -1,9 +1,9 @@
 using mvmclean.backend.Domain.Core.Interfaces;
+using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Domain.Aggregates.Contractor;
 
-public interface IContractorRepository : IRepository
+public interface IContractorRepository : IGenericRepository<Contractor>
 {
-    Task AddAsync(string? firstName, string? lastName, string? phoneNumber, string? email);
-    Task<Contractor?> GetByIdAsync(Guid contractorId);
+
 }

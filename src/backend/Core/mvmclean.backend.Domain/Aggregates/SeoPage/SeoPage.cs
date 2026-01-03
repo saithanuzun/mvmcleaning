@@ -9,44 +9,29 @@ public class SeoPage : AggregateRoot
     // Core identity
     public string Slug { get; private set; }
     public string City { get; private set; }
-    public string Area { get; private set; }
+    public string? Area { get; private set; }
     public string ServiceType { get; private set; }
 
-    // SEO Meta
     public string MetaTitle { get; private set; }
     public string MetaDescription { get; private set; }
     public string H1Tag { get; private set; }
 
-    // Page Intro
     public string Introduction { get; private set; }
 
-    // Statistics
-    public int YearsServing { get; private set; } = 10;
-    public int JobsCompleted { get; private set; } = 2000;
-    public decimal AverageRating { get; private set; } = 4.9m;
 
-    // Content Blocks (H2 + Paragraph)
     private readonly List<SeoPageContent> _contentBlocks = new();
     public IReadOnlyCollection<SeoPageContent> ContentBlocks => _contentBlocks.AsReadOnly();
 
-    // FAQs
     private readonly List<SeoPageFAQ> _faqs = new();
     public IReadOnlyCollection<SeoPageFAQ> FAQs => _faqs.AsReadOnly();
 
-    // Keywords
     private readonly List<SeoPageKeyword> _keywords = new();
     public IReadOnlyCollection<SeoPageKeyword> Keywords => _keywords.AsReadOnly();
 
     private SeoPage() { }
 
     // Factory
-    public static SeoPage Create(
-        string city,
-        string area,
-        string serviceType,
-        int yearsServing,
-        int jobsCompleted,
-        decimal averageRating)
+    public static SeoPage Create(string city, string area, string serviceType)
     {
         var page = new SeoPage
         {
@@ -54,13 +39,10 @@ public class SeoPage : AggregateRoot
             City = city.Trim(),
             Area = area.Trim(),
             ServiceType = serviceType.Trim(),
-            YearsServing = yearsServing,
-            JobsCompleted = jobsCompleted,
-            AverageRating = averageRating,
             CreatedAt = DateTime.UtcNow
         };
 
-        page.Slug = GenerateSlug(page.City, page.ServiceType);
+        page.Slug = GenerateSlug(page.City, page.Area, page.ServiceType);
         page.GenerateSeoMeta();
         page.GeneratePageContent();
         page.GenerateFaqs();
@@ -69,21 +51,22 @@ public class SeoPage : AggregateRoot
         return page;
     }
 
-    // Slug: /leicester/carpet-cleaning
-    private static string GenerateSlug(string city, string service)
+    // Slug: /leicester/wigston/carpet-cleaning
+    private static string GenerateSlug(string city, string? area, string service)
     {
-        return $"{city.ToLower().Replace(" ", "-")}/{service.ToLower().Replace(" ", "-")}";
+        return area is not null ? $"{city.ToLower().Replace(" ", "-")}/{area.ToLower().Replace(" ","-")}/{service.ToLower().Replace(" ", "-")}" 
+            : $"{city.ToLower().Replace(" ", "-")}/{service.ToLower().Replace(" ", "-")}";
     }
 
     // META + H1
     private void GenerateSeoMeta()
     {
         MetaTitle =
-            $"{ServiceType} in {City} | Rated {AverageRating}/5 · {YearsServing}+ Years Experience";
+            $"{ServiceType} in {City} | Rated 4.9/5 · 10+ Years Experience";
 
         MetaDescription =
             $"Professional {ServiceType.ToLower()} services in {Area}, {City}. " +
-            $"{JobsCompleted}+ jobs completed. Same-day availability and free quotes.";
+            $"2000+ jobs completed. Same-day availability and free quotes.";
 
         H1Tag = $"{ServiceType} in {Area}, {City}";
     }
@@ -93,7 +76,7 @@ public class SeoPage : AggregateRoot
     {
         Introduction =
             $"Looking for reliable {ServiceType.ToLower()} in {Area}, {City}? " +
-            $"With over {YearsServing} years of experience and {JobsCompleted}+ completed jobs, " +
+            $"With over 10 years of experience and 2000+ completed jobs, " +
             $"we deliver high-quality results every time.";
 
         _contentBlocks.Clear();
@@ -123,7 +106,6 @@ public class SeoPage : AggregateRoot
         ));
     }
 
-    // FAQ SECTION
     private void GenerateFaqs()
     {
         _faqs.Clear();
@@ -153,13 +135,26 @@ public class SeoPage : AggregateRoot
     {
         _keywords.Clear();
 
-        var keywords = new[]
+        var keywords = new List<string>
         {
-            $"{ServiceType.ToLower()} {Area}",
-            $"{ServiceType.ToLower()} {City}",
-            $"professional {ServiceType.ToLower()} {Area}",
-            $"best {ServiceType.ToLower()} near me",
-            $"{Area} {ServiceType.ToLower()} company"
+            // Service + Location variations
+            $"{ServiceType} {City}",
+            $"{ServiceType} in {City}",
+            $"{City} {ServiceType} services",
+        
+            // Professional qualifiers
+            $"professional {ServiceType} {City}",
+            $"certified {ServiceType} {City}",
+            $"licensed {ServiceType} {City}",
+        
+            // "Best" variations (high commercial intent)
+            $"best {ServiceType} {City}",
+            $"top {ServiceType} {City}",
+            $"affordable {ServiceType} {City}",
+        
+            // Service-specific with area
+            $"{ServiceType} near {Area}",
+            $"{Area} {ServiceType} company"
         };
 
         foreach (var keyword in keywords)
@@ -168,11 +163,4 @@ public class SeoPage : AggregateRoot
         }
     }
 
-    public void UpdateStatistics(int jobsCompleted, decimal averageRating)
-    {
-        JobsCompleted = jobsCompleted;
-        AverageRating = averageRating;
-        GenerateSeoMeta();
-        GeneratePageContent();
-    }
 }

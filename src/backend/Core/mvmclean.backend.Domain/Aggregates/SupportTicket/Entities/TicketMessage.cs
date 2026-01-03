@@ -9,11 +9,19 @@ public class TicketMessage : Entity
     public DateTime SentAt { get; private set; }
     public bool IsInternalNote { get; private set; }
     
-    public TicketMessage(Guid senderId, string message, bool isInternalNote)
+    public SupportTicket SupportTicket { get; set; }
+    public Guid SupportTicketId { get; set; }    
+    public TicketMessage(Guid senderId, string message, bool isInternalNote) : base()
     {
         SenderId = senderId;
         Message = message;
         SentAt = DateTime.UtcNow;
         IsInternalNote = isInternalNote;
     }
+    protected TicketMessage(): base()
+    {
+    }
+    
+    
+    
 }
