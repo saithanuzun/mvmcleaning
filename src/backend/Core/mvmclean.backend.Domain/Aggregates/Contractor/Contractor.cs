@@ -9,6 +9,9 @@ public class Contractor : Core.BaseClasses.AggregateRoot
 {
     public string? FirstName { get; private set; }
     public string? LastName { get; private set; }
+
+    public string Username { get; set; }
+    public string PasswordHash { get; set; }
     
     public string? ImageUrl { get; set; }
     public PhoneNumber PhoneNumber { get; private set; }

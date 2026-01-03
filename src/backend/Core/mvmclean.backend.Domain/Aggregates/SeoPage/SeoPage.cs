@@ -10,7 +10,7 @@ public class SeoPage : AggregateRoot
     public string Slug { get; private set; }
     public string City { get; private set; }
     public string? Area { get; private set; }
-    public string ServiceType { get; private set; }
+    public string? ServiceType { get; private set; }
 
     public string MetaTitle { get; private set; }
     public string MetaDescription { get; private set; }
@@ -31,14 +31,14 @@ public class SeoPage : AggregateRoot
     private SeoPage() { }
 
     // Factory
-    public static SeoPage Create(string city, string area, string serviceType)
+    public static SeoPage Create(string city, string area, string? serviceType)
     {
         var page = new SeoPage
         {
             Id = Guid.NewGuid(),
             City = city.Trim(),
             Area = area.Trim(),
-            ServiceType = serviceType.Trim(),
+            ServiceType = serviceType?.Trim(),
             CreatedAt = DateTime.UtcNow
         };
 
@@ -51,18 +51,16 @@ public class SeoPage : AggregateRoot
         return page;
     }
 
-    // Slug: /leicester/wigston/carpet-cleaning
-    private static string GenerateSlug(string city, string? area, string service)
+    private static string GenerateSlug(string city, string? area, string? service)
     {
         return area is not null ? $"{city.ToLower().Replace(" ", "-")}/{area.ToLower().Replace(" ","-")}/{service.ToLower().Replace(" ", "-")}" 
             : $"{city.ToLower().Replace(" ", "-")}/{service.ToLower().Replace(" ", "-")}";
     }
 
-    // META + H1
     private void GenerateSeoMeta()
     {
         MetaTitle =
-            $"{ServiceType} in {City} | Rated 4.9/5 · 10+ Years Experience";
+            $"{ServiceType} in {City} | BOOK ONLINE | Rated 4.9/5 · 10+ Years Experience  ";
 
         MetaDescription =
             $"Professional {ServiceType.ToLower()} services in {Area}, {City}. " +

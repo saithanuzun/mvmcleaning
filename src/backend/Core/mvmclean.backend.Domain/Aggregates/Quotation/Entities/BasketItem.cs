@@ -13,7 +13,7 @@ public class BasketItem : ValueObject
     
     private BasketItem() { } // EF Core
 
-    public BasketItem(Guid serviceId, Money price, int quantity)
+    private BasketItem(Guid serviceId, Money price, int quantity)
     {
         if (quantity <= 0)
             throw new ArgumentException("Quantity must be greater than zero.");
@@ -21,6 +21,11 @@ public class BasketItem : ValueObject
         ServiceId = ServiceId;
         Price = price;
         Quantity = quantity;
+    }
+
+    public static BasketItem Create(Guid serviceId, Money price, int quantity)
+    {
+        return new BasketItem(serviceId, price, quantity);
     }
 
     public void IncreaseQuantity(int amount)
@@ -35,4 +40,5 @@ public class BasketItem : ValueObject
     {
         throw new NotImplementedException();
     }
+    
 }
