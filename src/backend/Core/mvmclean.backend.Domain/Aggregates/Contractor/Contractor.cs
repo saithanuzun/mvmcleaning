@@ -16,8 +16,10 @@ public class Contractor : Core.BaseClasses.AggregateRoot
     public bool IsActive { get; private set; }
     
     private readonly List<Review> _reviews = new();
-
     public IReadOnlyCollection<Review> Reviews => _reviews.AsReadOnly();
+    
+    private readonly List<Guid> _services = new();
+    public IReadOnlyCollection<Guid> Services => _services.AsReadOnly();
 
     private readonly List<WorkingHours> _workingHours = new();
     public IReadOnlyCollection<WorkingHours> WorkingHours => _workingHours.AsReadOnly();
@@ -62,6 +64,17 @@ public class Contractor : Core.BaseClasses.AggregateRoot
         {
             _coverageAreas.Add(ContractorCoverage.Create(Id, postcode));
         }
+    }
+
+    public void AddService(Guid serviceId)
+    {
+        _services.Add(serviceId);
+        
+    }
+    public void RemoveService(Guid serviceId)
+    {
+        _services.Remove(serviceId);
+
     }
 
     public void RemoveCoverageArea(Postcode postcode)

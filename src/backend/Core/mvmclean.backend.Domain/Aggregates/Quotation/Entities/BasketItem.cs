@@ -4,12 +4,13 @@ using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Domain.Aggregates.Quotation.Entities;
 
-public class BasketItem : Entity
+public class BasketItem : ValueObject
 {
     public Guid ServiceId { get; private set; }
     public Money Price { get; private set; }
     public int Quantity { get; private set; }
-
+    
+    
     private BasketItem() { } // EF Core
 
     public BasketItem(Guid serviceId, Money price, int quantity)
@@ -28,5 +29,10 @@ public class BasketItem : Entity
             throw new ArgumentException("Amount must be positive.");
 
         Quantity += amount;
+    }
+
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,5 +1,4 @@
 using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
-using mvmclean.backend.Domain.Aggregates.Invoice.Entity;
 using mvmclean.backend.Domain.Aggregates.Invoice.Enums;
 using mvmclean.backend.Domain.Aggregates.Invoice.Events;
 using mvmclean.backend.Domain.Aggregates.Invoice.ValueObjects;
@@ -50,7 +49,7 @@ public class Invoice : Core.BaseClasses.AggregateRoot
     
     public void AddLineItem(string description, decimal unitPrice, int quantity)
     {
-        var lineItem = new InvoiceLineItem(
+        var lineItem =  InvoiceLineItem.Create(
             description, 
             unitPrice, 
             quantity

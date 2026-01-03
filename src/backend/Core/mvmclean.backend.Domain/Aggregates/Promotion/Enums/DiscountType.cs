@@ -1,4 +1,4 @@
-namespace mvmclean.backend.Domain.Aggregates.Booking.Enums;
+namespace mvmclean.backend.Domain.Aggregates.Promotion.Enums;
 
 public enum DiscountType
 {

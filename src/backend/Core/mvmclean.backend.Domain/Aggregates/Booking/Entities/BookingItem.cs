@@ -8,4 +8,6 @@ public class BookingItem : Entity
     public Guid ServiceId { get; set; }
     public Money AdjustedPrice { get; set; } 
     public int Quantity { get; set; }
+
+    private BookingItem(){}
 }

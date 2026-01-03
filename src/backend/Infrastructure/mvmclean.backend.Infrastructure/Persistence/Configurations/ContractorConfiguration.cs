@@ -8,6 +8,19 @@ public class ContractorConfiguration : EntityConfiguration<Contractor>
 {
     public override void Configure(EntityTypeBuilder<Contractor> builder)
     {
-        throw new NotImplementedException();
+        base.Configure(builder);
+        
+        builder.OwnsMany(o => o.UnavailableSlots, li =>
+        {
+            
+        });
+        
+        builder.OwnsOne(i => i.Email);
+        
+        builder.OwnsOne(i => i.PhoneNumber);
+        
+        builder.OwnsMany(i => i.CoverageAreas, li=>li.OwnsOne(i=>i.Postcode));
+
+            
     }
 }

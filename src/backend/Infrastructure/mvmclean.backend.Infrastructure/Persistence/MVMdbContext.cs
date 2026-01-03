@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using mvmclean.backend.Domain.Aggregates.Booking;
 using mvmclean.backend.Domain.Aggregates.Contractor;
 using mvmclean.backend.Domain.Aggregates.Invoice;
+using mvmclean.backend.Domain.Aggregates.Promotion;
 using mvmclean.backend.Domain.Aggregates.Quotation;
 using mvmclean.backend.Domain.Aggregates.SeoPage;
 using mvmclean.backend.Domain.Aggregates.Service;
@@ -30,6 +31,7 @@ public class MVMdbContext : DbContext
     public DbSet<Quotation> Quotations { get; set; } = null!;
     public DbSet<SeoPage> SeoPages { get; set; } = null!;
     public DbSet<Service> Services { get; set; } = null!;
+    public DbSet<Promotion> Promotions { get; set; } = null!;
     public DbSet<SupportTicket> SupportTickets { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,7 +39,7 @@ public class MVMdbContext : DbContext
         base.OnModelCreating(modelBuilder);
         
     
-        //modelBuilder.ApplyConfigurationsFromAssembly(typeof(MVMdbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(MVMdbContext).Assembly);
     
         // Global query filters
         ApplyGlobalQueryFilters(modelBuilder);
@@ -64,6 +66,9 @@ public class MVMdbContext : DbContext
     {
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
+            if (entityType.IsOwned())
+                continue;
+            
             if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
             {
                 var parameter = Expression.Parameter(entityType.ClrType, "e");
@@ -74,6 +79,7 @@ public class MVMdbContext : DbContext
                 entityType.SetQueryFilter(lambda);
             }
         }
+
     }
 
 

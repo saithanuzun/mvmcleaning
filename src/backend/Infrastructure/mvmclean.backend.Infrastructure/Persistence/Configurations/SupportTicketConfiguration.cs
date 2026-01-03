@@ -8,8 +8,10 @@ public class SupportTicketConfiguration : EntityConfiguration<SupportTicket>
 {
     public override void Configure(EntityTypeBuilder<SupportTicket> builder)
     {
-
-        builder.Property(i => i.Id).ValueGeneratedNever();
+        base.Configure(builder);
+        
+        
+        
     }
     
 }

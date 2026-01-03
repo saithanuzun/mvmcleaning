@@ -1,8 +1,9 @@
 using mvmclean.backend.Domain.Aggregates.Booking.Enums;
+using mvmclean.backend.Domain.Aggregates.Promotion.Enums;
 using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
-namespace mvmclean.backend.Domain.Aggregates.Booking.Entities;
+namespace mvmclean.backend.Domain.Aggregates.Promotion;
 
 public class Promotion : Entity
 {
@@ -19,7 +20,6 @@ public class Promotion : Entity
     
     public bool IsActive { get; private set; }
     
-    // Targeting
     public List<Postcode> ApplicablePostcodes { get; private set; }
     public List<Guid> ApplicableServices { get; private set; }
     

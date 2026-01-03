@@ -8,6 +8,21 @@ public class QuotationConfiguration : EntityConfiguration<Quotation>
 {
     public override void Configure(EntityTypeBuilder<Quotation> builder)
     {
-        throw new NotImplementedException();
+        base.Configure(builder);
+        
+        builder.OwnsMany(o => o.BasketItems, li =>
+        {
+            li.OwnsOne(i => i.Price, money =>
+            {
+            });
+        });
+        
+        builder.OwnsOne(i => i.Cost);
+        builder.OwnsOne(i => i.PhoneNumber);
+        
+        builder.OwnsOne(i => i.Postcode);
+
+        
+
     }
 }

@@ -17,8 +17,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
     public BookingStatus Status { get; private set; }
     public Money TotalPrice { get; private set; }
     
-    public Promotion? Promotion { get; private set; }
-
     private readonly List<BookingItem> _serviceItems = new();
 
     public List<BookingItem> ServiceItems => new List<BookingItem>(_serviceItems);
@@ -26,15 +24,14 @@ public class Booking : Core.BaseClasses.AggregateRoot
     public Guid? PaymentId { get; private set; }
     public Payment? Payment { get; private set; }
 
-    private Booking(Customer customer, Address serviceAddress, TimeSlot scheduledSlot, List<BookingItem> serviceItems, Promotion? promotion, Money totalPrice)
+    private Booking(Customer customer, Address serviceAddress, TimeSlot scheduledSlot, List<BookingItem> serviceItems, Promotion.Promotion? promotion, Money totalPrice)
     {
         CustomerId = customer.Id;
-        Customer = customer ?? throw new ArgumentNullException(nameof(customer));
-        ServiceAddress = serviceAddress ?? throw new ArgumentNullException(nameof(serviceAddress));
-        ScheduledSlot = scheduledSlot ?? throw new ArgumentNullException(nameof(scheduledSlot));
+        Customer = customer;
+        ServiceAddress = serviceAddress;
+        ScheduledSlot = scheduledSlot;
         _serviceItems = serviceItems;
         Status = BookingStatus.Pending;
-        Promotion = promotion;
 
         if (promotion == null)
         {
@@ -51,13 +48,20 @@ public class Booking : Core.BaseClasses.AggregateRoot
         
     }
 
-    public static Booking Create(Customer customer, Money totalPrice, Address serviceAddress, TimeSlot scheduledSlot, List<BookingItem> serviceItems, Promotion? promotion)
+    public static Booking Create(Customer customer, Money totalPrice, Address serviceAddress, TimeSlot scheduledSlot, List<BookingItem> serviceItems, Promotion.Promotion? promotion)
     {
         var booking = new Booking(customer, serviceAddress, scheduledSlot, serviceItems, promotion, totalPrice);
         
         booking.AddDomainEvent(new BookingCreatedEvent(booking.Id, customer.Id));
         return booking;
     }
+
+    public void ApplyPromotion(Promotion.Promotion promotion)
+    {
+        TotalPrice = promotion.ApplyDiscount(TotalPrice);
+    }
+
+    
     public void UpdateServiceAddress(Address newAddress)
     {
         ServiceAddress = newAddress ?? throw new ArgumentNullException(nameof(newAddress));

@@ -10,24 +10,27 @@ public class Customer : Entity
     public string? LastName { get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }
     public Email? Email { get; private set; }
-    public Address? Address { get; private set; }
+    public Address Address { get; set; }
 
     private readonly List<Message> _messages = [];
     public IReadOnlyList<Message> Messages => _messages.AsReadOnly();
+
+    public ICollection<Booking> Bookings { get; set; }
 
     private Customer()
     {
     }
 
     public static Customer Create(PhoneNumber phoneNumber, string? email = null,
-        string? firstName = null, string? lastName = null)
+        string? firstName = null, string? lastName = null, Address address = null)
     {
         return new Customer
         {
             FirstName = firstName,
             LastName = lastName,
             PhoneNumber = phoneNumber,
-            Email = Email.Create(email)
+            Email = Email.Create(email),
+            Address = address,
         };
     }
 

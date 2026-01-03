@@ -8,6 +8,10 @@ public class ServiceConfiguration : EntityConfiguration<Service>
 {
     public override void Configure(EntityTypeBuilder<Service> builder)
     {
-        throw new NotImplementedException();
+        base.Configure(builder);
+        
+        builder.OwnsOne(i => i.BasePrice);
+        
+        
     }
 }
