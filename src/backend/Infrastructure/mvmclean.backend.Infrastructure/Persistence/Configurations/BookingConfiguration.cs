@@ -24,7 +24,7 @@ public class BookingConfiguration: EntityConfiguration<Booking>
         
         builder.OwnsMany(o => o.ServiceItems, li =>
         {
-            li.OwnsOne(i => i.AdjustedPrice, money =>
+            li.OwnsOne(i => i.UnitAdjustedPrice, money =>
             {
             });
         });

@@ -22,15 +22,15 @@ public class AccountController : Controller
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.Role, "Admin")
+                new Claim(ClaimTypes.Role, "ContractorCookie")
             };
 
-            var identity = new ClaimsIdentity(claims, "AdminCookie");
+            var identity = new ClaimsIdentity(claims, "ContractorCookie");
             var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync("AdminCookie", principal);
+            await HttpContext.SignInAsync("ContractorCookie", principal);
 
-            return RedirectToAction("Index", "Home", new { area = "Admin" });
+            return RedirectToAction("Index", "Home", new { area = "Contractor" });
         }
 
         ViewBag.Error = "Invalid credentials";
@@ -42,5 +42,11 @@ public class AccountController : Controller
     {
         await HttpContext.SignOutAsync("AdminCookie");
         return RedirectToAction("Login");
+    }
+
+    [Route("register")]
+    public async Task<IActionResult> Register()
+    {
+        return View();
     }
 }

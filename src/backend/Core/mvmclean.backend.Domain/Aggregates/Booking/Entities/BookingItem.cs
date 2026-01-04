@@ -6,8 +6,16 @@ namespace mvmclean.backend.Domain.Aggregates.Booking.Entities;
 public class BookingItem : Entity
 {
     public Guid ServiceId { get; set; }
-    public Money AdjustedPrice { get; set; } 
+    public Money UnitAdjustedPrice { get; set; } 
     public int Quantity { get; set; }
 
-    private BookingItem(){}
+    public BookingItem(){}
+    
+    
+
+    public void UpdateQuantity(int quantity)
+    {
+        Quantity =  quantity;
+    }
+
 }

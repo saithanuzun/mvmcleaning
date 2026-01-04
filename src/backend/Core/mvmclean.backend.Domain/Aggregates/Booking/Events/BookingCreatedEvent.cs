@@ -1,15 +1,17 @@
 using mvmclean.backend.Domain.Core.BaseClasses;
+using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Domain.Aggregates.Booking.Events;
 
 public class BookingCreatedEvent : DomainEvent
 {
     public Guid BookingId { get; }
-    public Guid CustomerId { get; }
-
-    public BookingCreatedEvent(Guid bookingId, Guid customerId ) : base()
+    public PhoneNumber PhoneNumber { get; set; }
+    public Postcode Postcode { get; set; }
+    public BookingCreatedEvent(Guid bookingId, PhoneNumber phoneNumber, Postcode postcode) : base()
     {
         BookingId = bookingId;
-        CustomerId = customerId;
+        PhoneNumber = phoneNumber;
+        Postcode = postcode;
     }
 }

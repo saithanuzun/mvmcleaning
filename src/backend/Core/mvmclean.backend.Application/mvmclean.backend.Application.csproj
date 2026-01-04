@@ -15,10 +15,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Common\" />
       <Folder Include="Features\Customer\" />
       <Folder Include="Features\Invoice\" />
       <Folder Include="Features\Promotion\" />
-      <Folder Include="Features\Quotation\Events\" />
       <Folder Include="Features\SupportTicket\" />
     </ItemGroup>
 

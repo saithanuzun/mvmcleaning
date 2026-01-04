@@ -1,5 +1,6 @@
 using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
 using mvmclean.backend.Domain.Aggregates.Contractor.Entities;
+using mvmclean.backend.Domain.Aggregates.Contractor.Events;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 using WorkingHours = mvmclean.backend.Domain.Aggregates.Contractor.Entities.WorkingHours;
 
@@ -9,11 +10,10 @@ public class Contractor : Core.BaseClasses.AggregateRoot
 {
     public string? FirstName { get; private set; }
     public string? LastName { get; private set; }
-
-    public string Username { get; set; }
-    public string PasswordHash { get; set; }
-    
     public string? ImageUrl { get; set; }
+    
+    public string Username { get; private set; } 
+    public string PasswordHash { get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }
     public Email Email { get; private set; }
     public bool IsActive { get; private set; }
@@ -33,22 +33,36 @@ public class Contractor : Core.BaseClasses.AggregateRoot
     private readonly List<TimeSlot> _unavailableSlots = new();
     public IReadOnlyCollection<TimeSlot> UnavailableSlots => _unavailableSlots.AsReadOnly();
 
-    private Contractor()
-    {
-    }
+    private Contractor() { }
 
-    public static Contractor Create(string firstName, string lastName, string phoneNumber, string email, string? imageUrl)
+    public static Contractor Create(
+        string firstName, 
+        string lastName, 
+        string phoneNumber, 
+        string email, 
+        string? imageUrl,
+        string username,
+        string password)
     {
-        return new Contractor
+        var contractor = new Contractor
         {
+            Id = Guid.NewGuid(), 
             FirstName = firstName,
             LastName = lastName,
             PhoneNumber = PhoneNumber.Create(phoneNumber),
             Email = Email.Create(email),
             IsActive = true,
-            ImageUrl = imageUrl
+            ImageUrl = imageUrl,
+            CreatedAt = DateTime.UtcNow,
+            Username = username,
+            PasswordHash = password
         };
+
+        contractor.AddDomainEvent(new ContractorCreatedEvent(contractor.Id.ToString(), contractor.FullName, contractor.Email.ToString()));
+
+        return contractor;
     }
+
 
     public void AddWorkingHours(WorkingHours workingHours)
     {
@@ -92,10 +106,9 @@ public class Contractor : Core.BaseClasses.AggregateRoot
         _unavailableSlots.Add(timeSlot);
     }
 
-    public bool IsAvailableAt(TimeSlot timeSlot, Postcode postcode)
+    public bool IsAvailableAt(TimeSlot timeSlot)
     {
         if (!IsActive) return false;
-        if (!CoversPostcode(postcode)) return false;
         if (_unavailableSlots.Any(s => s.OverlapsWith(timeSlot))) return false;
 
         var dayOfWeek = (DayOfWeek)((int)timeSlot.StartTime.DayOfWeek == 0 ? 7 : (int)timeSlot.StartTime.DayOfWeek);

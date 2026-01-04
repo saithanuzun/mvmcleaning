@@ -9,83 +9,180 @@ namespace mvmclean.backend.Domain.Aggregates.Booking;
 
 public class Booking : Core.BaseClasses.AggregateRoot
 {
-    public Guid CustomerId { get; private set; }
-    public Customer Customer { get; private set; }
-    public Guid? ContractorId { get; private set; }
-    public Address ServiceAddress { get; private set; }
-    public TimeSlot ScheduledSlot { get; private set; }
-    public BookingStatus Status { get; private set; }
-    public Money TotalPrice { get; private set; }
-    
-    private readonly List<BookingItem> _serviceItems = new();
+    //first step to create booking required field
+    public PhoneNumber PhoneNumber { get; set; }
+    public Postcode Postcode { get; set; }
 
+    //second step assign contractor
+    public Guid? ContractorId { get; private set; }
+
+    //third step add booking items
+    private readonly List<BookingItem> _serviceItems = new();
     public List<BookingItem> ServiceItems => new List<BookingItem>(_serviceItems);
 
+    // total price is here
+    public Money TotalPrice { get; private set; }
+
+    //time slot
+    public TimeSlot ScheduledSlot { get; private set; }
+
+
+    // customer details and address
+    public Guid CustomerId { get; private set; }
+    public Customer Customer { get; private set; }
+    public Address ServiceAddress { get; private set; }
+
+    // payment
     public Guid? PaymentId { get; private set; }
     public Payment? Payment { get; private set; }
 
-    private Booking(Customer customer, Address serviceAddress, TimeSlot scheduledSlot, List<BookingItem> serviceItems, Promotion.Promotion? promotion, Money totalPrice)
-    {
-        CustomerId = customer.Id;
-        Customer = customer;
-        ServiceAddress = serviceAddress;
-        ScheduledSlot = scheduledSlot;
-        _serviceItems = serviceItems;
-        Status = BookingStatus.Pending;
+    // lastly booking status
 
-        if (promotion == null)
-        {
-            TotalPrice = totalPrice;
-        }
-        else
-        {
-            TotalPrice = promotion.ApplyDiscount(totalPrice);
-        }
+    public BookingCreationStatus CreationStatus { get; private set; }
+    public BookingStatus Status { get; private set; }
+
+
+    private Booking(PhoneNumber number, Postcode postcode)
+    {
+        PhoneNumber = number ?? throw new ArgumentNullException(nameof(number));
+        Postcode = postcode ?? throw new ArgumentNullException(nameof(postcode));
+        CreationStatus = BookingCreationStatus.BasicInfo;
+
+        AddDomainEvent(new BookingCreatedEvent(Id, number, postcode));
     }
 
     protected Booking()
     {
-        
     }
 
-    public static Booking Create(Customer customer, Money totalPrice, Address serviceAddress, TimeSlot scheduledSlot, List<BookingItem> serviceItems, Promotion.Promotion? promotion)
+    public static Booking Create(Postcode postcode, PhoneNumber phoneNumber)
     {
-        var booking = new Booking(customer, serviceAddress, scheduledSlot, serviceItems, promotion, totalPrice);
-        
-        booking.AddDomainEvent(new BookingCreatedEvent(booking.Id, customer.Id));
+        var booking = new Booking(phoneNumber, postcode);
+
+        booking.AddDomainEvent(new BookingCreatedEvent(booking.Id, phoneNumber, postcode));
         return booking;
     }
+
+    public void SelectContractor(Contractor.Contractor contractor)
+    {
+        if (contractor == null)
+            throw new ArgumentNullException(nameof(contractor));
+
+        if (!contractor.CoversPostcode(Postcode))
+        {
+            throw new InvalidOperationException("Contractor is not available for this time slot");
+        }
+
+
+        ContractorId = contractor.Id;
+        CreationStatus = BookingCreationStatus.ContractorSelected;
+
+        UpdatedAt = DateTime.UtcNow;
+
+        AddDomainEvent(new ContractorAssignedEvent(Id, contractor.Id));
+    }
+
+    public void AddServiceToCart(Guid serviceItemId, Money unitAdjustedPrice, int quantity = 1)
+    {
+
+        var existingItem = _serviceItems.FirstOrDefault(s => s.ServiceId == serviceItemId);
+
+        if (existingItem != null)
+        {
+            existingItem.UpdateQuantity(existingItem.Quantity + quantity);
+        }
+        else
+        {
+            // Add new item to cart
+            var bookingItem = new BookingItem {
+                ServiceId = serviceItemId,
+                UnitAdjustedPrice = unitAdjustedPrice,
+                Quantity = quantity,
+            };
+            _serviceItems.Add(bookingItem);
+
+            AddDomainEvent(new ServiceAddedToCartEvent(serviceItemId, unitAdjustedPrice, quantity));
+        }
+
+        UpdateTotalPrice();
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    // Remove service from cart
+    public void RemoveServiceFromCart(Guid serviceItemId)
+    {
+        var item = _serviceItems.FirstOrDefault(s => s.ServiceId == serviceItemId);
+        if (item != null)
+        {
+            _serviceItems.Remove(item);
+            UpdateTotalPrice();
+            UpdatedAt = DateTime.UtcNow;
+
+            //AddDomainEvent(new ServiceRemovedFromCartEvent(Id, serviceItemId));
+        }
+    }
+
+    private void UpdateTotalPrice()
+    {
+        TotalPrice = Money.Zero();
+
+        foreach (var item in _serviceItems)
+        {
+            TotalPrice += item.UnitAdjustedPrice * item.Quantity;
+        }
+
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void AssignTimeSlot(TimeSlot timeSlot, Contractor.Contractor contractor)
+    {
+        if (!contractor.IsAvailableAt(timeSlot))
+            throw new InvalidOperationException("TimeSlot is not available for this time slot");
+
+        ScheduledSlot = timeSlot;
+        CreationStatus = BookingCreationStatus.TimeSlotSelected;
+
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void AssignCustomer(Customer newCustomer)
+    {
+        if (newCustomer == null)
+            throw new ArgumentNullException(nameof(newCustomer));
+
+        Customer = newCustomer;
+        CustomerId = newCustomer.Id;
+        ServiceAddress = newCustomer.Address; //this can be different address as well, I just didnt want to implement now
+        CreationStatus = BookingCreationStatus.CustomerAdded;
+
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void AssignPayment(Payment payment)
+    {
+        CreationStatus = BookingCreationStatus.PaymentInitiated;
+
+        PaymentId = payment.Id;
+        Payment = payment;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
 
     public void ApplyPromotion(Promotion.Promotion promotion)
     {
         TotalPrice = promotion.ApplyDiscount(TotalPrice);
     }
 
-    
+
     public void UpdateServiceAddress(Address newAddress)
     {
         ServiceAddress = newAddress ?? throw new ArgumentNullException(nameof(newAddress));
-        
+
         UpdatedAt = DateTime.UtcNow;
 
         //AddDomainEvent(new ServiceAddressUpdatedEvent(Id, newAddress));
     }
 
-    public void AssignContractor(Contractor.Contractor contractor)
-    {
-        if (contractor == null)
-            throw new ArgumentNullException(nameof(contractor));
-
-        if (!contractor.IsAvailableAt(ScheduledSlot, ServiceAddress.Postcode))
-        {
-            throw new InvalidOperationException("Contractor is not available for this time slot");
-        }
-
-        ContractorId = contractor.Id;
-        UpdatedAt = DateTime.UtcNow;
-
-        AddDomainEvent(new ContractorAssignedEvent(Id, contractor.Id));
-    }
 
     #region BookingFlow
 
@@ -113,7 +210,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
 
         Status = BookingStatus.InProgress;
         UpdatedAt = DateTime.UtcNow;
-
     }
 
     public void Complete()
@@ -123,7 +219,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
 
         Status = BookingStatus.Completed;
         UpdatedAt = DateTime.UtcNow;
-
     }
 
     public void Cancel(string? cancellationReason = null)
@@ -134,10 +229,7 @@ public class Booking : Core.BaseClasses.AggregateRoot
         var previousStatus = Status;
         Status = BookingStatus.Cancelled;
         UpdatedAt = DateTime.UtcNow;
-
     }
-    
 
     #endregion
-    
 }

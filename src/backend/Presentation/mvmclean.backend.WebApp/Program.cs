@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using mvmclean.backend.Application;
 using mvmclean.backend.Infrastructure;
 using mvmclean.backend.Infrastructure.Persistence;
 
@@ -9,10 +10,19 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication()
     .AddCookie("AdminCookie", options =>
     {
-        options.LoginPath = "/Admin/Login"; 
-        options.AccessDeniedPath = "/Admin/Login"; 
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.LoginPath = "/Admin/Login";
+        options.AccessDeniedPath = "/Admin/Login";
+        options.ExpireTimeSpan = TimeSpan.FromDays(60);
+    })
+    .AddCookie("ContractorCookie", options =>
+    {
+        options.LoginPath = "/Contractor/Login";
+        options.AccessDeniedPath = "/Contractor/Login";
+        options.ExpireTimeSpan = TimeSpan.FromDays(60);
     });
+
+builder.Services.AddInfrastructureRegistration();
+builder.Services.AddApplicationRegistration();
 
 
 var app = builder.Build();
@@ -23,7 +33,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//builder.Services.AddInfrastructureRegistration();
 
 
 

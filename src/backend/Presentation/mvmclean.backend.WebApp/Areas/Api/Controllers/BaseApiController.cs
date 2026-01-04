@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace mvmclean.backend.WebApp.Areas.Api.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
+[Area("Admin")]
+[Route("Admin")]
 public abstract class BaseApiController : ControllerBase
 {
     protected readonly IMediator _mediator;

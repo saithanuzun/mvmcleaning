@@ -1,34 +1,34 @@
 using System.Linq.Expressions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using mvmclean.backend.Domain.Aggregates.Booking;
 using mvmclean.backend.Domain.Aggregates.Contractor;
 using mvmclean.backend.Domain.Aggregates.Invoice;
 using mvmclean.backend.Domain.Aggregates.Promotion;
-using mvmclean.backend.Domain.Aggregates.Quotation;
 using mvmclean.backend.Domain.Aggregates.SeoPage;
 using mvmclean.backend.Domain.Aggregates.Service;
 using mvmclean.backend.Domain.Aggregates.SupportTicket;
-using mvmclean.backend.Domain.Aggregates.SupportTicket.Entities;
+using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.Core.Interfaces;
 
 namespace mvmclean.backend.Infrastructure.Persistence;
 
 public class MVMdbContext : DbContext
 {
-    public MVMdbContext(DbContextOptions<MVMdbContext> options)
-        : base(options)
+    private readonly IMediator _mediator;
+    public MVMdbContext(DbContextOptions<MVMdbContext> options, IMediator mediator) : base(options)
     {
+        _mediator = mediator;
     }
 
-    public MVMdbContext() : base()
+    public MVMdbContext(IMediator mediator) : base()
     {
-        
+        _mediator = mediator;
     }
 
     public DbSet<Contractor> Contractors { get; set; } = null!;
     public DbSet<Booking> Bookings { get; set; } = null!;
     public DbSet<Invoice> Invoices { get; set; } = null!;
-    public DbSet<Quotation> Quotations { get; set; } = null!;
     public DbSet<SeoPage> SeoPages { get; set; } = null!;
     public DbSet<Service> Services { get; set; } = null!;
     public DbSet<Promotion> Promotions { get; set; } = null!;
@@ -81,11 +81,28 @@ public class MVMdbContext : DbContext
         }
 
     }
-
-
+    
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return await base.SaveChangesAsync(cancellationToken);
+        var domainEvents = ChangeTracker
+            .Entries<AggregateRoot>()
+            .SelectMany(e => e.Entity.DomainEvents)
+            .ToList();
+
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        foreach (var domainEvent in domainEvents)
+        {
+            await _mediator.Publish(domainEvent, cancellationToken);
+        }
+
+        foreach (var entry in ChangeTracker.Entries<AggregateRoot>())
+        {
+            entry.Entity.ClearDomainEvents();
+        }
+
+        return result;
     }
+
     
 }

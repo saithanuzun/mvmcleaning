@@ -1,15 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using mvmclean.backend.Domain.Aggregates.Booking;
 using mvmclean.backend.Domain.Aggregates.Contractor;
-using mvmclean.backend.Domain.Aggregates.Quotation;
 using mvmclean.backend.Infrastructure.Persistence;
 using mvmclean.backend.Infrastructure.Persistence.Repositories;
 
 namespace mvmclean.backend.Infrastructure;
 
-public static class Registrations
+public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureRegistration(this IServiceCollection serviceCollection)
     {
@@ -23,8 +21,6 @@ public static class Registrations
 
         serviceCollection.AddScoped<IBookingRepository, BookingRepository>();
         serviceCollection.AddScoped<IContractorRepository, ContractorRepository>();
-        serviceCollection.AddScoped<IQuotationRepository, QuotationRepository>();
-
         
         return serviceCollection;
     }
