@@ -24,6 +24,7 @@ public static class Registrations
         serviceCollection.AddScoped<IBookingRepository, BookingRepository>();
         serviceCollection.AddScoped<IContractorRepository, ContractorRepository>();
         serviceCollection.AddScoped<IQuotationRepository, QuotationRepository>();
+
         
         return serviceCollection;
     }

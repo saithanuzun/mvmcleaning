@@ -1,8 +1,7 @@
-// src/pages/PostcodePage.jsx
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import Logo from '../assets/Logo.png'; // Adjust path as needed
+import Logo from '../assets/Logo.png'; 
 
 const PostcodePage = ({bookingData, updateBookingData}) => {
     const [postcode, setPostcode] = useState(bookingData.postcode || '');
@@ -37,7 +36,6 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
 
         setLoading(true);
         try {
-            // Mock API call - replace with your actual API
             const response = await axios.get(`https://api.postcodes.io/postcodes/${postcode}/validate`);
 
             if (response.data.result) {
@@ -58,17 +56,15 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 py-8 px-4">
             <div className="max-w-6xl mx-auto">
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col lg:flex-row">
-                    {/* Left Side - Form Section */}
+
                     <div className="lg:w-1/2">
-                        {/* Header Section with Different Gradient */}
                         <div
                             className="px-8 pt-8 pb-6 relative overflow-hidden"
                             style={{
                                 background: '#194376'
                             }}
                         >
-                          
-
+                            
                             <div className="relative z-10">
                                 <div className="inline-block px-3 py-1 bg-white/30 rounded-full mb-3">
                                     <span className="text-white text-sm font-semibold">Step 1 of 4</span>
@@ -82,7 +78,6 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
                             </div>
                         </div>
 
-                        {/* Form Section */}
                         <div className="p-8">
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 {/* Postcode Input */}
@@ -202,7 +197,6 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
                                     )}
                                 </button>
 
-                                {/* Info Box - Updated Colors */}
                                 <div
                                     className="bg-gradient-to-r from-[#46C6CE]/10 to-blue-50 border-l-4 p-4 rounded-lg"
                                     style={{borderColor: '#46C6CE'}}

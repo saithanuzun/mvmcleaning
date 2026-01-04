@@ -65,9 +65,7 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
 
     const [availableDates] = useState(generateDates());
 
-    // Mock time slots - in real app, fetch based on selected date
     const mockTimeSlots = [
-        // Today
         { id: 1, date: new Date().toISOString().split('T')[0], startTime: '08:00', endTime: '08:30', available: true },
         { id: 2, date: new Date().toISOString().split('T')[0], startTime: '08:30', endTime: '09:00', available: true },
         { id: 3, date: new Date().toISOString().split('T')[0], startTime: '09:00', endTime: '09:30', available: true },
@@ -90,35 +88,12 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
         { id: 20, date: new Date().toISOString().split('T')[0], startTime: '17:30', endTime: '18:00', available: false },
         { id: 21, date: new Date().toISOString().split('T')[0], startTime: '18:00', endTime: '18:30', available: false },
         { id: 22, date: new Date().toISOString().split('T')[0], startTime: '18:30', endTime: '19:00', available: false },
-
-        // Tomorrow
-        { id: 23, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '08:00', endTime: '08:30', available: true },
-        { id: 24, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '08:30', endTime: '09:00', available: true },
-        { id: 25, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '09:00', endTime: '09:30', available: true },
-        { id: 26, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '09:30', endTime: '10:00', available: true },
-        { id: 27, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '10:00', endTime: '10:30', available: true },
-        { id: 28, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '10:30', endTime: '11:00', available: true },
-        { id: 29, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '11:00', endTime: '11:30', available: true },
-        { id: 30, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '11:30', endTime: '12:00', available: true },
-        { id: 31, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '12:00', endTime: '12:30', available: false },
-        { id: 32, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '12:30', endTime: '13:00', available: false },
-        { id: 33, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '13:00', endTime: '13:30', available: true },
-        { id: 34, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '13:30', endTime: '14:00', available: true },
-        { id: 35, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '14:00', endTime: '14:30', available: true },
-        { id: 36, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '14:30', endTime: '15:00', available: true },
-        { id: 37, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '15:00', endTime: '15:30', available: true },
-        { id: 38, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '15:30', endTime: '16:00', available: true },
-        { id: 39, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '16:00', endTime: '16:30', available: true },
-        { id: 40, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '16:30', endTime: '17:00', available: true },
-        { id: 41, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '17:00', endTime: '17:30', available: true },
-        { id: 42, date: new Date(Date.now() + 86400000).toISOString().split('T')[0], startTime: '17:30', endTime: '18:00', available: true },
     ];
 
     useEffect(() => {
         setTimeout(() => {
             setTimeSlots(mockTimeSlots);
             setLoading(false);
-            // Auto-select today's date
             setSelectedDate(new Date());
         }, 1000);
     }, []);
