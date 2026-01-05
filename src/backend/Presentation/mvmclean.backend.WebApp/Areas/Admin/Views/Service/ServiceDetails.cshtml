@@ -1,0 +1,66 @@
+@model mvmclean.backend.Application.Features.Services.GetServiceByIdResponse
+
+@{
+    ViewData["Title"] = "Service Details";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Service Details</h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-4 text-muted">Name</div>
+                        <div class="col-8 fw-semibold">@Model.Name</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4 text-muted">Description</div>
+                        <div class="col-8">@Model.Description</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4 text-muted">Shortcut</div>
+                        <div class="col-8">
+                            <span class="badge bg-secondary">
+                                @Model.Shortcut
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4 text-muted">Duration</div>
+                        <div class="col-8">@Model.Duration</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4 text-muted">Category</div>
+                        <div class="col-8">@Model.CategoryName</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 text-muted">Base Price</div>
+                        <div class="col-8 fw-bold">
+                            £@Model.BasePrice.ToString("0.00")
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light d-flex justify-content-end">
+                    <a asp-area="Admin"
+                       asp-controller="Service"
+                       asp-action="Index"
+                       class="btn btn-secondary">
+                        Back
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

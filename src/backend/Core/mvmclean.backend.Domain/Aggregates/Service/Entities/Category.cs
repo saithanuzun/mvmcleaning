@@ -28,6 +28,7 @@ public class Category : Entity
             UpdatedAt = DateTime.UtcNow
         };
     }
+    
 
     public void Rename(string newName)
     {

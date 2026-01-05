@@ -1,7 +1,8 @@
+using mvmclean.backend.Domain.Core.Interfaces;
+
 namespace mvmclean.backend.Domain.Aggregates.Service;
 
-public interface IServiceRepository
+public interface IServiceRepository : IGenericRepository<Service>
 {
-    Task<List<Service>> GetAllServicesByPostcode(string postcode);
-    Task<Service?> GetServiceByPostcode(string postcode);
+
 }

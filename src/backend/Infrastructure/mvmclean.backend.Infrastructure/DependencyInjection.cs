@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using mvmclean.backend.Domain.Aggregates.Booking;
 using mvmclean.backend.Domain.Aggregates.Contractor;
+using mvmclean.backend.Domain.Aggregates.Service;
 using mvmclean.backend.Infrastructure.Persistence;
 using mvmclean.backend.Infrastructure.Persistence.Repositories;
 
@@ -21,6 +22,8 @@ public static class DependencyInjection
 
         serviceCollection.AddScoped<IBookingRepository, BookingRepository>();
         serviceCollection.AddScoped<IContractorRepository, ContractorRepository>();
+        serviceCollection.AddScoped<IServiceRepository, ServiceRepository>();
+
         
         return serviceCollection;
     }

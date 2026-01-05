@@ -21,7 +21,7 @@ public class Service : AggregateRoot
     private Service() { }
 
     public static Service Create(string name, string description, string shortcut, 
-        decimal basePrice, TimeSpan estimatedDuration, Category category)
+        decimal basePrice, TimeSpan estimatedDuration)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new Exception("Service name is required");
@@ -31,9 +31,6 @@ public class Service : AggregateRoot
         
         if (basePrice < 0)
             throw new Exception("Base price cannot be negative");
-        
-        if (category == null)
-            throw new Exception("Category is required");
 
         return new Service
         {
@@ -42,12 +39,19 @@ public class Service : AggregateRoot
             Description = description?.Trim(),
             Shortcut = shortcut?.Trim().ToUpper(),
             EstimatedDuration = estimatedDuration,
-            Category = category,
-            CategoryId = category.Id,
             BasePrice = Money.Create(basePrice), // Store base price as-is
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
+    }
+    
+    public void AddCategory(string categoryName)
+    {
+        if (Category.Name == categoryName)
+            return;
+
+        Category = Category.Create(categoryName);
+        CategoryId = Category.Id;
     }
 
     
@@ -62,7 +66,7 @@ public class Service : AggregateRoot
     public void AddPostcodePricing(Postcode postcode, decimal multiplier, decimal fixedAdjustment)
     {
         var existingPricing = _postcodePricings
-            .FirstOrDefault(p => p.Postcode == postcode);
+            .FirstOrDefault(p => p.Postcode.Area == postcode.Area);
     
         if (existingPricing != null)
         {
@@ -80,8 +84,6 @@ public class Service : AggregateRoot
         UpdatedAt = DateTime.UtcNow;
     }
     
-
-  
 
     public void UpdatePrice(decimal newPrice)
     {
