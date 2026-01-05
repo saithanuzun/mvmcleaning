@@ -14,6 +14,8 @@ public class Contractor : Core.BaseClasses.AggregateRoot
     
     public string Username { get; private set; } 
     public string PasswordHash { get; private set; }
+    
+    public int BookedCount { get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }
     public Email Email { get; private set; }
     public bool IsActive { get; private set; }
@@ -55,7 +57,8 @@ public class Contractor : Core.BaseClasses.AggregateRoot
             ImageUrl = imageUrl,
             CreatedAt = DateTime.UtcNow,
             Username = username,
-            PasswordHash = password
+            PasswordHash = password,
+            BookedCount = 0,
         };
 
         contractor.AddDomainEvent(new ContractorCreatedEvent(contractor.Id.ToString(), contractor.FullName, contractor.Email.ToString()));
@@ -82,6 +85,7 @@ public class Contractor : Core.BaseClasses.AggregateRoot
             _coverageAreas.Add(ContractorCoverage.Create(Id, postcode));
         }
     }
+    
 
     public void AddService(Guid serviceId)
     {
@@ -139,6 +143,11 @@ public class Contractor : Core.BaseClasses.AggregateRoot
     public void AddReview(Review review)
     {
         _reviews.Add(review);
+    }
+
+    public void IncreaseBookedCount()
+    {
+        BookedCount++;
     }
 
 }

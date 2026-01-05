@@ -6,20 +6,21 @@ namespace mvmclean.backend.Application.Features.Contractor;
 
 public class GetContractorAvailabilityByDayRequest : IRequest<List<GetContractorAvailabilityByDayResponse>>
 {
-    public string ContractorId { get; set; } = default!;
+    public List<string> ContractorIds { get; set; } = default!;
     public DateTime Date { get; set; }
     public TimeSpan Duration { get; set; }
 }
 
 public class GetContractorAvailabilityByDayResponse
 {
+    public string ContractorId { get; set; }
     public string StartTime { get; set; } = default!;
     public string EndTime { get; set; } = default!;
     public bool Available { get; set; }
 }
 
-
-public class GetContractorAvailabilityByDayHandler : IRequestHandler<GetContractorAvailabilityByDayRequest,List<GetContractorAvailabilityByDayResponse>>
+public class GetContractorAvailabilityByDayHandler : IRequestHandler<GetContractorAvailabilityByDayRequest,
+    List<GetContractorAvailabilityByDayResponse>>
 {
     private readonly IContractorRepository _contractorRepository;
 
@@ -28,18 +29,34 @@ public class GetContractorAvailabilityByDayHandler : IRequestHandler<GetContract
         _contractorRepository = contractorRepository;
     }
 
-    public async Task<List<GetContractorAvailabilityByDayResponse>> Handle(GetContractorAvailabilityByDayRequest request, CancellationToken token)
+    public async Task<List<GetContractorAvailabilityByDayResponse>> Handle(
+        GetContractorAvailabilityByDayRequest request,
+        CancellationToken token)
     {
-        var contractorId = Guid.Parse(request.ContractorId);
+        if (!request.ContractorIds.Any())
+            throw new Exception("No contractors provided");
 
-        var contractor = await _contractorRepository.GetByIdAsync(contractorId);
-        if (contractor == null)
-            throw new Exception("Contractor not found");
+        var contractorIds = request.ContractorIds.Select(Guid.Parse).ToList();
+
+        var contractors = new List<Domain.Aggregates.Contractor.Contractor>();
+
+        foreach (var id in contractorIds)
+        {
+            var contractor = await _contractorRepository.GetByIdAsync(id);
+
+            if (contractor == null)
+                throw new Exception($"Contractor not found: {id}");
+
+            contractors.Add(contractor);
+        }
+
+        if (contractors.Count != contractorIds.Count)
+            throw new Exception("One or more contractors not found");
 
         var day = request.Date.Date;
 
-        var workStart = day.AddHours(8).AddMinutes(30);   
-        var workEnd   = day.AddHours(18).AddMinutes(30);  
+        var workStart = day.AddHours(8).AddMinutes(30);
+        var workEnd = day.AddHours(18).AddMinutes(30);
 
         var step = TimeSpan.FromMinutes(30);
         var duration = request.Duration;
@@ -50,17 +67,20 @@ public class GetContractorAvailabilityByDayHandler : IRequestHandler<GetContract
         {
             var slot = TimeSlot.Create(start, start.Add(duration));
 
-            var available = contractor.IsAvailableAt(slot);
-
-            result.Add(new GetContractorAvailabilityByDayResponse
+            foreach (var contractor in contractors)
             {
-                StartTime = slot.StartTime.ToString("HH:mm"),
-                EndTime = slot.EndTime.ToString("HH:mm"),
-                Available = available
-            });
+                var available = contractor.IsAvailableAt(slot);
+
+                result.Add(new GetContractorAvailabilityByDayResponse
+                {
+                    ContractorId = contractor.Id.ToString(),
+                    StartTime = slot.StartTime.ToString("HH:mm"),
+                    EndTime = slot.EndTime.ToString("HH:mm"),
+                    Available = available
+                });
+            }
         }
 
         return result;
     }
-    
 }

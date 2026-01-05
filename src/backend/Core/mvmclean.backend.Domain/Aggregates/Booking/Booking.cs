@@ -84,7 +84,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
 
     public void AddServiceToCart(Guid serviceItemId, Money unitAdjustedPrice, int quantity = 1)
     {
-
         var existingItem = _serviceItems.FirstOrDefault(s => s.ServiceId == serviceItemId);
 
         if (existingItem != null)
@@ -94,7 +93,8 @@ public class Booking : Core.BaseClasses.AggregateRoot
         else
         {
             // Add new item to cart
-            var bookingItem = new BookingItem {
+            var bookingItem = new BookingItem
+            {
                 ServiceId = serviceItemId,
                 UnitAdjustedPrice = unitAdjustedPrice,
                 Quantity = quantity,
@@ -145,14 +145,15 @@ public class Booking : Core.BaseClasses.AggregateRoot
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void AssignCustomer(Customer newCustomer)
+    public void AssignCustomer(Email? email, string? FirstName, string? LastName, string? street, string? city, string? additionalInfo)
     {
-        if (newCustomer == null)
-            throw new ArgumentNullException(nameof(newCustomer));
+        var address = Address.Create(street, city, Postcode, additionalInfo);
 
-        Customer = newCustomer;
-        CustomerId = newCustomer.Id;
-        ServiceAddress = newCustomer.Address; //this can be different address as well, I just didnt want to implement now
+        var customer = Customer.Create(PhoneNumber, email: email, FirstName, LastName, address);
+
+        Customer = customer;
+        CustomerId = customer.Id;
+        ServiceAddress = customer.Address; //this can be different address as well, I just didnt want to implement now //Todo
         CreationStatus = BookingCreationStatus.CustomerAdded;
 
         UpdatedAt = DateTime.UtcNow;

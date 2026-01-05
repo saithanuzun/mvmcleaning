@@ -9,6 +9,7 @@ public class Payment : Entity
 {
     public Guid BookingId { get; private set; }
     public Money Amount { get; private set; }
+    public string? PaymentLink { get; set; }
     public PaymentStatus Status { get; private set; }
 
     public PaymentType PaymentType { get; set; }
@@ -19,7 +20,7 @@ public class Payment : Entity
 
     private Payment() { }
 
-    public static Payment Create(Guid bookingId, Money amount, PaymentType paymentType)
+    public static Payment Create(Guid bookingId, Money amount, PaymentType paymentType, string? paymentLink)
     {
         return new Payment
         {
@@ -27,6 +28,7 @@ public class Payment : Entity
             Amount = amount,
             Status = PaymentStatus.Pending,
             PaymentType = paymentType,
+            PaymentLink = paymentLink,
         };
     }
 

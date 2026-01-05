@@ -9,8 +9,6 @@ public interface IGenericRepository<TEntity> where TEntity : Entity
     int Add(TEntity entity);
     int Add(IEnumerable<TEntity> entities);
     Task<int> AddAsync(IEnumerable<TEntity> entities);
-
-
     Task<int> UpdateAsync(TEntity entity);
     int Update(TEntity entity);
 

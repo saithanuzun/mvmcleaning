@@ -4,5 +4,5 @@ public enum PaymentType
 {
     Cash = 0,
     Card = 1,
-    BankTransfer =2
+    BankTransfer =2,
 }

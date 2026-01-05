@@ -11,12 +11,14 @@ public class ContractorController : BaseApiController
         
     }
 
-    public async Task<IActionResult> GetContractorAvailabilityByDay(GetContractorAvailabilityByDayRequest request)
+    public async Task<IActionResult> GetContractorsAvailabilityByDay(GetContractorAvailabilityByDayRequest request)
     {
 
-        var respones = await _mediator.Send(request);
+        var response = await _mediator.Send(request);
         
         
-        return Ok(respones);
+        return Ok(response);
     }
+    
+    
 }
