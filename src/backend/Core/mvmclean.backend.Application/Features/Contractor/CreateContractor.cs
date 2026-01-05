@@ -22,7 +22,7 @@ public class CreateContractorResponse
 
 public class CreateContractorHandler : IRequestHandler<CreateContractorRequest, CreateContractorResponse>
 {
-    private IContractorRepository _contractorRepository;
+    private readonly IContractorRepository _contractorRepository;
 
     public CreateContractorHandler(IContractorRepository contractorRepository)
     {
@@ -33,9 +33,9 @@ public class CreateContractorHandler : IRequestHandler<CreateContractorRequest, 
     public async Task<CreateContractorResponse> Handle(CreateContractorRequest request, CancellationToken cancellationToken)
     {
         
-        var contractor = Domain.Aggregates.Contractor.Contractor.Create(request.FirstName, request.LastName, request.PhoneNumber, request.Email, request.ImageUrl, request.Username, request.Password);
+        var contractor = Domain.Aggregates.Contractor.Contractor.Create(firstName:request.FirstName, lastName:request.LastName, phoneNumber:request.PhoneNumber, email:request.Email, imageUrl:request.ImageUrl, username:request.Username, password:Encryptor.PasswordEncryptor.Encrypt(request.Password));
         
-        await _contractorRepository.AddAsync(contractor);
+        var result = await _contractorRepository.AddAsync(contractor);
         
         return new CreateContractorResponse
         {

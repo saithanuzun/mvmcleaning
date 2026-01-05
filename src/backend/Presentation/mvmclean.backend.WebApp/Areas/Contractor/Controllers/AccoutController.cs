@@ -1,52 +1,99 @@
 using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using mvmclean.backend.Application.Features.Contractor;
 
 namespace mvmclean.backend.WebApp.Areas.Contractor.Controllers;
 
 [Area("Contractor")]
-[Route("Contractor")]
-public class AccountController : Controller
+[Route("Contractor")] 
+public class AccountController : BaseContractorController
 {
+    public AccountController(IMediator mediator) : base(mediator)
+    {
+    }
+
     [HttpGet("Login")]
+    [Route("Login")]
     public IActionResult Login()
     {
         return View();
     }
-
-    [HttpPost("Login")]
+    
+    [HttpPost]
+    [Route("Login")]
     public async Task<IActionResult> Login(string username, string password)
     {
-        if (username == "saithanuzun" && password == "1234")
+        var request = new LoginRequest
         {
-            var claims = new List<Claim>
+            Usename = username,
+            Password = password,
+        };
+
+        try
+        {
+            var response = await _mediator.Send(request);
+
+            if (response.Success)
             {
-                new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.Role, "ContractorCookie")
-            };
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, response.Username),
+                    new Claim(ClaimTypes.NameIdentifier, response.ContractorId.ToString()),
+                    new Claim(ClaimTypes.Role, "ContractorCookie")
+                };
 
-            var identity = new ClaimsIdentity(claims, "ContractorCookie");
-            var principal = new ClaimsPrincipal(identity);
+                var identity = new ClaimsIdentity(claims, "ContractorCookie");
+                var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync("ContractorCookie", principal);
+                await HttpContext.SignInAsync("ContractorCookie", principal);
 
-            return RedirectToAction("Index", "Home", new { area = "Contractor" });
+                return RedirectToAction("Index", "Home", new { area = "Contractor" });
+            }
+
+            ViewBag.Error = response;
+            return View();
         }
-
-        ViewBag.Error = "Invalid credentials";
-        return View();
+        catch (Exception ex)
+        {
+            ViewBag.Error = "An unexpected error occurred.";
+            return View();
+        }
     }
+
+    
 
     [HttpPost("Logout")]
     public async Task<IActionResult> Logout()
     {
-        await HttpContext.SignOutAsync("AdminCookie");
+        await HttpContext.SignOutAsync("ContractorCookie");
         return RedirectToAction("Login");
     }
 
-    [Route("register")]
-    public async Task<IActionResult> Register()
+    [HttpGet]
+    [Route("Register")]
+    public IActionResult Register()
     {
-        return View();
+        return View(); 
     }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Route("Register")]
+    public async Task<IActionResult> Register(CreateContractorRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(request);
+        }
+
+        var response = await _mediator.Send(request);
+
+        return Ok(response.ContractorId);
+    }
+
+
+
+
 }

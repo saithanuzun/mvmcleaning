@@ -12,6 +12,8 @@ public class LoginRequest: IRequest<LoginResponse>
 public class LoginResponse
 {
     public string ContractorId { get; set; }
+    public string Username { get; set; }
+    public string Email { get; set; }
     public bool Success { get; set; }
 }
 
@@ -39,6 +41,8 @@ public class LoginHandler: IRequestHandler<LoginRequest,LoginResponse>
         {           
             Success = contractor != null,
             ContractorId = contractor?.Id.ToString() ??  string.Empty,
+            Username = username,
+            Email = contractor.Email.ToString() ?? string.Empty,
         };
     }
 }

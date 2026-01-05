@@ -1,18 +1,37 @@
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using mvmclean.backend.Application.Features.Contractor;
+using mvmclean.backend.WebApp.Areas.Contractor.Models;
 
 namespace mvmclean.backend.WebApp.Areas.Contractor.Controllers;
 
 [Area("Contractor")]
 [Route("Contractor")] 
 [Authorize(AuthenticationSchemes = "ContractorCookie")] 
-public class HomeController : Controller
+public class HomeController : BaseContractorController
 {
-    
-    [Route("")]
-    public IActionResult Index()
+    public HomeController(IMediator mediator) : base(mediator)
     {
-        return View();
+    }
+
+    [Route("")]
+    public async Task<IActionResult> Index()
+    {
+        var request = new GetContractorByIdRequest() { Id = ContractorId.ToString() };
+        
+        var response = await _mediator.Send(request);
+        
+        var contractorViewModel = new ContractorViewModel
+        {
+            FullName = response.FullName,
+            Username = response.Username,
+            Email = response.Email,
+            PhoneNumber = response.PhoneNumber,
+        };
+
+        
+        return View(contractorViewModel);
     }
     
     [Route("Bookings")]
@@ -44,6 +63,14 @@ public class HomeController : Controller
     {
         return View();
     }
+    
+    [Route("PostUnavailability")]
+    public IActionResult PostUnavailability()
+    {
+        return View();
+    }
+    
+    
     
     
 }

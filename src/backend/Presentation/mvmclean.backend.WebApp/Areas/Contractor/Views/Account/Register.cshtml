@@ -34,7 +34,7 @@
 
                 <div class="card-body">
 
-                    @using (Html.BeginForm("RegisterContractor", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation", novalidate = "novalidate" }))
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation", novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
 
@@ -86,13 +86,7 @@
                             <input type="password" class="form-control" id="ConfirmPassword" required />
                             <span id="passwordError" class="text-danger"></span>
                         </div>
-
-                        <!-- Image -->
-                        <div class="mb-3">
-                            <label class="form-label">Profile Image</label>
-                            <input type="file" name="ImageFile" class="form-control" accept="image/*">
-                        </div>
-
+                        
                         <!-- Terms -->
                         <div class="form-check mb-3">
                             <input type="checkbox" class="form-check-input" id="terms" name="terms" required>

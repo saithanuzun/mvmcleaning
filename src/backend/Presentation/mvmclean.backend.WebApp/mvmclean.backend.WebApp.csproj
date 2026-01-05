@@ -10,7 +10,6 @@
       <Folder Include="Areas\Admin\Models\" />
       <Folder Include="Areas\Admin\wwwroot\" />
       <Folder Include="Areas\Api\Models\" />
-      <Folder Include="Areas\Contractor\Models\" />
       <Folder Include="Areas\Contractor\wwwroot\" />
       <Folder Include="ClientApp\" />
       <Folder Include="Views\Services\" />

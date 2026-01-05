@@ -106,7 +106,6 @@ public class Contractor : Core.BaseClasses.AggregateRoot
 
     public void MarkAsUnavailable(TimeSlot timeSlot)
     {
-
         _unavailableSlots.Add(timeSlot);
     }
 

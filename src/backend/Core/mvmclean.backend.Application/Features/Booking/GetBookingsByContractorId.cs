@@ -6,12 +6,12 @@ using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Application.Features.Booking;
 
-public class GetBookingByIdRequest : IRequest<GetBookingByIdResponse>
+public class GetBookingsByContractorIdRequest : IRequest<List<GetBookingsByContractorIdResponse>>
 {
-    public string BookingId { get; set; }
+    public string ContractorId { get; set; }
 }
 
-public class GetBookingByIdResponse
+public class GetBookingsByContractorIdResponse
 {
     public Guid Id { get; set; }
 
@@ -40,27 +40,24 @@ public class GetBookingByIdResponse
     public DateTime? UpdatedAt { get; set; }
 }
 
-public class GetBookingByIdHandler : IRequestHandler<GetBookingByIdRequest, GetBookingByIdResponse>
+public class GetBookingsByContractorIdHandler : IRequestHandler<GetBookingsByContractorIdRequest,List<GetBookingsByContractorIdResponse>>
 {
     private readonly IBookingRepository _bookingRepository;
 
-    public GetBookingByIdHandler(IBookingRepository bookingRepository)
+    public GetBookingsByContractorIdHandler(IBookingRepository bookingRepository)
     {
         _bookingRepository = bookingRepository;
     }
 
 
-    public async Task<GetBookingByIdResponse> Handle(GetBookingByIdRequest request, CancellationToken cancellationToken)
+    public async Task<List<GetBookingsByContractorIdResponse>> Handle(GetBookingsByContractorIdRequest request, CancellationToken cancellationToken)
     {
-        if (!Guid.TryParse(request.BookingId, out var bookingId))
-            throw new ArgumentException("Invalid booking id");
+        if (!Guid.TryParse(request.ContractorId, out var contractorId))
+            throw new ArgumentException("Invalid contractor id");
 
-        var booking = await _bookingRepository.GetByIdAsync(bookingId);
+        var bookings =  _bookingRepository.Get(i=>i.ContractorId == contractorId).ToList();
 
-        if (booking == null)
-            throw new KeyNotFoundException("Booking not found");
-
-        return new GetBookingByIdResponse
+        return bookings.Select(booking => new GetBookingsByContractorIdResponse
         {
             Id = booking.Id,
             PhoneNumber = booking.PhoneNumber.Value,
@@ -68,7 +65,14 @@ public class GetBookingByIdHandler : IRequestHandler<GetBookingByIdRequest, GetB
 
             ContractorId = booking.ContractorId,
 
-            ServiceItems = booking.ServiceItems.ToList(),
+            ServiceItems = booking.ServiceItems
+                .Select(i => new BookingItem
+                {
+                    ServiceId = i.ServiceId,
+                    UnitAdjustedPrice = i.UnitAdjustedPrice,
+                    Quantity = i.Quantity
+                })
+                .ToList(),
 
             TotalPrice = booking.TotalPrice.Amount,
             Currency = booking.TotalPrice.Currency,
@@ -77,7 +81,6 @@ public class GetBookingByIdHandler : IRequestHandler<GetBookingByIdRequest, GetB
 
             CustomerId = booking.CustomerId,
             Customer = booking.Customer,
-
             ServiceAddress = booking.ServiceAddress,
 
             PaymentId = booking.PaymentId,
@@ -87,6 +90,6 @@ public class GetBookingByIdHandler : IRequestHandler<GetBookingByIdRequest, GetB
 
             CreatedAt = booking.CreatedAt,
             UpdatedAt = booking.UpdatedAt
-        };
+        }).ToList();
     }
 }

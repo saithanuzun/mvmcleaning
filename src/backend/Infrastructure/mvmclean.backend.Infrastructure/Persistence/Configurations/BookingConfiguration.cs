@@ -33,6 +33,12 @@ public class BookingConfiguration: EntityConfiguration<Booking>
             .WithMany(c => c.Bookings)
             .HasForeignKey(b => b.CustomerId);
         
+        builder.OwnsOne(i => i.PhoneNumber);
+        
+        builder.OwnsOne(i => i.Postcode);
+
+
+        
 
 
     }

@@ -4,8 +4,8 @@ namespace mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 public class Email : ValueObject
 {
-    public string Value { get; }
-    public string NormalizedValue { get; }
+    public string Value { get; private set; }
+    public string NormalizedValue { get; private set; }
     
     private Email() { }
     

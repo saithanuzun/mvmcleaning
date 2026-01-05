@@ -79,6 +79,10 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
+                    b.Property<string>("CreationStatus")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
@@ -226,6 +230,9 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("PaidAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("PaymentLink")
+                        .HasColumnType("text");
+
                     b.Property<string>("PaymentType")
                         .IsRequired()
                         .HasColumnType("text");
@@ -252,6 +259,9 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("BookedCount")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -280,10 +290,18 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("text");
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -494,37 +512,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.ToTable("Promotions");
                 });
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Quotation.Quotation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Quotations");
-                });
-
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.Entities.SeoPageContent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -714,7 +701,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ServiceType")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Slug")
@@ -981,6 +967,52 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("PaymentId1");
 
+                    b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.PhoneNumber", "PhoneNumber", b1 =>
+                        {
+                            b1.Property<Guid>("BookingId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("BookingId");
+
+                            b1.ToTable("Bookings");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BookingId");
+                        });
+
+                    b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Postcode", "Postcode", b1 =>
+                        {
+                            b1.Property<Guid>("BookingId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Area")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("District")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Sector")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("BookingId");
+
+                            b1.ToTable("Bookings");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BookingId");
+                        });
+
                     b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.TimeSlot", "ScheduledSlot", b1 =>
                         {
                             b1.Property<Guid>("BookingId")
@@ -1125,7 +1157,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("BookingId");
 
-                            b1.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Money", "AdjustedPrice", b2 =>
+                            b1.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Money", "UnitAdjustedPrice", b2 =>
                                 {
                                     b2.Property<Guid>("BookingItemBookingId")
                                         .HasColumnType("uuid");
@@ -1148,13 +1180,19 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                         .HasForeignKey("BookingItemBookingId", "BookingItemId");
                                 });
 
-                            b1.Navigation("AdjustedPrice")
+                            b1.Navigation("UnitAdjustedPrice")
                                 .IsRequired();
                         });
 
                     b.Navigation("Customer");
 
                     b.Navigation("Payment");
+
+                    b.Navigation("PhoneNumber")
+                        .IsRequired();
+
+                    b.Navigation("Postcode")
+                        .IsRequired();
 
                     b.Navigation("ScheduledSlot")
                         .IsRequired();
@@ -1237,6 +1275,14 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                             b1.Property<Guid>("CustomerId")
                                 .HasColumnType("uuid");
 
+                            b1.Property<string>("NormalizedValue")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text");
+
                             b1.HasKey("CustomerId");
 
                             b1.ToTable("Customer");
@@ -1314,6 +1360,14 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         {
                             b1.Property<Guid>("ContractorId")
                                 .HasColumnType("uuid");
+
+                            b1.Property<string>("NormalizedValue")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text");
 
                             b1.HasKey("ContractorId");
 
@@ -1679,137 +1733,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("ApplicablePostcodes");
 
                     b.Navigation("MinimumOrderAmount")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Quotation.Quotation", b =>
-                {
-                    b.OwnsMany("mvmclean.backend.Domain.Aggregates.Quotation.Entities.BasketItem", "BasketItems", b1 =>
-                        {
-                            b1.Property<Guid>("QuotationId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
-
-                            b1.Property<int>("Quantity")
-                                .HasColumnType("integer");
-
-                            b1.Property<Guid>("ServiceId")
-                                .HasColumnType("uuid");
-
-                            b1.HasKey("QuotationId", "Id");
-
-                            b1.ToTable("BasketItem");
-
-                            b1.WithOwner()
-                                .HasForeignKey("QuotationId");
-
-                            b1.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Money", "Price", b2 =>
-                                {
-                                    b2.Property<Guid>("BasketItemQuotationId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("BasketItemId")
-                                        .HasColumnType("integer");
-
-                                    b2.Property<decimal>("Amount")
-                                        .HasColumnType("numeric");
-
-                                    b2.Property<string>("Currency")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("BasketItemQuotationId", "BasketItemId");
-
-                                    b2.ToTable("BasketItem");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("BasketItemQuotationId", "BasketItemId");
-                                });
-
-                            b1.Navigation("Price")
-                                .IsRequired();
-                        });
-
-                    b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Money", "Cost", b1 =>
-                        {
-                            b1.Property<Guid>("QuotationId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<decimal>("Amount")
-                                .HasColumnType("numeric");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("QuotationId");
-
-                            b1.ToTable("Quotations");
-
-                            b1.WithOwner()
-                                .HasForeignKey("QuotationId");
-                        });
-
-                    b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.PhoneNumber", "PhoneNumber", b1 =>
-                        {
-                            b1.Property<Guid>("QuotationId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("QuotationId");
-
-                            b1.ToTable("Quotations");
-
-                            b1.WithOwner()
-                                .HasForeignKey("QuotationId");
-                        });
-
-                    b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Postcode", "Postcode", b1 =>
-                        {
-                            b1.Property<Guid>("QuotationId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Area")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("District")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Sector")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("QuotationId");
-
-                            b1.ToTable("Quotations");
-
-                            b1.WithOwner()
-                                .HasForeignKey("QuotationId");
-                        });
-
-                    b.Navigation("BasketItems");
-
-                    b.Navigation("Cost")
-                        .IsRequired();
-
-                    b.Navigation("PhoneNumber")
-                        .IsRequired();
-
-                    b.Navigation("Postcode")
                         .IsRequired();
                 });
 

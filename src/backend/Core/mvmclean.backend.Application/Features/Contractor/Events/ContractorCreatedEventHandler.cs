@@ -7,6 +7,8 @@ public class BookingConfirmedEventHandler : INotificationHandler<ContractorCreat
 {
     public Task Handle(ContractorCreatedEvent notification, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        //todo
+        
+        return Task.CompletedTask;
     }
 }
