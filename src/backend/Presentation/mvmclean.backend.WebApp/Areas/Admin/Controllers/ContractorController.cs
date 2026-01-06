@@ -6,11 +6,11 @@ using mvmclean.backend.Application.Features.Services;
 namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Route("Admin")] 
+[Route("Admin/Contractor")] 
 [Authorize(AuthenticationSchemes = "AdminCookie")] 
-public class HomeController : BaseAdminController
+public class ContractorController : BaseAdminController
 {
-    public HomeController(IMediator mediator) : base(mediator)
+    public ContractorController(IMediator mediator) : base(mediator)
     {
     }
 
@@ -19,7 +19,7 @@ public class HomeController : BaseAdminController
     {
         return View();
     }
-    
+
 
     
 }

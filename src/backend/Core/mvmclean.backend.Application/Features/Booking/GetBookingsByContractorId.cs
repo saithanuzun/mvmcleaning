@@ -20,7 +20,7 @@ public class GetBookingsByContractorIdResponse
 
     public Guid? ContractorId { get; set; }
 
-    public IReadOnlyList<BookingItem> ServiceItems { get; set; } = new List<BookingItem>();
+    public List<BookingItemDto> ServiceItems { get; set; } = new();
 
     public decimal TotalPrice { get; set; }
     public string Currency { get; set; }
@@ -28,16 +28,21 @@ public class GetBookingsByContractorIdResponse
     public TimeSlot? ScheduledSlot { get; set; }
 
     public Guid? CustomerId { get; set; }
-    public Customer? Customer { get; set; }
-    public Address? ServiceAddress { get; set; }
+    public string CustomerName { get; set; }
 
-    public Guid? PaymentId { get; set; }
-
-    public BookingCreationStatus CreationStatus { get; set; }
     public BookingStatus Status { get; set; }
 
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+}
+
+public class BookingItemDto
+{
+    public Guid ServiceId { get; set; }
+    public string ServiceName { get; set; }
+    public decimal UnitPrice { get; set; }
+    public int Quantity { get; set; }
+    public decimal Total => UnitPrice * Quantity;
 }
 
 public class GetBookingsByContractorIdHandler : IRequestHandler<GetBookingsByContractorIdRequest,List<GetBookingsByContractorIdResponse>>
@@ -55,7 +60,7 @@ public class GetBookingsByContractorIdHandler : IRequestHandler<GetBookingsByCon
         if (!Guid.TryParse(request.ContractorId, out var contractorId))
             throw new ArgumentException("Invalid contractor id");
 
-        var bookings =  _bookingRepository.Get(i=>i.ContractorId == contractorId).ToList();
+        var bookings = _bookingRepository.Get(i => i.ContractorId == contractorId).ToList();
 
         return bookings.Select(booking => new GetBookingsByContractorIdResponse
         {
@@ -66,10 +71,11 @@ public class GetBookingsByContractorIdHandler : IRequestHandler<GetBookingsByCon
             ContractorId = booking.ContractorId,
 
             ServiceItems = booking.ServiceItems
-                .Select(i => new BookingItem
+                .Select(i => new BookingItemDto
                 {
                     ServiceId = i.ServiceId,
-                    UnitAdjustedPrice = i.UnitAdjustedPrice,
+                    ServiceName = i.ServiceName ?? "Unknown Service",
+                    UnitPrice = i.UnitAdjustedPrice.Amount,
                     Quantity = i.Quantity
                 })
                 .ToList(),
@@ -80,12 +86,8 @@ public class GetBookingsByContractorIdHandler : IRequestHandler<GetBookingsByCon
             ScheduledSlot = booking.ScheduledSlot,
 
             CustomerId = booking.CustomerId,
-            Customer = booking.Customer,
-            ServiceAddress = booking.ServiceAddress,
+            CustomerName = booking.Customer?.FullName ?? "Unknown Customer",
 
-            PaymentId = booking.PaymentId,
-
-            CreationStatus = booking.CreationStatus,
             Status = booking.Status,
 
             CreatedAt = booking.CreatedAt,

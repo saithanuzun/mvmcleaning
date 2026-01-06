@@ -1,0 +1,156 @@
+@using mvmclean.backend.Application.Features.Contractor
+
+@model GetContractorByIdResponse
+
+@{
+    ViewData["Title"] = "Unavailable Slots";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-calendar-x"></i> Unavailable Slots
+            </h2>
+            <a href="@Url.Action("Index", "Availability")" class="btn btn-secondary mb-3">
+                <i class="bi bi-arrow-left"></i> Back to Availability
+            </a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(TempData["Success"]?.ToString()))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(TempData["Error"]?.ToString()))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Your Unavailable Slots</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model?.UnavailableSlots != null && Model.UnavailableSlots.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Duration</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var slot in Model.UnavailableSlots.OrderByDescending(s => s.StartTime))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@slot.StartTime.ToString("dd MMM yyyy HH:mm")</strong>
+                                            </td>
+                                            <td>
+                                                @slot.EndTime.ToString("dd MMM yyyy HH:mm")
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary">@((int)slot.Duration.TotalHours)h @(slot.Duration.Minutes)m</span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-danger" disabled title="Coming soon">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> You have no unavailable slots set yet.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Add Unavailability</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="@Url.Action("AddUnavailability", "Availability")">
+                        <div class="mb-3">
+                            <label for="startTime" class="form-label">
+                                <strong>Start Date & Time</strong>
+                            </label>
+                            <input type="datetime-local" 
+                                   class="form-control" 
+                                   id="startTime" 
+                                   name="startTime" 
+                                   required>
+                            <small class="form-text text-muted">
+                                When will you become unavailable?
+                            </small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="endTime" class="form-label">
+                                <strong>End Date & Time</strong>
+                            </label>
+                            <input type="datetime-local" 
+                                   class="form-control" 
+                                   id="endTime" 
+                                   name="endTime" 
+                                   required>
+                            <small class="form-text text-muted">
+                                When will you be available again?
+                            </small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle"></i> Add Unavailability
+                        </button>
+                    </form>
+
+                    <hr />
+
+                    <div class="alert alert-secondary">
+                        <h6 class="mb-2">
+                            <i class="bi bi-lightbulb"></i> Tip
+                        </h6>
+                        <p class="mb-0 small">
+                            Mark yourself as unavailable during holidays, sick leave, or when you need a break.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2">
+                        <strong>Total Unavailable Slots:</strong>
+                        <span class="badge bg-primary">@(Model?.UnavailableSlots?.Count ?? 0)</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -53,7 +53,7 @@ public class Contractor : Core.BaseClasses.AggregateRoot
             LastName = lastName,
             PhoneNumber = PhoneNumber.Create(phoneNumber),
             Email = Email.Create(email),
-            IsActive = true,
+            IsActive = false,
             ImageUrl = imageUrl,
             CreatedAt = DateTime.UtcNow,
             Username = username,

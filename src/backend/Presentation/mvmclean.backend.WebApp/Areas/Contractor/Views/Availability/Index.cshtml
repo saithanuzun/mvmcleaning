@@ -1,0 +1,162 @@
+@using mvmclean.backend.Application.Features.Contractor
+
+@model GetContractorByIdResponse
+
+@{
+    ViewData["Title"] = "My Availability";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-calendar2-check"></i> Availability Management
+            </h2>
+            <a href="@Url.Action("Index", "Profile")" class="btn btn-secondary mb-3">
+                <i class="bi bi-arrow-left"></i> Back to Profile
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Availability Overview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center p-3 bg-light rounded">
+                                <h6 class="text-muted">Working Days</h6>
+                                <h3 class="text-primary">
+                                    <i class="bi bi-calendar3"></i>
+                                    @(Model?.WorkingHours?.Count ?? 0)
+                                </h3>
+                                <a href="@Url.Action("WorkingDays", "Availability")" class="btn btn-sm btn-primary mt-2">
+                                    <i class="bi bi-pencil"></i> Manage
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center p-3 bg-light rounded">
+                                <h6 class="text-muted">Unavailable Slots</h6>
+                                <h3 class="text-primary">
+                                    <i class="bi bi-calendar-x"></i>
+                                    @(Model?.UnavailableSlots?.Count ?? 0)
+                                </h3>
+                                <a href="@Url.Action("Unavailability", "Availability")" class="btn btn-sm btn-primary mt-2">
+                                    <i class="bi bi-plus-circle"></i> Add
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center p-3 bg-light rounded">
+                                <h6 class="text-muted">Coverage Areas</h6>
+                                <h3 class="text-primary">
+                                    <i class="bi bi-geo-alt"></i>
+                                    @(Model?.CoverageAreas?.Count ?? 0)
+                                </h3>
+                                <a href="@Url.Action("Coverage", "Profile")" class="btn btn-sm btn-primary mt-2">
+                                    <i class="bi bi-pencil"></i> Manage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-calendar3"></i> Working Days
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model?.WorkingHours != null && Model.WorkingHours.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var hours in Model.WorkingHours)
+                                    {
+                                        <tr>
+                                            <td><strong>@hours.DayOfWeek</strong></td>
+                                            <td>@hours.StartTime.ToString("hh:mm tt")</td>
+                                            <td>@hours.EndTime.ToString("hh:mm tt")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="@Url.Action("WorkingDays", "Availability")" class="btn btn-primary w-100 mt-3">
+                            <i class="bi bi-pencil"></i> Manage Working Days
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No working days set yet.</p>
+                        <a href="@Url.Action("WorkingDays", "Availability")" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle"></i> Set Working Days
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-calendar-x"></i> Unavailable Slots
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model?.UnavailableSlots != null && Model.UnavailableSlots.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var slot in Model.UnavailableSlots)
+                                    {
+                                        <tr>
+                                            <td><small>@slot.StartTime.ToString("dd MMM HH:mm")</small></td>
+                                            <td><small>@slot.EndTime.ToString("dd MMM HH:mm")</small></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="@Url.Action("Unavailability", "Availability")" class="btn btn-primary w-100 mt-3">
+                            <i class="bi bi-plus-circle"></i> Add Unavailability
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No unavailable slots set yet.</p>
+                        <a href="@Url.Action("Unavailability", "Availability")" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle"></i> Add Unavailability
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

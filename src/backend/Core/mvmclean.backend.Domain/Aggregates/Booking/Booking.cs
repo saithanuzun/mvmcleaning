@@ -82,7 +82,7 @@ public class Booking : Core.BaseClasses.AggregateRoot
         AddDomainEvent(new ContractorAssignedEvent(Id, contractor.Id));
     }
 
-    public void AddServiceToCart(Guid serviceItemId, Money unitAdjustedPrice, int quantity = 1)
+    public void AddServiceToCart(string name, Guid serviceItemId, Money unitAdjustedPrice, int quantity = 1)
     {
         var existingItem = _serviceItems.FirstOrDefault(s => s.ServiceId == serviceItemId);
 
@@ -92,9 +92,9 @@ public class Booking : Core.BaseClasses.AggregateRoot
         }
         else
         {
-            // Add new item to cart
             var bookingItem = new BookingItem
             {
+                ServiceName = name,
                 ServiceId = serviceItemId,
                 UnitAdjustedPrice = unitAdjustedPrice,
                 Quantity = quantity,

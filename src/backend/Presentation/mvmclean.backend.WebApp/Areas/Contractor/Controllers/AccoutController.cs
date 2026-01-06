@@ -64,6 +64,7 @@ public class AccountController : BaseContractorController
 
     
 
+    [HttpGet("Logout")]
     [HttpPost("Logout")]
     public async Task<IActionResult> Logout()
     {

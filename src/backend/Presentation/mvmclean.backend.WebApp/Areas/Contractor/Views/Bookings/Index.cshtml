@@ -1,0 +1,112 @@
+@using mvmclean.backend.Application.Features.Booking
+
+@model List<GetBookingsByContractorIdResponse>
+
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-calendar-check"></i> My Bookings
+            </h2>
+        </div>
+    </div>
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="alert alert-info" role="alert">
+            <i class="bi bi-info-circle"></i> You have no bookings yet.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var booking in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-calendar-event"></i> Booking
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Booking ID</strong></label>
+                                <p class="text-muted"><code>@booking.Id.ToString().Substring(0, 8)...</code></p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Customer</strong></label>
+                                <p class="text-muted">@booking.CustomerName</p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Location</strong></label>
+                                <p class="text-muted">
+                                    <i class="bi bi-geo-alt"></i> @booking.Postcode
+                                </p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Services</strong></label>
+                                <p>
+                                    <span class="badge bg-primary">@booking.ServiceItems?.Count item(s)</span>
+                                </p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Total Price</strong></label>
+                                <p class="lead">
+                                    <strong class="text-primary">@booking.TotalPrice.ToString("C")</strong>
+                                    <small class="text-muted">@booking.Currency</small>
+                                </p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Status</strong></label>
+                                <p>
+                                    @{
+                                        var statusBadge = booking.Status switch
+                                        {
+                                            _ => "bg-secondary"
+                                        };
+                                    }
+                                    <span class="badge @statusBadge">@booking.Status</span>
+                                </p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Scheduled</strong></label>
+                                @if (booking.ScheduledSlot != null)
+                                {
+                                    <p class="text-muted">
+                                        <i class="bi bi-clock"></i> @booking.ScheduledSlot
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="text-muted"><em>Not scheduled yet</em></p>
+                                }
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Created</strong></label>
+                                <p class="text-muted">@booking.CreatedAt.ToString("dd MMM yyyy HH:mm")</p>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="@Url.Action("Details", "Bookings", new { bookingId = booking.Id })" class="btn btn-sm btn-primary w-100">
+                                <i class="bi bi-eye"></i> View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+

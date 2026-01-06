@@ -1,0 +1,108 @@
+@using mvmclean.backend.Application.Features.Contractor
+
+@model GetContractorByIdResponse
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-pencil-square"></i> Edit Profile
+            </h2>
+            <a href="@Url.Action("Index", "Profile")" class="btn btn-secondary mb-3">
+                <i class="bi bi-arrow-left"></i> Back to Profile
+            </a>
+        </div>
+    </div>
+
+    @if (Model != null)
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Edit Personal Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="#">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" value="@Model.FullName" disabled>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" value="@Model.Username" disabled>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" value="@Model.Email" disabled>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" value="@Model.PhoneNumber" disabled>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i>
+                                Contact administrator to update your personal information.
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" disabled>
+                                <i class="bi bi-check"></i> Save Changes
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Your Services</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Services != null && Model.Services.Count > 0)
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var serviceId in Model.Services)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span><i class="bi bi-check-circle-fill" style="color: #194376;"></i> Service ID: @serviceId.ToString().Substring(0, 8)</span>
+                                        <button class="btn btn-sm btn-danger" disabled>Remove</button>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No services assigned yet.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Edit Info</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">
+                            <small>This form displays your current information. Contact the administrator to make changes to your profile.</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">Profile not found.</div>
+    }
+</div>

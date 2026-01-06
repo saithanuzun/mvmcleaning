@@ -34,43 +34,6 @@ public class HomeController : BaseContractorController
         return View(contractorViewModel);
     }
     
-    [Route("Bookings")]
-    public IActionResult Bookings()
-    {
-        return View();
-    }
-    
-    [Route("Services")]
-    public IActionResult Services()
-    {
-        return View();
-    }
-    
-    [Route("Profile")]
-    public IActionResult Profile()
-    {
-        return View();
-    }
-    
-    [Route("Workingdays")]
-    public IActionResult Workingdays()
-    {
-        return View();
-    }
-    
-    [Route("Availability")]
-    public IActionResult Availability()
-    {
-        return View();
-    }
-    
-    [Route("PostUnavailability")]
-    public IActionResult PostUnavailability()
-    {
-        return View();
-    }
-    
-    
     
     
 }

@@ -1,0 +1,173 @@
+@using mvmclean.backend.Application.Features.Contractor
+
+@model GetContractorByIdResponse
+
+@{
+    ViewData["Title"] = "Service Coverage Areas";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-geo-alt"></i> Service Coverage Areas
+            </h2>
+            <a href="@Url.Action("Index", "Profile")" class="btn btn-secondary mb-3">
+                <i class="bi bi-arrow-left"></i> Back to Profile
+            </a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(TempData["Success"]?.ToString()))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(TempData["Error"]?.ToString()))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-map"></i> Your Coverage Areas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model?.CoverageAreas != null && Model.CoverageAreas.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Postcode</th>
+                                        <th>Status</th>
+                                        <th>Created Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var coverage in Model.CoverageAreas.OrderByDescending(c => c.CreatedAt))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@coverage.Postcode</strong>
+                                            </td>
+                                            <td>
+                                                @if (coverage.IsActive)
+                                                {
+                                                    <span class="badge bg-primary">
+                                                        <i class="bi bi-check-circle"></i> Active
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">
+                                                        <i class="bi bi-x-circle"></i> Inactive
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">@coverage.CreatedAt.ToString("dd MMM yyyy")</small>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> You haven't added any coverage areas yet. Start by adding your first postcode below.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-plus-circle"></i> Add Coverage Area
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="@Url.Action("Add", "Coverage")">
+                        <div class="mb-3">
+                            <label for="postcode" class="form-label">
+                                <strong>Postcode</strong>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="postcode" 
+                                   name="postcode" 
+                                   placeholder="e.g., SW1A1AA"
+                                   required 
+                                   pattern="^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$|^[A-Z]{1,2}\d{1,2} ?\d[A-Z]{2}$"
+                                   title="Enter a valid UK postcode">
+                            <small class="form-text text-muted">
+                                Enter a valid UK postcode where you provide services
+                            </small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle"></i> Add Postcode
+                        </button>
+                    </form>
+
+                    <hr />
+
+                    <div class="alert alert-secondary">
+                        <h6 class="mb-2">
+                            <i class="bi bi-lightbulb"></i> About Coverage Areas
+                        </h6>
+                        <p class="mb-0 small">
+                            Add postcodes where you're willing to provide cleaning services. Customers can find you based on the postcodes you've registered.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-bar-chart"></i> Coverage Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <p class="mb-2">
+                            <strong>Total Coverage Areas:</strong>
+                        </p>
+                        <h3 class="text-primary">
+                            <i class="bi bi-geo-alt"></i> @(Model?.CoverageAreas?.Count ?? 0)
+                        </h3>
+                    </div>
+                    <hr />
+                    <div class="mb-2">
+                        <p class="mb-2">
+                            <strong>Active Areas:</strong>
+                            <span class="badge bg-primary">@(Model?.CoverageAreas?.Count(c => c.IsActive) ?? 0)</span>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="mb-0">
+                            <strong>Inactive Areas:</strong>
+                            <span class="badge bg-secondary">@(Model?.CoverageAreas?.Count(c => !c.IsActive) ?? 0)</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,172 @@
+@using mvmclean.backend.Application.Features.Booking
+
+@model GetBookingByIdResponse
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-calendar-check"></i> Booking Details
+            </h2>
+            <a href="@Url.Action("Index", "Bookings")" class="btn btn-secondary mb-3">
+                <i class="bi bi-arrow-left"></i> Back to Bookings
+            </a>
+        </div>
+    </div>
+
+    @if (Model != null)
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Booking Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><strong>Booking ID</strong></label>
+                                <p class="text-muted"><code>@Model.Id</code></p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><strong>Status</strong></label>
+                                <p>
+                                    @{
+                                        var statusBadge = Model.Status switch
+                                        {
+                                            _ => "bg-primary"
+                                        };
+                                    }
+                                    <span class="badge @statusBadge">@Model.Status</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><strong>Phone Number</strong></label>
+                                <p class="text-muted">@Model.PhoneNumber</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><strong>Created Date</strong></label>
+                                <p class="text-muted">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><strong>Postcode</strong></label>
+                                <p class="text-muted">@Model.Postcode</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><strong>Total Price</strong></label>
+                                <p><strong>@Model.TotalPrice.ToString("C")</strong> @Model.Currency</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Services</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.ServiceItems?.Count > 0)
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Service</th>
+                                            <th>Quantity</th>
+                                            <th>Unit Price</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.ServiceItems)
+                                        {
+                                            <tr>
+                                                <td>@item.ServiceName</td>
+                                                <td>@item.Quantity</td>
+                                                <td>@item.UnitAdjustedPrice.ToString("C")</td>
+                                                <td>@(item.UnitAdjustedPrice * item.Quantity).ToString("C")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No services assigned to this booking.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Scheduled Date & Time</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.ScheduledSlot != null)
+                        {
+                            <p class="lead">
+                                <i class="bi bi-clock-history"></i>
+                                <strong>@Model.ScheduledSlot.ToString()</strong>
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="text-muted"><em>Not scheduled yet</em></p>
+                        }
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Payment Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <strong>@Model.TotalPrice.ToString("C")</strong>
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Currency:</span>
+                            <strong>@Model.Currency</strong>
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-between">
+                            <span>Total:</span>
+                            <strong class="text-primary lead">@Model.TotalPrice.ToString("C")</strong>
+                        </div>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.CreationStatus.ToString()))
+                {
+                    <div class="card shadow-sm mt-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Creation Status</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>@Model.CreationStatus</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">Booking not found.</div>
+    }
+</div>
