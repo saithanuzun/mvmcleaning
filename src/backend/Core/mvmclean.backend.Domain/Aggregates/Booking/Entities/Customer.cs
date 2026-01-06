@@ -29,7 +29,7 @@ public class Customer : Entity
             FirstName = firstName,
             LastName = lastName,
             PhoneNumber = phoneNumber,
-            Email = Email.Create(email),
+            Email = string.IsNullOrWhiteSpace(email) ? null : Email.Create(email),
             Address = address,
         };
     }

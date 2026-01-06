@@ -53,6 +53,26 @@
                                 <p class="text-muted">@Model.PhoneNumber</p>
                             </div>
                         </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label"><strong>Account Status</strong></label>
+                                <p>
+                                    @if (Model.IsActive)
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-check-circle-fill"></i> Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">
+                                            <i class="bi bi-exclamation-triangle-fill"></i> Inactive
+                                        </span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -64,11 +84,13 @@
                         </div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
-                                @foreach (var serviceId in Model.Services)
+                                @foreach (var serviceItem in Model.Services)
                                 {
                                     <li class="list-group-item">
                                         <i class="bi bi-check-circle-fill" style="color: #194376;"></i>
-                                        Service: <code>@serviceId.ToString().Substring(0, 8)</code>
+                                        <strong>@serviceItem.ServiceName</strong>
+                                        <br />
+                                        <small class="text-muted">@serviceItem.Category - @serviceItem.Description</small>
                                     </li>
                                 }
                             </ul>
@@ -122,6 +144,21 @@
                         <h5 class="mb-0">Profile Overview</h5>
                     </div>
                     <div class="card-body">
+                        <p>
+                            <strong>Account Status:</strong>
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle-fill"></i> Active
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">
+                                    <i class="bi bi-exclamation-triangle-fill"></i> Inactive
+                                </span>
+                            }
+                        </p>
                         <p>
                             <strong>Services:</strong>
                             <span class="badge bg-primary">@(Model.Services?.Count ?? 0)</span>

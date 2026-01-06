@@ -20,6 +20,8 @@ public class PaymentTerms : ValueObject
     public static PaymentTerms DueOnReceipt => new PaymentTerms(0);
     protected override IEnumerable<object?> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return DaysToPay;
+        yield return EarlyPaymentDiscountPercent;
+        yield return EarlyPaymentDiscountDays;
     }
 }

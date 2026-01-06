@@ -35,19 +35,27 @@ public class CreateContractorCoverageHandler : IRequestHandler<CreateContractorC
         if (string.IsNullOrWhiteSpace(request.Postcode))
             throw new ArgumentException("Postcode is required");
 
-        var contractor = await _contractorRepository.GetByIdAsync(contractorId);
+        var contractor = await _contractorRepository.GetByIdAsync(contractorId, noTracking: false);
         if (contractor == null)
             throw new KeyNotFoundException("Contractor not found");
 
-        // Create postcode value object
         var postcode = Postcode.Create(request.Postcode);
 
-        // Add coverage area to contractor
+        if (contractor.CoverageAreas.Any(c => c.Postcode.Value == postcode.Value))
+        {
+            return new CreateContractorCoverageResponse
+            {
+                ContractorId = contractorId,
+                Postcode = request.Postcode,
+                IsActive = true,
+                Message = $"Coverage area '{request.Postcode}' already exists"
+            };
+        }
+        
         contractor.AddCoverageArea(postcode);
-
-        // Save changes
-        await _contractorRepository.UpdateAsync(contractor);
-
+        
+        await _contractorRepository.SaveChangesAsync();
+         
         return new CreateContractorCoverageResponse
         {
             ContractorId = contractorId,

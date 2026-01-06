@@ -1,0 +1,263 @@
+@using mvmclean.backend.Application.Features.Services
+
+@{
+    ViewData["Title"] = "Create Manual Booking";
+    var services = ViewBag.Services as List<GetAllServicesResponse> ?? new List<GetAllServicesResponse>();
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-plus-circle"></i> Create Manual Booking
+            </h2>
+            <a href="@Url.Action("Index", "Bookings")" class="btn btn-secondary mb-3">
+                <i class="bi bi-arrow-left"></i> Back to Bookings
+            </a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(TempData["Success"]?.ToString()))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(TempData["Error"]?.ToString()))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <form method="post" action="@Url.Action("Create", "Bookings")" id="createBookingForm">
+        <div class="row">
+            <!-- Customer Details -->
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-person"></i> Customer Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="customerFirstName" class="form-label"><strong>First Name *</strong></label>
+                                <input type="text" class="form-control" id="customerFirstName" name="customerFirstName"
+                                    required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="customerLastName" class="form-label"><strong>Last Name *</strong></label>
+                                <input type="text" class="form-control" id="customerLastName" name="customerLastName"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label"><strong>Phone Number *</strong></label>
+                            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber"
+                                placeholder="07123456789" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="customerEmail" class="form-label"><strong>Email</strong></label>
+                            <input type="email" class="form-control" id="customerEmail" name="customerEmail"
+                                placeholder="customer@example.com">
+                        </div>
+
+                        <hr />
+
+                        <h6 class="mb-3"><i class="bi bi-geo-alt"></i> Service Address</h6>
+
+                        <div class="mb-3">
+                            <label for="postcode" class="form-label"><strong>Postcode *</strong></label>
+                            <input type="text" class="form-control" id="postcode" name="postcode" placeholder="SW1A 1AA"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="customerStreet" class="form-label"><strong>Street Address</strong></label>
+                            <input type="text" class="form-control" id="customerStreet" name="customerStreet"
+                                placeholder="123 Main Street">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="customerCity" class="form-label"><strong>City</strong></label>
+                            <input type="text" class="form-control" id="customerCity" name="customerCity"
+                                placeholder="London">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="customerAdditionalInfo" class="form-label"><strong>Additional
+                                    Info</strong></label>
+                            <textarea class="form-control" id="customerAdditionalInfo" name="customerAdditionalInfo"
+                                rows="2" placeholder="Flat number, access codes, special instructions..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scheduling & Services -->
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-clock"></i> Scheduling</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="scheduledDateTime" class="form-label"><strong>Date & Time *</strong></label>
+                                <input type="datetime-local" class="form-control" id="scheduledDateTime"
+                                    name="scheduledDateTime" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="durationMinutes" class="form-label"><strong>Duration (mins)</strong></label>
+                                <select class="form-control" id="durationMinutes" name="durationMinutes">
+                                    <option value="30">30 mins</option>
+                                    <option value="60" selected>1 hour</option>
+                                    <option value="90">1.5 hours</option>
+                                    <option value="120">2 hours</option>
+                                    <option value="180">3 hours</option>
+                                    <option value="240">4 hours</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-list-check"></i> Services</h5>
+                        <button type="button" class="btn btn-sm btn-light" id="addServiceBtn">
+                            <i class="bi bi-plus"></i> Add Service
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="servicesContainer">
+                            <div class="service-row mb-3 p-3 border rounded bg-light">
+                                <div class="row">
+                                    <div class="col-md-5 mb-2">
+                                        <label class="form-label"><strong>Service</strong></label>
+                                        <select class="form-control service-select" name="serviceIds"
+                                            onchange="updateServiceDetails(this)">
+                                            <option value="">Select a service...</option>
+                                            @foreach (var service in services)
+                                            {
+                                                <option value="@service.ServiceId" data-name="@service.Name"
+                                                    data-price="@service.BasePrice">
+                                                    @service.Name - £@service.BasePrice
+                                                </option>
+                                            }
+                                        </select>
+                                        <input type="hidden" name="serviceNames" class="service-name" value="">
+                                        <input type="hidden" name="servicePrices" class="service-price" value="0">
+                                    </div>
+                                    <div class="col-md-3 mb-2">
+                                        <label class="form-label"><strong>Quantity</strong></label>
+                                        <input type="number" class="form-control service-quantity"
+                                            name="serviceQuantities" value="1" min="1" onchange="updateTotal()">
+                                    </div>
+                                    <div class="col-md-3 mb-2">
+                                        <label class="form-label"><strong>Subtotal</strong></label>
+                                        <div class="form-control-plaintext">
+                                            <strong class="service-subtotal">£0.00</strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 mb-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-sm btn-danger remove-service-btn"
+                                            onclick="removeService(this)" style="display: none;">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Total:</h5>
+                            <h4 class="mb-0 text-primary" id="totalPrice">£0.00</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                    <i class="bi bi-check-circle"></i> Create Booking
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const servicesData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(services.Select(s => new { s.ServiceId, s.Name, s.BasePrice })));
+
+        function updateServiceDetails(selectElement) {
+            const row = selectElement.closest('.service-row');
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const name = selectedOption.getAttribute('data-name') || '';
+            const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+
+            row.querySelector('.service-name').value = name;
+            row.querySelector('.service-price').value = price;
+
+            updateRowSubtotal(row);
+            updateTotal();
+        }
+
+        function updateRowSubtotal(row) {
+            const price = parseFloat(row.querySelector('.service-price').value) || 0;
+            const quantity = parseInt(row.querySelector('.service-quantity').value) || 1;
+            const subtotal = price * quantity;
+            row.querySelector('.service-subtotal').textContent = '£' + subtotal.toFixed(2);
+        }
+
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll('.service-row').forEach(row => {
+                updateRowSubtotal(row);
+                const price = parseFloat(row.querySelector('.service-price').value) || 0;
+                const quantity = parseInt(row.querySelector('.service-quantity').value) || 1;
+                total += price * quantity;
+            });
+            document.getElementById('totalPrice').textContent = '£' + total.toFixed(2);
+        }
+
+        function removeService(btn) {
+            const row = btn.closest('.service-row');
+            row.remove();
+            updateTotal();
+            updateRemoveButtons();
+        }
+
+        function updateRemoveButtons() {
+            const rows = document.querySelectorAll('.service-row');
+            rows.forEach((row, index) => {
+                const btn = row.querySelector('.remove-service-btn');
+                btn.style.display = rows.length > 1 ? 'block' : 'none';
+            });
+        }
+
+        document.getElementById('addServiceBtn').addEventListener('click', function () {
+            const container = document.getElementById('servicesContainer');
+            const template = container.querySelector('.service-row').cloneNode(true);
+
+            // Reset values
+            template.querySelector('.service-select').value = '';
+            template.querySelector('.service-name').value = '';
+            template.querySelector('.service-price').value = '0';
+            template.querySelector('.service-quantity').value = '1';
+            template.querySelector('.service-subtotal').textContent = '£0.00';
+
+            container.appendChild(template);
+            updateRemoveButtons();
+        });
+
+        // Initialize
+        updateRemoveButtons();
+    </script>
+}

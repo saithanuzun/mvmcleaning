@@ -5,7 +5,8 @@ namespace mvmclean.backend.Domain.Aggregates.Contractor.Entities;
 
 public class ContractorCoverage : Entity
 {
-    public Guid ContractorId { get; private set; }
+    public Guid ContractorId { get; set; }
+    public Contractor Contractor { get; set; }
     public Postcode Postcode { get; private set; }
     public bool IsActive { get; private set; }
 
@@ -15,7 +16,6 @@ public class ContractorCoverage : Entity
     {
         return new ContractorCoverage
         {
-            ContractorId = employeeId,
             Postcode = postcode,
             IsActive = true
         };

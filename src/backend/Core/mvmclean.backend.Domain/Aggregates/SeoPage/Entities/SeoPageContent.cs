@@ -4,8 +4,11 @@ namespace mvmclean.backend.Domain.Aggregates.SeoPage.Entities;
 
 public class SeoPageContent : Entity
 {
+    public Guid SeoPageId { get; private set; }
     public string Heading { get; private set; }
     public string Paragraph { get; private set; }
+    
+    public virtual SeoPage SeoPage { get; private set; }
 
     private SeoPageContent() { }
 

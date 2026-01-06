@@ -1,0 +1,102 @@
+@{
+    ViewData["Title"] = "Availability Calendar";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-calendar3"></i> Availability Calendar
+            </h2>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a href="@Url.Action("Index", "Availability")" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Overview
+                </a>
+                <div class="legend d-flex gap-3">
+                    <span class="badge bg-primary d-flex align-items-center p-2"><i class="bi bi-circle-fill me-1"></i>
+                        Booking</span>
+                    <span class="badge bg-danger d-flex align-items-center p-2"><i class="bi bi-circle-fill me-1"></i>
+                        Unavailable</span>
+                    <span class="badge bg-light text-dark border d-flex align-items-center p-2"><i
+                            class="bi bi-circle-fill me-1" style="color: #f0f0f0;"></i> Off Hours</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div id="calendar" style="height: 800px;"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                slotMinTime: '06:00:00',
+                slotMaxTime: '22:00:00',
+                allDaySlot: false,
+                height: 'auto',
+                aspectRatio: 1.5,
+
+                // Fetch events and business hours from server
+                events: {
+                    url: '@Url.Action("GetCalendarEvents", "Availability")',
+                    failure: function () {
+                        alert('there was an error while fetching events!');
+                    }
+                },
+
+                // Dynamic business hours (grey out non-working times)
+                bookingDataFromServer: function (info, successCallback, failureCallback) {
+                    fetch('@Url.Action("GetCalendarEvents", "Availability")' + '?start=' + info.startStr + '&end=' + info.endStr)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Update business hours
+                            calendar.setOption('businessHours', data.businessHours);
+                            // Return events
+                            successCallback(data.events);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching calendar data:', error);
+                            failureCallback(error);
+                        });
+                },
+
+                // Using a custom function to fetch both events and set business hours
+                events: function (info, successCallback, failureCallback) {
+                    fetch('@Url.Action("GetCalendarEvents", "Availability")' + '?start=' + info.startStr + '&end=' + info.endStr)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Update business hours dynamically
+                            calendar.setOption('businessHours', data.businessHours);
+                            // Return events
+                            successCallback(data.events);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching calendar data:', error);
+                            failureCallback(error);
+                        });
+                },
+
+                eventClick: function (info) {
+                    if (info.event.url) {
+                        window.location.href = info.event.url;
+                        info.jsEvent.preventDefault();
+                    }
+                }
+            });
+            calendar.render();
+        });
+    </script>
+}

@@ -16,9 +16,9 @@ public class CreateUnavailabilityResponse
     public string ContractorId { get; set; }
 }
 
-public class CreateUnavailabilityHandler : IRequestHandler<CreateUnavailabilityRequest,CreateUnavailabilityResponse>
+public class CreateUnavailabilityHandler : IRequestHandler<CreateUnavailabilityRequest, CreateUnavailabilityResponse>
 {
-    private readonly IContractorRepository  _contractorRepository;
+    private readonly IContractorRepository _contractorRepository;
 
     public CreateUnavailabilityHandler(IContractorRepository contractorRepository)
     {
@@ -27,13 +27,13 @@ public class CreateUnavailabilityHandler : IRequestHandler<CreateUnavailabilityR
 
     public async Task<CreateUnavailabilityResponse> Handle(CreateUnavailabilityRequest request, CancellationToken cancellationToken)
     {
-        var contractor = await _contractorRepository.GetByIdAsync(Guid.Parse(request.ContractorId));
-        
+        var contractor = await _contractorRepository.GetByIdAsync(Guid.Parse(request.ContractorId), noTracking: false);
+
         contractor.MarkAsUnavailable(TimeSlot.Create(request.Startime, request.EndTime));
-        
-        await _contractorRepository.UpdateAsync(contractor);
-        
-        
+
+        await _contractorRepository.SaveChangesAsync();
+
+
         return new CreateUnavailabilityResponse
         {
             ContractorId = contractor.Id.ToString(),

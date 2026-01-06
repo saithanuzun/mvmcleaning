@@ -63,11 +63,34 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     #region Update Methods
 
-    public virtual async Task<int> UpdateAsync(TEntity entity)
+    public async Task<int> UpdateAsync(TEntity entity)
     {
-        this.entity.Attach(entity);
-        dbContext.Entry(entity).State = EntityState.Modified;
-
+        // Option 1: Safe approach - Check if entity exists first
+        var entry = dbContext.Entry(entity);
+    
+        // Get primary key value(s)
+        var keyValues = entry.Metadata.FindPrimaryKey().Properties
+            .Select(p => entry.Property(p.Name).CurrentValue)
+            .ToArray();
+    
+        // Find the existing entity
+        var existingEntity = await dbContext.Set<TEntity>().FindAsync(keyValues);
+    
+        if (existingEntity == null)
+        {
+            throw new KeyNotFoundException(
+                $"{typeof(TEntity).Name} with key [{string.Join(", ", keyValues)}] not found");
+        }
+    
+        // Detach the incoming entity if it's tracked
+        if (entry.State != EntityState.Detached)
+        {
+            entry.State = EntityState.Detached;
+        }
+    
+        // Update the existing tracked entity with values from the incoming entity
+        dbContext.Entry(existingEntity).CurrentValues.SetValues(entity);
+    
         return await dbContext.SaveChangesAsync();
     }
 
@@ -299,3 +322,4 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     #endregion
 }
+

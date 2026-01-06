@@ -41,7 +41,6 @@ public class MVMdbContext : DbContext
     
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(MVMdbContext).Assembly);
     
-        // Global query filters
         ApplyGlobalQueryFilters(modelBuilder);
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

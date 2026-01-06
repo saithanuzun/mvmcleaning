@@ -146,7 +146,8 @@
         }
         
         .content-wrapper {
-            min-height: calc(100vh - 200px); /* Adjust based on your header/footer height */
+            min-height: calc(100vh - 200px);
+            padding-bottom: 100px;
         }
         
         /* Remove profile from navbar */
@@ -272,8 +273,8 @@
                     @RenderBody()
                 </div>
 
-                <!-- Footer - Made static to bottom -->
-                <footer class="mt-auto py-3 border-top bg-primary-custom text-white" style="position: sticky; bottom: 0; width: 100%;">
+                <!-- Footer - Fixed to bottom -->
+                <footer class="py-3 border-top bg-primary-custom text-white" style="position: fixed; bottom: 0; left: 0; right: 0; width: 100%;">
                     <div class="text-center">
                         <p class="mb-0">&copy; @DateTime.Now.Year - Contractor Dashboard. MVM Cleaning All rights reserved.</p>
                     </div>

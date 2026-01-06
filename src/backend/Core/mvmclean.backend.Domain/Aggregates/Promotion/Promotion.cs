@@ -5,7 +5,7 @@ using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Domain.Aggregates.Promotion;
 
-public class Promotion : Entity
+public class Promotion : AggregateRoot
 {
     public string Code { get; private set; }
     public string Description { get; private set; }

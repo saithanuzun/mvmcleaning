@@ -5,6 +5,7 @@ namespace mvmclean.backend.Domain.Aggregates.Contractor.Entities;
 public class Review : Entity
 {
     public Guid ContractorId { get; private set; }
+    public Contractor Contractor { get; set; }
     public Guid AuthorId { get; private set; }
 
     public int Rating { get; private set; }
@@ -19,21 +20,19 @@ public class Review : Entity
         Guid authorId,
         int rating,
         string comment)
-        : base(id)
     {
+        Id = id;
         SetRating(rating);
         SetComment(comment);
 
         ContractorId = contractorId;
         AuthorId = authorId;
-        CreatedAt = DateTime.UtcNow;
     }
 
     public void Update(int rating, string comment)
     {
         SetRating(rating);
         SetComment(comment);
-        UpdatedAt = DateTime.UtcNow;
     }
 
     private void SetRating(int rating)

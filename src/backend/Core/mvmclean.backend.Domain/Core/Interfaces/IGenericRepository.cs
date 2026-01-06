@@ -51,4 +51,7 @@ public interface IGenericRepository<TEntity> where TEntity : Entity
     Task BulkDelete(IEnumerable<TEntity> entities);
     Task BulkUpdate(IEnumerable<TEntity> entities);
     Task BulkAdd(IEnumerable<TEntity> entities);
+
+    Task<int> SaveChangesAsync();
+
 }

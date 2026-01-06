@@ -64,12 +64,21 @@
                                                 @slot.EndTime.ToString("dd MMM yyyy HH:mm")
                                             </td>
                                             <td>
-                                                <span class="badge bg-secondary">@((int)slot.Duration.TotalHours)h @(slot.Duration.Minutes)m</span>
+                                                <span class="badge bg-secondary">@((int)slot.Duration.TotalHours)h
+                                                    @(slot.Duration.Minutes)m</span>
                                             </td>
                                             <td>
-                                                <button class="btn btn-sm btn-danger" disabled title="Coming soon">
-                                                    <i class="bi bi-trash"></i> Delete
-                                                </button>
+                                                <form method="post" action="@Url.Action("DeleteUnavailability", "Availability")"
+                                                    style="display:inline;">
+                                                    <input type="hidden" name="startTime"
+                                                        value="@slot.StartTime.ToString("yyyy-MM-ddTHH:mm")" />
+                                                    <input type="hidden" name="endTime"
+                                                        value="@slot.EndTime.ToString("yyyy-MM-ddTHH:mm")" />
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this unavailability slot?')">
+                                                        <i class="bi bi-trash"></i> Delete
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     }
@@ -98,11 +107,7 @@
                             <label for="startTime" class="form-label">
                                 <strong>Start Date & Time</strong>
                             </label>
-                            <input type="datetime-local" 
-                                   class="form-control" 
-                                   id="startTime" 
-                                   name="startTime" 
-                                   required>
+                            <input type="datetime-local" class="form-control" id="startTime" name="startTime" required>
                             <small class="form-text text-muted">
                                 When will you become unavailable?
                             </small>
@@ -112,11 +117,7 @@
                             <label for="endTime" class="form-label">
                                 <strong>End Date & Time</strong>
                             </label>
-                            <input type="datetime-local" 
-                                   class="form-control" 
-                                   id="endTime" 
-                                   name="endTime" 
-                                   required>
+                            <input type="datetime-local" class="form-control" id="endTime" name="endTime" required>
                             <small class="form-text text-muted">
                                 When will you be available again?
                             </small>

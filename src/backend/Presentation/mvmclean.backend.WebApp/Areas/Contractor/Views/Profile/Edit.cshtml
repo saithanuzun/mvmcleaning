@@ -70,10 +70,15 @@
                         @if (Model.Services != null && Model.Services.Count > 0)
                         {
                             <ul class="list-group list-group-flush">
-                                @foreach (var serviceId in Model.Services)
+                                @foreach (var serviceItem in Model.Services)
                                 {
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span><i class="bi bi-check-circle-fill" style="color: #194376;"></i> Service ID: @serviceId.ToString().Substring(0, 8)</span>
+                                        <div>
+                                            <i class="bi bi-check-circle-fill" style="color: #194376;"></i>
+                                            <strong>@serviceItem.ServiceName</strong> 
+                                            <br />
+                                            <small class="text-muted">@serviceItem.Category - @serviceItem.Description</small>
+                                        </div>
                                         <button class="btn btn-sm btn-danger" disabled>Remove</button>
                                     </li>
                                 }
