@@ -21,17 +21,7 @@ public class ServiceConfiguration : EntityConfiguration<Service>
             .IsRequired();
         
         // BasePrice value object
-        builder.OwnsOne(i => i.BasePrice, money =>
-        {
-            money.Property(m => m.Amount)
-                .HasColumnName("BasePrice_Amount")
-                .HasColumnType("decimal(18,2)")
-                .IsRequired();
-            money.Property(m => m.Currency)
-                .HasColumnName("BasePrice_Currency")
-                .HasMaxLength(3)
-                .IsRequired();
-        });
+        builder.OwnsOne(i => i.BasePrice);
         
         // Category relationship
         builder.HasOne(s => s.Category)
@@ -44,9 +34,6 @@ public class ServiceConfiguration : EntityConfiguration<Service>
             .WithOne(p => p.Service)
             .HasForeignKey(p => p.ServiceId)
             .OnDelete(DeleteBehavior.Cascade);
-            
-        // Indexes
-        builder.HasIndex(s => s.Shortcut);
-        builder.HasIndex(s => s.CategoryId);
+        
     }
 }

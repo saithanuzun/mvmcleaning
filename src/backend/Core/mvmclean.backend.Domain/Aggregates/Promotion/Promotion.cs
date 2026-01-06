@@ -21,7 +21,6 @@ public class Promotion : AggregateRoot
     public bool IsActive { get; private set; }
     
     public List<Postcode> ApplicablePostcodes { get; private set; }
-    public List<Guid> ApplicableServices { get; private set; }
     
     private Promotion() { }
     
@@ -41,7 +40,6 @@ public class Promotion : AggregateRoot
             IsActive = true,
             MinimumOrderAmount = Money.Create(0),
             ApplicablePostcodes = new List<Postcode>(),
-            ApplicableServices = new List<Guid>()
         };
     }
     
@@ -83,8 +81,5 @@ public class Promotion : AggregateRoot
         ApplicablePostcodes.Add(postcodePrefix);
     }
     
-    public void AddApplicableService(Guid serviceId)
-    {
-        ApplicableServices.Add(serviceId);
-    }
+
 }

@@ -23,43 +23,12 @@ public class ContractorConfiguration : EntityConfiguration<Contractor>
             .HasForeignKey(x => x.ContractorId);
 
         // WorkingHours collection
-        builder.OwnsMany(c => c.WorkingHours, a =>
-        {
-            a.WithOwner().HasForeignKey("ContractorId");
-            a.ToTable("ContractorWorkingHours");
-            a.Property<Guid>("Id").ValueGeneratedNever();
-            a.HasKey("Id");
-            
-            a.Property(w => w.DayOfWeek)
-                .IsRequired();
-            a.Property(w => w.IsWorkingDay)
-                .IsRequired();
-            a.Property(w => w.StartTime)
-                .HasColumnName("StartTime")
-                .IsRequired();
-            a.Property(w => w.EndTime)
-                .HasColumnName("EndTime")
-                .IsRequired();
-        });
+        builder.HasMany(c => c.WorkingHours)
+            .WithOne(i=>i.Contractor)
+            .HasForeignKey(x => x.ContractorId);
         
         // Services collection (List<ServiceItem>)
-        builder.OwnsMany(c => c.Services, a =>
-        {
-            a.WithOwner().HasForeignKey("ContractorId");
-            a.ToTable("ContractorServices");
-            a.Property<Guid>("Id").ValueGeneratedNever();
-            a.HasKey("Id");
-            
-            a.Property(s => s.ServiceId)
-                .IsRequired();
-            a.Property(s => s.ServiceName)
-                .HasMaxLength(255)
-                .IsRequired();
-            a.Property(s => s.Category)
-                .HasMaxLength(100);
-            a.Property(s => s.Description)
-                .HasMaxLength(500);
-        });
+        builder.OwnsMany(c => c.Services);
         
         // Reviews collection
         builder.HasMany<Review>()

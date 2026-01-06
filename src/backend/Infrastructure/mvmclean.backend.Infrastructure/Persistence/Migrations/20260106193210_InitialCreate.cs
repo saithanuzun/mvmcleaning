@@ -65,18 +65,18 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    LastName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    PhoneNumber_Value = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Email_Value = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email_NormalizedValue = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Address_Street = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    Address_City = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Address_Postcode_Value = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    Address_Postcode_Area = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: false),
-                    Address_Postcode_District = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: false),
-                    Address_Postcode_Sector = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
-                    Address_AdditionalInfo = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber_Value = table.Column<string>(type: "text", nullable: false),
+                    Email_Value = table.Column<string>(type: "text", nullable: true),
+                    Email_NormalizedValue = table.Column<string>(type: "text", nullable: true),
+                    Address_Street = table.Column<string>(type: "text", nullable: false),
+                    Address_City = table.Column<string>(type: "text", nullable: false),
+                    Address_Postcode_Value = table.Column<string>(type: "text", nullable: false),
+                    Address_Postcode_Area = table.Column<string>(type: "text", nullable: false),
+                    Address_Postcode_District = table.Column<string>(type: "text", nullable: false),
+                    Address_Postcode_Sector = table.Column<string>(type: "text", nullable: false),
+                    Address_AdditionalInfo = table.Column<string>(type: "text", nullable: true),
                     Address_Latitude = table.Column<double>(type: "double precision", nullable: true),
                     Address_Longitude = table.Column<double>(type: "double precision", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -97,18 +97,17 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Code = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
                     DiscountType = table.Column<string>(type: "text", nullable: false),
-                    DiscountValue = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    MinimumOrderAmount_Amount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    MinimumOrderAmount_Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
+                    DiscountValue = table.Column<decimal>(type: "numeric", nullable: false),
+                    MinimumOrderAmount_Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    MinimumOrderAmount_Currency = table.Column<string>(type: "text", nullable: false),
                     ValidFrom = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ValidTo = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UsageLimit = table.Column<int>(type: "integer", nullable: false),
                     UsedCount = table.Column<int>(type: "integer", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
-                    ApplicableServices = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -158,8 +157,8 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     Shortcut = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     EstimatedDuration = table.Column<TimeSpan>(type: "interval", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    BasePrice_Amount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    BasePrice_Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
+                    BasePrice_Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    BasePrice_Currency = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -190,7 +189,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     Postcode_District = table.Column<string>(type: "text", nullable: false),
                     Postcode_Sector = table.Column<string>(type: "text", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    ContractorId1 = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -208,11 +206,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         principalTable: "Contractors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ContractorCoverage_Contractors_ContractorId1",
-                        column: x => x.ContractorId1,
-                        principalTable: "Contractors",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -230,50 +223,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     table.PrimaryKey("PK_Contractors_UnavailableSlots", x => new { x.ContractorId, x.Id });
                     table.ForeignKey(
                         name: "FK_Contractors_UnavailableSlots_Contractors_ContractorId",
-                        column: x => x.ContractorId,
-                        principalTable: "Contractors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ContractorServices",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ServiceId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ServiceName = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Category = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    ContractorId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContractorServices", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ContractorServices_Contractors_ContractorId",
-                        column: x => x.ContractorId,
-                        principalTable: "Contractors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ContractorWorkingHours",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    DayOfWeek = table.Column<string>(type: "text", nullable: false),
-                    IsWorkingDay = table.Column<bool>(type: "boolean", nullable: false),
-                    StartTime = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
-                    EndTime = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
-                    ContractorId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContractorWorkingHours", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ContractorWorkingHours_Contractors_ContractorId",
                         column: x => x.ContractorId,
                         principalTable: "Contractors",
                         principalColumn: "Id",
@@ -315,6 +264,29 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ServiceItem",
+                columns: table => new
+                {
+                    ContractorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ServiceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ServiceName = table.Column<string>(type: "text", nullable: false),
+                    Category = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceItem", x => new { x.ContractorId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_ServiceItem_Contractors_ContractorId",
+                        column: x => x.ContractorId,
+                        principalTable: "Contractors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SupportTickets",
                 columns: table => new
                 {
@@ -345,6 +317,31 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WorkingHours",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ContractorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletedBy = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkingHours", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkingHours_Contractors_ContractorId",
+                        column: x => x.ContractorId,
+                        principalTable: "Contractors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Bookings",
                 columns: table => new
                 {
@@ -355,18 +352,18 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     Postcode_District = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: false),
                     Postcode_Sector = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
                     ContractorId = table.Column<Guid>(type: "uuid", nullable: true),
-                    TotalPrice_Amount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    TotalPrice_Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
+                    TotalPrice_Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    TotalPrice_Currency = table.Column<string>(type: "text", nullable: false),
                     ScheduledSlot_StartTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ScheduledSlot_EndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ServiceAddress_Street = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    ServiceAddress_City = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    ServiceAddress_Postcode_Value = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    ServiceAddress_Postcode_Area = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: false),
-                    ServiceAddress_Postcode_District = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: false),
-                    ServiceAddress_Postcode_Sector = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
-                    ServiceAddress_AdditionalInfo = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    ServiceAddress_Street = table.Column<string>(type: "text", nullable: false),
+                    ServiceAddress_City = table.Column<string>(type: "text", nullable: false),
+                    ServiceAddress_Postcode_Value = table.Column<string>(type: "text", nullable: false),
+                    ServiceAddress_Postcode_Area = table.Column<string>(type: "text", nullable: false),
+                    ServiceAddress_Postcode_District = table.Column<string>(type: "text", nullable: false),
+                    ServiceAddress_Postcode_Sector = table.Column<string>(type: "text", nullable: false),
+                    ServiceAddress_AdditionalInfo = table.Column<string>(type: "text", nullable: true),
                     ServiceAddress_Latitude = table.Column<double>(type: "double precision", nullable: true),
                     ServiceAddress_Longitude = table.Column<double>(type: "double precision", nullable: true),
                     PaymentId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -425,21 +422,22 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PromotionApplicablePostcodes",
+                name: "Promotions_ApplicablePostcodes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Postcode_Value = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    Postcode_Area = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: false),
-                    Postcode_District = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: false),
-                    Postcode_Sector = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
-                    PromotionId = table.Column<Guid>(type: "uuid", nullable: false)
+                    PromotionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    Area = table.Column<string>(type: "text", nullable: false),
+                    District = table.Column<string>(type: "text", nullable: false),
+                    Sector = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PromotionApplicablePostcodes", x => x.Id);
+                    table.PrimaryKey("PK_Promotions_ApplicablePostcodes", x => new { x.PromotionId, x.Id });
                     table.ForeignKey(
-                        name: "FK_PromotionApplicablePostcodes_Promotions_PromotionId",
+                        name: "FK_Promotions_ApplicablePostcodes_Promotions_PromotionId",
                         column: x => x.PromotionId,
                         principalTable: "Promotions",
                         principalColumn: "Id",
@@ -543,12 +541,12 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ServiceId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Postcode_Value = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    Postcode_Area = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: false),
-                    Postcode_District = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: false),
-                    Postcode_Sector = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
-                    Multiplier = table.Column<decimal>(type: "numeric(5,2)", nullable: false),
-                    FixedAdjustment = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    Postcode_Value = table.Column<string>(type: "text", nullable: false),
+                    Postcode_Area = table.Column<string>(type: "text", nullable: false),
+                    Postcode_District = table.Column<string>(type: "text", nullable: false),
+                    Postcode_Sector = table.Column<string>(type: "text", nullable: false),
+                    Multiplier = table.Column<decimal>(type: "numeric", nullable: false),
+                    FixedAdjustment = table.Column<decimal>(type: "numeric", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -598,16 +596,16 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookingServiceItems",
+                name: "BookingItem",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ServiceName = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    ServiceId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UnitAdjustedPrice_Amount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    UnitAdjustedPrice_Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
                     BookingId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ServiceName = table.Column<string>(type: "text", nullable: false),
+                    ServiceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UnitAdjustedPrice_Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    UnitAdjustedPrice_Currency = table.Column<string>(type: "text", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -618,9 +616,9 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookingServiceItems", x => x.Id);
+                    table.PrimaryKey("PK_BookingItem", x => new { x.BookingId, x.Id });
                     table.ForeignKey(
-                        name: "FK_BookingServiceItems_Bookings_BookingId",
+                        name: "FK_BookingItem_Bookings_BookingId",
                         column: x => x.BookingId,
                         principalTable: "Bookings",
                         principalColumn: "Id",
@@ -632,21 +630,21 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    InvoiceNumber = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    InvoiceNumber = table.Column<string>(type: "text", nullable: false),
                     BookingId = table.Column<Guid>(type: "uuid", nullable: false),
                     CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
                     IssueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PaidDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Subtotal_Amount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    Subtotal_Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
-                    DiscountAmount_Amount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    DiscountAmount_Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
-                    TotalAmount_Amount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    TotalAmount_Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
+                    Subtotal_Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Subtotal_Currency = table.Column<string>(type: "text", nullable: false),
+                    DiscountAmount_Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    DiscountAmount_Currency = table.Column<string>(type: "text", nullable: false),
+                    TotalAmount_Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    TotalAmount_Currency = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
                     PaymentTerms_DaysToPay = table.Column<int>(type: "integer", nullable: false),
-                    PaymentTerms_EarlyPaymentDiscountPercent = table.Column<decimal>(type: "numeric(5,2)", nullable: false),
+                    PaymentTerms_EarlyPaymentDiscountPercent = table.Column<decimal>(type: "numeric", nullable: false),
                     PaymentTerms_EarlyPaymentDiscountDays = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -706,8 +704,8 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
-                    UnitPrice_Amount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    UnitPrice_Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
+                    UnitPrice_Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    UnitPrice_Currency = table.Column<string>(type: "text", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     InvoiceId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
@@ -743,28 +741,8 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 column: "Status");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookingServiceItems_BookingId",
-                table: "BookingServiceItems",
-                column: "BookingId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ContractorCoverage_ContractorId",
                 table: "ContractorCoverage",
-                column: "ContractorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ContractorCoverage_ContractorId1",
-                table: "ContractorCoverage",
-                column: "ContractorId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ContractorServices_ContractorId",
-                table: "ContractorServices",
-                column: "ContractorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ContractorWorkingHours_ContractorId",
-                table: "ContractorWorkingHours",
                 column: "ContractorId");
 
             migrationBuilder.CreateIndex(
@@ -778,27 +756,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 column: "BookingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoices_CustomerId",
-                table: "Invoices",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Invoices_DueDate",
-                table: "Invoices",
-                column: "DueDate");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Invoices_InvoiceNumber",
-                table: "Invoices",
-                column: "InvoiceNumber",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Invoices_Status",
-                table: "Invoices",
-                column: "Status");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Message_CustomerId",
                 table: "Message",
                 column: "CustomerId");
@@ -810,45 +767,9 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_Status",
-                table: "Payment",
-                column: "Status");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Payment_TransactionId",
-                table: "Payment",
-                column: "TransactionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PostcodePricing_ServiceId",
                 table: "PostcodePricing",
                 column: "ServiceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PromotionApplicablePostcodes_PromotionId",
-                table: "PromotionApplicablePostcodes",
-                column: "PromotionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Promotions_Code",
-                table: "Promotions",
-                column: "Code",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Promotions_IsActive",
-                table: "Promotions",
-                column: "IsActive");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Promotions_ValidFrom",
-                table: "Promotions",
-                column: "ValidFrom");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Promotions_ValidTo",
-                table: "Promotions",
-                column: "ValidTo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_ContractorId",
@@ -886,58 +807,32 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Services_Shortcut",
-                table: "Services",
-                column: "Shortcut");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SupportTickets_AssignedToId",
                 table: "SupportTickets",
                 column: "AssignedToId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SupportTickets_BookingId",
-                table: "SupportTickets",
-                column: "BookingId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SupportTickets_CustomerId",
-                table: "SupportTickets",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SupportTickets_Status",
-                table: "SupportTickets",
-                column: "Status");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TicketMessage_SenderId",
-                table: "TicketMessage",
-                column: "SenderId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TicketMessage_SupportTicketId",
                 table: "TicketMessage",
                 column: "SupportTicketId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkingHours_ContractorId",
+                table: "WorkingHours",
+                column: "ContractorId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BookingServiceItems");
+                name: "BookingItem");
 
             migrationBuilder.DropTable(
                 name: "ContractorCoverage");
 
             migrationBuilder.DropTable(
                 name: "Contractors_UnavailableSlots");
-
-            migrationBuilder.DropTable(
-                name: "ContractorServices");
-
-            migrationBuilder.DropTable(
-                name: "ContractorWorkingHours");
 
             migrationBuilder.DropTable(
                 name: "InvoiceLineItems");
@@ -952,7 +847,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 name: "PostcodePricing");
 
             migrationBuilder.DropTable(
-                name: "PromotionApplicablePostcodes");
+                name: "Promotions_ApplicablePostcodes");
 
             migrationBuilder.DropTable(
                 name: "Review");
@@ -967,7 +862,13 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 name: "SeoPageKeyword");
 
             migrationBuilder.DropTable(
+                name: "ServiceItem");
+
+            migrationBuilder.DropTable(
                 name: "TicketMessage");
+
+            migrationBuilder.DropTable(
+                name: "WorkingHours");
 
             migrationBuilder.DropTable(
                 name: "Invoices");

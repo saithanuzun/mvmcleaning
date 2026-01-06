@@ -101,16 +101,25 @@
                 @if (Model.CoverageAreas != null && Model.CoverageAreas.Count > 0)
                 {
                     <div class="card shadow-sm mt-4">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Coverage Areas</h5>
+                            <a href="@Url.Action("List", "Coverage")" class="btn btn-sm btn-light">
+                                <i class="bi bi-eye"></i> View All
+                            </a>
                         </div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
-                                @foreach (var area in Model.CoverageAreas)
+                                @foreach (var area in Model.CoverageAreas.Take(5))
                                 {
                                     <li class="list-group-item">
                                         <i class="bi bi-geo-alt-fill" style="color: #46C6CE;"></i>
                                         Postcode: @area.Postcode
+                                    </li>
+                                }
+                                @if (Model.CoverageAreas.Count > 5)
+                                {
+                                    <li class="list-group-item text-muted">
+                                        <em>+@(Model.CoverageAreas.Count - 5) more area(s)</em>
                                     </li>
                                 }
                             </ul>

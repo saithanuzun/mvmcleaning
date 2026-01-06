@@ -11,11 +11,7 @@ public class ContractorCoverageConfiguration : EntityConfiguration<ContractorCov
         base.Configure(builder);
         
         builder.OwnsOne(i => i.Postcode);
-
-        builder.HasOne(c => c.Contractor)
-            .WithMany()
-            .HasForeignKey(c => c.ContractorId)
-            .OnDelete(DeleteBehavior.Cascade);
+        
         
     }
 }

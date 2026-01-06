@@ -42,7 +42,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<decimal>("FixedAdjustment")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<decimal>("Multiplier")
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<Guid>("ServiceId")
                         .HasColumnType("uuid");
@@ -150,8 +150,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<string>("FirstName")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -159,8 +158,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("LastName")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -280,10 +278,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.HasIndex("BookingId")
                         .IsUnique();
 
-                    b.HasIndex("Status");
-
-                    b.HasIndex("TransactionId");
-
                     b.ToTable("Payment");
                 });
 
@@ -354,9 +348,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("ContractorId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ContractorId1")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -389,8 +380,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContractorId");
-
-                    b.HasIndex("ContractorId1");
 
                     b.ToTable("ContractorCoverage");
                 });
@@ -447,6 +436,43 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.ToTable("Review");
                 });
 
+            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contractor.Entities.WorkingHours", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ContractorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractorId");
+
+                    b.ToTable("WorkingHours");
+                });
+
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Invoice.Invoice", b =>
                 {
                     b.Property<Guid>("Id")
@@ -477,8 +503,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("InvoiceNumber")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -506,15 +531,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("BookingId");
 
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("DueDate");
-
-                    b.HasIndex("InvoiceNumber")
-                        .IsUnique();
-
-                    b.HasIndex("Status");
-
                     b.ToTable("Invoices");
                 });
 
@@ -523,15 +539,9 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ApplicableServices")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -549,20 +559,17 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("text");
 
                     b.Property<string>("DiscountType")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<decimal>("DiscountValue")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true);
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -589,15 +596,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.HasIndex("IsActive");
-
-                    b.HasIndex("ValidFrom");
-
-                    b.HasIndex("ValidTo");
 
                     b.ToTable("Promotions");
                 });
@@ -912,8 +910,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("Shortcut");
-
                     b.ToTable("Services");
                 });
 
@@ -965,8 +961,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SenderId");
 
                     b.HasIndex("SupportTicketId");
 
@@ -1031,12 +1025,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("AssignedToId");
 
-                    b.HasIndex("BookingId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("Status");
-
                     b.ToTable("SupportTickets");
                 });
 
@@ -1055,27 +1043,19 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                             b1.Property<string>("Area")
                                 .IsRequired()
-                                .HasMaxLength(2)
-                                .HasColumnType("character varying(2)")
-                                .HasColumnName("Postcode_Area");
+                                .HasColumnType("text");
 
                             b1.Property<string>("District")
                                 .IsRequired()
-                                .HasMaxLength(4)
-                                .HasColumnType("character varying(4)")
-                                .HasColumnName("Postcode_District");
+                                .HasColumnType("text");
 
                             b1.Property<string>("Sector")
                                 .IsRequired()
-                                .HasMaxLength(8)
-                                .HasColumnType("character varying(8)")
-                                .HasColumnName("Postcode_Sector");
+                                .HasColumnType("text");
 
                             b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasMaxLength(10)
-                                .HasColumnType("character varying(10)")
-                                .HasColumnName("Postcode_Value");
+                                .HasColumnType("text");
 
                             b1.HasKey("PostcodePricingId");
 
@@ -1166,12 +1146,10 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<DateTime>("EndTime")
-                                .HasColumnType("timestamp with time zone")
-                                .HasColumnName("ScheduledSlot_EndTime");
+                                .HasColumnType("timestamp with time zone");
 
                             b1.Property<DateTime>("StartTime")
-                                .HasColumnType("timestamp with time zone")
-                                .HasColumnName("ScheduledSlot_StartTime");
+                                .HasColumnType("timestamp with time zone");
 
                             b1.HasKey("BookingId");
 
@@ -1187,29 +1165,21 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("AdditionalInfo")
-                                .HasMaxLength(1000)
-                                .HasColumnType("character varying(1000)")
-                                .HasColumnName("ServiceAddress_AdditionalInfo");
+                                .HasColumnType("text");
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasMaxLength(200)
-                                .HasColumnType("character varying(200)")
-                                .HasColumnName("ServiceAddress_City");
+                                .HasColumnType("text");
 
                             b1.Property<double?>("Latitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("ServiceAddress_Latitude");
+                                .HasColumnType("double precision");
 
                             b1.Property<double?>("Longitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("ServiceAddress_Longitude");
+                                .HasColumnType("double precision");
 
                             b1.Property<string>("Street")
                                 .IsRequired()
-                                .HasMaxLength(500)
-                                .HasColumnType("character varying(500)")
-                                .HasColumnName("ServiceAddress_Street");
+                                .HasColumnType("text");
 
                             b1.HasKey("BookingId");
 
@@ -1225,27 +1195,19 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                                     b2.Property<string>("Area")
                                         .IsRequired()
-                                        .HasMaxLength(2)
-                                        .HasColumnType("character varying(2)")
-                                        .HasColumnName("ServiceAddress_Postcode_Area");
+                                        .HasColumnType("text");
 
                                     b2.Property<string>("District")
                                         .IsRequired()
-                                        .HasMaxLength(4)
-                                        .HasColumnType("character varying(4)")
-                                        .HasColumnName("ServiceAddress_Postcode_District");
+                                        .HasColumnType("text");
 
                                     b2.Property<string>("Sector")
                                         .IsRequired()
-                                        .HasMaxLength(8)
-                                        .HasColumnType("character varying(8)")
-                                        .HasColumnName("ServiceAddress_Postcode_Sector");
+                                        .HasColumnType("text");
 
                                     b2.Property<string>("Value")
                                         .IsRequired()
-                                        .HasMaxLength(10)
-                                        .HasColumnType("character varying(10)")
-                                        .HasColumnName("ServiceAddress_Postcode_Value");
+                                        .HasColumnType("text");
 
                                     b2.HasKey("AddressBookingId");
 
@@ -1265,14 +1227,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("TotalPrice_Amount");
+                                .HasColumnType("numeric");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
-                                .HasMaxLength(3)
-                                .HasColumnType("character varying(3)")
-                                .HasColumnName("TotalPrice_Currency");
+                                .HasColumnType("text");
 
                             b1.HasKey("BookingId");
 
@@ -1284,10 +1243,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                     b.OwnsMany("mvmclean.backend.Domain.Aggregates.Booking.Entities.BookingItem", "ServiceItems", b1 =>
                         {
-                            b1.Property<Guid>("Id")
+                            b1.Property<Guid>("BookingId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<Guid>("BookingId")
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
                                 .HasColumnType("uuid");
 
                             b1.Property<DateTime>("CreatedAt")
@@ -1313,8 +1273,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                             b1.Property<string>("ServiceName")
                                 .IsRequired()
-                                .HasMaxLength(500)
-                                .HasColumnType("character varying(500)");
+                                .HasColumnType("text");
 
                             b1.Property<DateTime?>("UpdatedAt")
                                 .HasColumnType("timestamp with time zone");
@@ -1322,36 +1281,34 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                             b1.Property<string>("UpdatedBy")
                                 .HasColumnType("text");
 
-                            b1.HasKey("Id");
+                            b1.HasKey("BookingId", "Id");
 
-                            b1.HasIndex("BookingId");
-
-                            b1.ToTable("BookingServiceItems", (string)null);
+                            b1.ToTable("BookingItem");
 
                             b1.WithOwner()
                                 .HasForeignKey("BookingId");
 
                             b1.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Money", "UnitAdjustedPrice", b2 =>
                                 {
+                                    b2.Property<Guid>("BookingItemBookingId")
+                                        .HasColumnType("uuid");
+
                                     b2.Property<Guid>("BookingItemId")
                                         .HasColumnType("uuid");
 
                                     b2.Property<decimal>("Amount")
-                                        .HasColumnType("decimal(18,2)")
-                                        .HasColumnName("UnitAdjustedPrice_Amount");
+                                        .HasColumnType("numeric");
 
                                     b2.Property<string>("Currency")
                                         .IsRequired()
-                                        .HasMaxLength(3)
-                                        .HasColumnType("character varying(3)")
-                                        .HasColumnName("UnitAdjustedPrice_Currency");
+                                        .HasColumnType("text");
 
-                                    b2.HasKey("BookingItemId");
+                                    b2.HasKey("BookingItemBookingId", "BookingItemId");
 
-                                    b2.ToTable("BookingServiceItems");
+                                    b2.ToTable("BookingItem");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("BookingItemId");
+                                        .HasForeignKey("BookingItemBookingId", "BookingItemId");
                                 });
 
                             b1.Navigation("UnitAdjustedPrice")
@@ -1386,29 +1343,21 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("AdditionalInfo")
-                                .HasMaxLength(1000)
-                                .HasColumnType("character varying(1000)")
-                                .HasColumnName("Address_AdditionalInfo");
+                                .HasColumnType("text");
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasMaxLength(200)
-                                .HasColumnType("character varying(200)")
-                                .HasColumnName("Address_City");
+                                .HasColumnType("text");
 
                             b1.Property<double?>("Latitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("Address_Latitude");
+                                .HasColumnType("double precision");
 
                             b1.Property<double?>("Longitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("Address_Longitude");
+                                .HasColumnType("double precision");
 
                             b1.Property<string>("Street")
                                 .IsRequired()
-                                .HasMaxLength(500)
-                                .HasColumnType("character varying(500)")
-                                .HasColumnName("Address_Street");
+                                .HasColumnType("text");
 
                             b1.HasKey("CustomerId");
 
@@ -1424,27 +1373,19 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                                     b2.Property<string>("Area")
                                         .IsRequired()
-                                        .HasMaxLength(2)
-                                        .HasColumnType("character varying(2)")
-                                        .HasColumnName("Address_Postcode_Area");
+                                        .HasColumnType("text");
 
                                     b2.Property<string>("District")
                                         .IsRequired()
-                                        .HasMaxLength(4)
-                                        .HasColumnType("character varying(4)")
-                                        .HasColumnName("Address_Postcode_District");
+                                        .HasColumnType("text");
 
                                     b2.Property<string>("Sector")
                                         .IsRequired()
-                                        .HasMaxLength(8)
-                                        .HasColumnType("character varying(8)")
-                                        .HasColumnName("Address_Postcode_Sector");
+                                        .HasColumnType("text");
 
                                     b2.Property<string>("Value")
                                         .IsRequired()
-                                        .HasMaxLength(10)
-                                        .HasColumnType("character varying(10)")
-                                        .HasColumnName("Address_Postcode_Value");
+                                        .HasColumnType("text");
 
                                     b2.HasKey("AddressCustomerId");
 
@@ -1465,15 +1406,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                             b1.Property<string>("NormalizedValue")
                                 .IsRequired()
-                                .HasMaxLength(256)
-                                .HasColumnType("character varying(256)")
-                                .HasColumnName("Email_NormalizedValue");
+                                .HasColumnType("text");
 
                             b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasMaxLength(256)
-                                .HasColumnType("character varying(256)")
-                                .HasColumnName("Email_Value");
+                                .HasColumnType("text");
 
                             b1.HasKey("CustomerId");
 
@@ -1490,9 +1427,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                             b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasMaxLength(20)
-                                .HasColumnType("character varying(20)")
-                                .HasColumnName("PhoneNumber_Value");
+                                .HasColumnType("text");
 
                             b1.HasKey("CustomerId");
 
@@ -1624,68 +1559,33 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                     b.OwnsMany("mvmclean.backend.Domain.Aggregates.Contractor.Entities.ServiceItem", "Services", b1 =>
                         {
-                            b1.Property<Guid>("Id")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Category")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)");
-
                             b1.Property<Guid>("ContractorId")
                                 .HasColumnType("uuid");
 
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("Category")
+                                .IsRequired()
+                                .HasColumnType("text");
+
                             b1.Property<string>("Description")
                                 .IsRequired()
-                                .HasMaxLength(500)
-                                .HasColumnType("character varying(500)");
+                                .HasColumnType("text");
 
                             b1.Property<Guid>("ServiceId")
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("ServiceName")
                                 .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("character varying(255)");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("ContractorId");
-
-                            b1.ToTable("ContractorServices", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContractorId");
-                        });
-
-                    b.OwnsMany("mvmclean.backend.Domain.Aggregates.Contractor.ValueObjects.WorkingHours", "WorkingHours", b1 =>
-                        {
-                            b1.Property<Guid>("Id")
-                                .HasColumnType("uuid");
-
-                            b1.Property<Guid>("ContractorId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("DayOfWeek")
-                                .IsRequired()
                                 .HasColumnType("text");
 
-                            b1.Property<TimeOnly>("EndTime")
-                                .HasColumnType("time without time zone")
-                                .HasColumnName("EndTime");
+                            b1.HasKey("ContractorId", "Id");
 
-                            b1.Property<bool>("IsWorkingDay")
-                                .HasColumnType("boolean");
-
-                            b1.Property<TimeOnly>("StartTime")
-                                .HasColumnType("time without time zone")
-                                .HasColumnName("StartTime");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("ContractorId");
-
-                            b1.ToTable("ContractorWorkingHours", (string)null);
+                            b1.ToTable("ServiceItem");
 
                             b1.WithOwner()
                                 .HasForeignKey("ContractorId");
@@ -1700,21 +1600,15 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("Services");
 
                     b.Navigation("UnavailableSlots");
-
-                    b.Navigation("WorkingHours");
                 });
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contractor.Entities.ContractorCoverage", b =>
                 {
                     b.HasOne("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", "Contractor")
-                        .WithMany()
+                        .WithMany("CoverageAreas")
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", null)
-                        .WithMany("CoverageAreas")
-                        .HasForeignKey("ContractorId1");
 
                     b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Postcode", "Postcode", b1 =>
                         {
@@ -1766,6 +1660,17 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("Contractor");
                 });
 
+            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contractor.Entities.WorkingHours", b =>
+                {
+                    b.HasOne("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", "Contractor")
+                        .WithMany("WorkingHours")
+                        .HasForeignKey("ContractorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contractor");
+                });
+
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Invoice.Invoice", b =>
                 {
                     b.HasOne("mvmclean.backend.Domain.Aggregates.Booking.Booking", null)
@@ -1780,14 +1685,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("DiscountAmount_Amount");
+                                .HasColumnType("numeric");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
-                                .HasMaxLength(3)
-                                .HasColumnType("character varying(3)")
-                                .HasColumnName("DiscountAmount_Currency");
+                                .HasColumnType("text");
 
                             b1.HasKey("InvoiceId");
 
@@ -1803,14 +1705,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("Subtotal_Amount");
+                                .HasColumnType("numeric");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
-                                .HasMaxLength(3)
-                                .HasColumnType("character varying(3)")
-                                .HasColumnName("Subtotal_Currency");
+                                .HasColumnType("text");
 
                             b1.HasKey("InvoiceId");
 
@@ -1826,14 +1725,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("TotalAmount_Amount");
+                                .HasColumnType("numeric");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
-                                .HasMaxLength(3)
-                                .HasColumnType("character varying(3)")
-                                .HasColumnName("TotalAmount_Currency");
+                                .HasColumnType("text");
 
                             b1.HasKey("InvoiceId");
 
@@ -1874,14 +1770,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                         .HasColumnType("uuid");
 
                                     b2.Property<decimal>("Amount")
-                                        .HasColumnType("decimal(18,2)")
-                                        .HasColumnName("UnitPrice_Amount");
+                                        .HasColumnType("numeric");
 
                                     b2.Property<string>("Currency")
                                         .IsRequired()
-                                        .HasMaxLength(3)
-                                        .HasColumnType("character varying(3)")
-                                        .HasColumnName("UnitPrice_Currency");
+                                        .HasColumnType("text");
 
                                     b2.HasKey("InvoiceLineItemId");
 
@@ -1901,16 +1794,13 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<int>("DaysToPay")
-                                .HasColumnType("integer")
-                                .HasColumnName("PaymentTerms_DaysToPay");
+                                .HasColumnType("integer");
 
                             b1.Property<int>("EarlyPaymentDiscountDays")
-                                .HasColumnType("integer")
-                                .HasColumnName("PaymentTerms_EarlyPaymentDiscountDays");
+                                .HasColumnType("integer");
 
                             b1.Property<decimal>("EarlyPaymentDiscountPercent")
-                                .HasColumnType("decimal(5,2)")
-                                .HasColumnName("PaymentTerms_EarlyPaymentDiscountPercent");
+                                .HasColumnType("numeric");
 
                             b1.HasKey("InvoiceId");
 
@@ -1939,41 +1829,34 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 {
                     b.OwnsMany("mvmclean.backend.Domain.SharedKernel.ValueObjects.Postcode", "ApplicablePostcodes", b1 =>
                         {
-                            b1.Property<Guid>("Id")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Area")
-                                .IsRequired()
-                                .HasMaxLength(2)
-                                .HasColumnType("character varying(2)")
-                                .HasColumnName("Postcode_Area");
-
-                            b1.Property<string>("District")
-                                .IsRequired()
-                                .HasMaxLength(4)
-                                .HasColumnType("character varying(4)")
-                                .HasColumnName("Postcode_District");
-
                             b1.Property<Guid>("PromotionId")
                                 .HasColumnType("uuid");
 
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("Area")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("District")
+                                .IsRequired()
+                                .HasColumnType("text");
+
                             b1.Property<string>("Sector")
                                 .IsRequired()
-                                .HasMaxLength(8)
-                                .HasColumnType("character varying(8)")
-                                .HasColumnName("Postcode_Sector");
+                                .HasColumnType("text");
 
                             b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasMaxLength(10)
-                                .HasColumnType("character varying(10)")
-                                .HasColumnName("Postcode_Value");
+                                .HasColumnType("text");
 
-                            b1.HasKey("Id");
+                            b1.HasKey("PromotionId", "Id");
 
-                            b1.HasIndex("PromotionId");
-
-                            b1.ToTable("PromotionApplicablePostcodes", (string)null);
+                            b1.ToTable("Promotions_ApplicablePostcodes");
 
                             b1.WithOwner()
                                 .HasForeignKey("PromotionId");
@@ -1985,14 +1868,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("MinimumOrderAmount_Amount");
+                                .HasColumnType("numeric");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
-                                .HasMaxLength(3)
-                                .HasColumnType("character varying(3)")
-                                .HasColumnName("MinimumOrderAmount_Currency");
+                                .HasColumnType("text");
 
                             b1.HasKey("PromotionId");
 
@@ -2061,14 +1941,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("BasePrice_Amount");
+                                .HasColumnType("numeric");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
-                                .HasMaxLength(3)
-                                .HasColumnType("character varying(3)")
-                                .HasColumnName("BasePrice_Currency");
+                                .HasColumnType("text");
 
                             b1.HasKey("ServiceId");
 
@@ -2122,6 +1999,8 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("CoverageAreas");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("WorkingHours");
                 });
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.SeoPage", b =>

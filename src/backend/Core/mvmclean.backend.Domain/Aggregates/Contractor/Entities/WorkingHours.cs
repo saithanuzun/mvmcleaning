@@ -1,13 +1,15 @@
 using mvmclean.backend.Domain.Core.BaseClasses;
 
-namespace mvmclean.backend.Domain.Aggregates.Contractor.ValueObjects;
+namespace mvmclean.backend.Domain.Aggregates.Contractor.Entities;
 
-public class WorkingHours : ValueObject
+public class WorkingHours : Entity
 {
     public DayOfWeek DayOfWeek { get; }
     public bool IsWorkingDay { get; }
     public TimeOnly StartTime { get; }
     public TimeOnly EndTime { get; }
+    public Contractor Contractor { get; set; }
+    public Guid ContractorId { get; set; }
 
     private WorkingHours() { }
 
@@ -34,12 +36,5 @@ public class WorkingHours : ValueObject
 
     public static WorkingHours CreateDayOff(DayOfWeek dayOfWeek)
         => new(dayOfWeek, false, default, default);
-    
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return DayOfWeek;
-        yield return IsWorkingDay;
-        yield return StartTime;
-        yield return EndTime;
-    }
+
 }

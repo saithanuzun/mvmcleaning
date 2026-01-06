@@ -2,7 +2,7 @@ using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
 using mvmclean.backend.Domain.Aggregates.Contractor.Entities;
 using mvmclean.backend.Domain.Aggregates.Contractor.Events;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
-using WorkingHours = mvmclean.backend.Domain.Aggregates.Contractor.ValueObjects.WorkingHours;
+using WorkingHours = mvmclean.backend.Domain.Aggregates.Contractor.Entities.WorkingHours;
 
 namespace mvmclean.backend.Domain.Aggregates.Contractor;
 

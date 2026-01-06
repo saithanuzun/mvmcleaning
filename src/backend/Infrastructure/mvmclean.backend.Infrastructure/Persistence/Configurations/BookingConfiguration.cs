@@ -11,93 +11,18 @@ public class BookingConfiguration: EntityConfiguration<Booking>
     {
         base.Configure(builder);
         
-        // TotalPrice value object
-        builder.OwnsOne(i => i.TotalPrice, money =>
-        {
-            money.Property(m => m.Amount)
-                .HasColumnName("TotalPrice_Amount")
-                .HasColumnType("decimal(18,2)")
-                .IsRequired();
-            money.Property(m => m.Currency)
-                .HasColumnName("TotalPrice_Currency")
-                .HasMaxLength(3)
-                .IsRequired();
-        });
+        builder.OwnsOne(i => i.TotalPrice);
         
         builder.OwnsOne(i => i.ServiceAddress, address =>
         {
-            address.Property(a => a.Street)
-                .HasColumnName("ServiceAddress_Street")
-                .HasMaxLength(500)
-                .IsRequired();
-            address.Property(a => a.City)
-                .HasColumnName("ServiceAddress_City")
-                .HasMaxLength(200)
-                .IsRequired();
-            address.Property(a => a.AdditionalInfo)
-                .HasColumnName("ServiceAddress_AdditionalInfo")
-                .HasMaxLength(1000);
-            address.Property(a => a.Latitude)
-                .HasColumnName("ServiceAddress_Latitude")
-                .HasColumnType("double precision");
-            address.Property(a => a.Longitude)
-                .HasColumnName("ServiceAddress_Longitude")
-                .HasColumnType("double precision");
-                
-            address.OwnsOne(a => a.Postcode, postcode =>
-            {
-                postcode.Property(p => p.Value)
-                    .HasColumnName("ServiceAddress_Postcode_Value")
-                    .HasMaxLength(10)
-                    .IsRequired();
-                postcode.Property(p => p.Area)
-                    .HasColumnName("ServiceAddress_Postcode_Area")
-                    .HasMaxLength(2);
-                postcode.Property(p => p.District)
-                    .HasColumnName("ServiceAddress_Postcode_District")
-                    .HasMaxLength(4);
-                postcode.Property(p => p.Sector)
-                    .HasColumnName("ServiceAddress_Postcode_Sector")
-                    .HasMaxLength(8);
-            });
+            address.OwnsOne(a => a.Postcode);
         });
 
-        builder.OwnsOne(i => i.ScheduledSlot, slot =>
-        {
-            slot.Property(s => s.StartTime)
-                .HasColumnName("ScheduledSlot_StartTime")
-                .IsRequired();
-            slot.Property(s => s.EndTime)
-                .HasColumnName("ScheduledSlot_EndTime")
-                .IsRequired();
-        });
+        builder.OwnsOne(i => i.ScheduledSlot);
         
         builder.OwnsMany(o => o.ServiceItems, li =>
         {
-            li.WithOwner().HasForeignKey("BookingId");
-            li.ToTable("BookingServiceItems");
-            li.Property<Guid>("Id").ValueGeneratedNever();
-            li.HasKey("Id");
-            
-            li.Property(i => i.ServiceName)
-                .HasMaxLength(500)
-                .IsRequired();
-            li.Property(i => i.ServiceId)
-                .IsRequired();
-            li.Property(i => i.Quantity)
-                .IsRequired();
-                
-            li.OwnsOne(i => i.UnitAdjustedPrice, money =>
-            {
-                money.Property(m => m.Amount)
-                    .HasColumnName("UnitAdjustedPrice_Amount")
-                    .HasColumnType("decimal(18,2)")
-                    .IsRequired();
-                money.Property(m => m.Currency)
-                    .HasColumnName("UnitAdjustedPrice_Currency")
-                    .HasMaxLength(3)
-                    .IsRequired();
-            });
+            li.OwnsOne(i => i.UnitAdjustedPrice);
         });
 
         builder.HasOne(b => b.Customer)

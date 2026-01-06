@@ -10,11 +10,8 @@ namespace mvmclean.backend.WebApp.Areas.Contractor.Controllers;
 [Authorize(AuthenticationSchemes = "ContractorCookie")]
 public class CoverageController : BaseContractorController
 {
-    private readonly IMediator _mediator;
-
     public CoverageController(IMediator mediator) : base(mediator)
     {
-        _mediator = mediator;
     }
 
     [Route("")]
@@ -27,6 +24,26 @@ public class CoverageController : BaseContractorController
         var response = await _mediator.Send(new GetContractorByIdRequest { Id = ContractorId.ToString() });
         ViewBag.Title = "Service Coverage Areas";
         return View(response);
+    }
+
+    [Route("list")]
+    [HttpGet]
+    public async Task<IActionResult> List()
+    {
+        if (ContractorId == null)
+            return RedirectToAction("Index", "Home");
+
+        try
+        {
+            var response = await _mediator.Send(new GetContractorCoveragesRequest { ContractorId = ContractorId.ToString() });
+            ViewBag.Title = "Coverage Areas";
+            return View(response);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return RedirectToAction("Index");
+        }
     }
 
     [Route("add")]

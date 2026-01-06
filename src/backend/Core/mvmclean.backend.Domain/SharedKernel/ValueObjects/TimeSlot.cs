@@ -15,9 +15,6 @@ public class TimeSlot : ValueObject
         if (startTime >= endTime)
             throw new ArgumentException("Start time must be before end time");
 
-        if (startTime < DateTime.UtcNow)
-            throw new ArgumentException("Cannot create time slot in the past");
-
         return new TimeSlot { StartTime = startTime, EndTime = endTime };
     }
 

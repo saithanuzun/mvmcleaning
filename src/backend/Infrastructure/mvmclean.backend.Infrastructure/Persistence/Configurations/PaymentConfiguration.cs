@@ -43,9 +43,6 @@ public class PaymentConfiguration : EntityConfiguration<Payment>
             .HasForeignKey<Payment>(p => p.BookingId)
             .OnDelete(DeleteBehavior.Restrict);
             
-        // Indexes
-        builder.HasIndex(p => p.BookingId);
-        builder.HasIndex(p => p.Status);
-        builder.HasIndex(p => p.TransactionId);
+
     }
 }

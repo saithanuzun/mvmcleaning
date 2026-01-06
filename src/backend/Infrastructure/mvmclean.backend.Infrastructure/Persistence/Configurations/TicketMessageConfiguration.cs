@@ -12,10 +12,7 @@ public class TicketMessageConfiguration : EntityConfiguration<TicketMessage>
         
         builder.HasOne(m => m.SupportTicket)
             .WithMany(t => t.Messages)
-            .HasForeignKey(m => m.SupportTicketId)
-            .OnDelete(DeleteBehavior.Cascade);
-            
-        builder.HasIndex(m => m.SupportTicketId);
-        builder.HasIndex(m => m.SenderId);
+            .HasForeignKey(m => m.SupportTicketId);
+        
     }
 }

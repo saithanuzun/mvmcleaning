@@ -7,7 +7,7 @@ namespace mvmclean.backend.Application.Features.Contractor;
 public class CreateUnavailabilityRequest : IRequest<CreateUnavailabilityResponse>
 {
     public string ContractorId { get; set; }
-    public DateTime Startime { get; set; }
+    public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
 }
 
@@ -29,7 +29,7 @@ public class CreateUnavailabilityHandler : IRequestHandler<CreateUnavailabilityR
     {
         var contractor = await _contractorRepository.GetByIdAsync(Guid.Parse(request.ContractorId), noTracking: false);
 
-        contractor.MarkAsUnavailable(TimeSlot.Create(request.Startime, request.EndTime));
+        contractor.MarkAsUnavailable(TimeSlot.Create(request.StartTime, request.EndTime));
 
         await _contractorRepository.SaveChangesAsync();
 

@@ -27,16 +27,9 @@ public class SupportTicketConfiguration : EntityConfiguration<SupportTicket>
             .HasForeignKey(m => m.SupportTicketId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        // AssignedTo relationship
         builder.HasOne(t => t.AssignedTo)
             .WithMany()
             .HasForeignKey(t => t.AssignedToId)
             .OnDelete(DeleteBehavior.SetNull);
-            
-        // Indexes
-        builder.HasIndex(t => t.CustomerId);
-        builder.HasIndex(t => t.BookingId);
-        builder.HasIndex(t => t.Status);
-        builder.HasIndex(t => t.AssignedToId);
     }
 }

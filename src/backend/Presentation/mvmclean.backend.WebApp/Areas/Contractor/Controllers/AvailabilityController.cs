@@ -69,7 +69,7 @@ public class AvailabilityController : BaseContractorController
             var request = new CreateUnavailabilityRequest
             {
                 ContractorId = ContractorId.ToString(),
-                Startime = startTime,
+                StartTime = startTime,
                 EndTime = endTime
             };
 
@@ -113,12 +113,30 @@ public class AvailabilityController : BaseContractorController
 
     [Route("working-days/add")]
     [HttpPost]
-    public async Task<IActionResult> AddWorkingDay(string dayOfWeek, TimeOnly startTime, TimeOnly endTime)
+    public async Task<IActionResult> AddWorkingDay(string dayOfWeek, string startTime, string endTime)
     {
         if (ContractorId == null)
             return RedirectToAction("Index", "Home");
 
-        if (startTime >= endTime)
+        if (string.IsNullOrWhiteSpace(startTime) || string.IsNullOrWhiteSpace(endTime))
+        {
+            TempData["Error"] = "Start time and end time are required";
+            return RedirectToAction("WorkingDays");
+        }
+
+        if (!TimeOnly.TryParse(startTime, out var parsedStartTime))
+        {
+            TempData["Error"] = "Invalid start time format";
+            return RedirectToAction("WorkingDays");
+        }
+
+        if (!TimeOnly.TryParse(endTime, out var parsedEndTime))
+        {
+            TempData["Error"] = "Invalid end time format";
+            return RedirectToAction("WorkingDays");
+        }
+
+        if (parsedStartTime >= parsedEndTime)
         {
             TempData["Error"] = "Start time must be before end time";
             return RedirectToAction("WorkingDays");
@@ -136,8 +154,8 @@ public class AvailabilityController : BaseContractorController
             {
                 ContractorId = ContractorId.ToString(),
                 DayOfWeek = parsedDay,
-                StartTime = startTime,
-                EndTime = endTime,
+                StartTime = parsedStartTime,
+                EndTime = parsedEndTime,
                 IsWorkingDay = true
             };
 
