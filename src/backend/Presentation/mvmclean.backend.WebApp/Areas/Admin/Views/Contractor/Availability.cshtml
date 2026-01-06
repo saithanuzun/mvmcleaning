@@ -1,0 +1,148 @@
+@using mvmclean.backend.Application.Features.Contractor
+
+@model GetContractorByIdResponse
+
+@{
+    ViewData["Title"] = "Contractor Availability";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-calendar3"></i> Availability - @Model?.FullName
+            </h2>
+            <a href="@Url.Action("Details", "Contractor", new { contractorId = "" })" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Details
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            @if (Model != null && Model.WorkingHours != null && Model.WorkingHours.Count > 0)
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock"></i> Working Hours
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var hours in Model.WorkingHours.OrderBy(h => h.DayOfWeek))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@hours.DayOfWeek</strong>
+                                            </td>
+                                            <td>@hours.StartTime.ToString("hh:mm tt")</td>
+                                            <td>@hours.EndTime.ToString("hh:mm tt")</td>
+                                            <td>
+                                                <small class="text-muted">
+                                                    @{
+                                                        var duration = hours.EndTime - hours.StartTime;
+                                                        <text>@duration.Hours h @duration.Minutes m</text>
+                                                    }
+                                                </small>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info mb-4">
+                    <i class="bi bi-info-circle"></i> No working hours configured yet.
+                </div>
+            }
+
+            @if (Model != null && Model.UnavailableSlots != null && Model.UnavailableSlots.Count > 0)
+            {
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="bi bi-calendar-x"></i> Unavailable Slots
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var slot in Model.UnavailableSlots.OrderByDescending(s => s.StartTime).Take(10))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@slot.StartTime.ToString("dd MMM yyyy HH:mm")</strong>
+                                            </td>
+                                            <td>
+                                                @slot.EndTime.ToString("dd MMM yyyy HH:mm")
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-warning">
+                                                    @((int)slot.Duration.TotalHours)h @(slot.Duration.Minutes)m
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No unavailable slots recorded.
+                </div>
+            }
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle"></i> Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>
+                        <strong>Working Days:</strong>
+                        <span class="badge bg-primary">@(Model?.WorkingHours?.Count ?? 0)</span>
+                    </p>
+                    <p>
+                        <strong>Unavailable Slots:</strong>
+                        <span class="badge bg-warning">@(Model?.UnavailableSlots?.Count ?? 0)</span>
+                    </p>
+                    <hr />
+                    <p class="small text-muted">
+                        <i class="bi bi-lightbulb"></i>
+                        Configure working hours and unavailable slots to manage contractor availability.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

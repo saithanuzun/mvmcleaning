@@ -12,7 +12,7 @@ using mvmclean.backend.Infrastructure.Persistence;
 namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MVMdbContext))]
-    [Migration("20260106193210_InitialCreate")]
+    [Migration("20260106215248_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -439,11 +439,15 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.ToTable("Review");
                 });
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contractor.Entities.WorkingHours", b =>
+            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contractor.Entities.ServiceItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid>("ContractorId")
                         .HasColumnType("uuid");
@@ -460,14 +464,80 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Property<string>("DeletedBy")
                         .HasColumnType("text");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
+
+                    b.Property<Guid>("ServiceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ServiceName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractorId");
+
+                    b.ToTable("ServiceItem");
+                });
+
+            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contractor.Entities.WorkingHours", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ContractorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("time without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsWorkingDay")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("time without time zone");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -1560,47 +1630,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("ContractorId");
                         });
 
-                    b.OwnsMany("mvmclean.backend.Domain.Aggregates.Contractor.Entities.ServiceItem", "Services", b1 =>
-                        {
-                            b1.Property<Guid>("ContractorId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
-
-                            b1.Property<string>("Category")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Description")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<Guid>("ServiceId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("ServiceName")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("ContractorId", "Id");
-
-                            b1.ToTable("ServiceItem");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContractorId");
-                        });
-
                     b.Navigation("Email")
                         .IsRequired();
 
                     b.Navigation("PhoneNumber")
                         .IsRequired();
-
-                    b.Navigation("Services");
 
                     b.Navigation("UnavailableSlots");
                 });
@@ -1659,6 +1693,17 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.HasOne("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", null)
                         .WithMany("Reviews")
                         .HasForeignKey("ContractorId1");
+
+                    b.Navigation("Contractor");
+                });
+
+            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contractor.Entities.ServiceItem", b =>
+                {
+                    b.HasOne("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", "Contractor")
+                        .WithMany("Services")
+                        .HasForeignKey("ContractorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Contractor");
                 });
@@ -2002,6 +2047,8 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("CoverageAreas");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("Services");
 
                     b.Navigation("WorkingHours");
                 });

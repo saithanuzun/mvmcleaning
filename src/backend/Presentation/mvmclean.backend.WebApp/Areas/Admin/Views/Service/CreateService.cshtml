@@ -4,107 +4,129 @@
     ViewData["Title"] = "Create Service";
 }
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-plus-circle"></i> Create New Service
+            </h2>
+            <a asp-area="Admin" asp-controller="Service" asp-action="AllServices" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Services
+            </a>
+        </div>
+    </div>
+
     <div class="row justify-content-center">
         <div class="col-lg-8">
-
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Create New Service</h5>
+                    <h5 class="mb-0">
+                        <i class="bi bi-form-check"></i> Service Information
+                    </h5>
                 </div>
 
                 <div class="card-body">
-                    <form asp-area="Admin"
-                          asp-controller="Service"
-                          asp-action="CreateService"
-                          method="post">
+                    <form asp-area="Admin" asp-controller="Service" asp-action="CreateService" method="post">
 
                         @Html.AntiForgeryToken()
 
                         <!-- Name -->
                         <div class="mb-3">
-                            <label asp-for="Name" class="form-label fw-semibold"></label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <label asp-for="Name" class="form-label fw-semibold">
+                                <i class="bi bi-chat-dots"></i> Service Name *
+                            </label>
+                            <input asp-for="Name" class="form-control" placeholder="e.g., General Cleaning" required/>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
                         </div>
 
                         <!-- Description -->
                         <div class="mb-3">
-                            <label asp-for="Description" class="form-label fw-semibold"></label>
-                            <textarea asp-for="Description"
-                                      class="form-control"
-                                      rows="3"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
+                            <label asp-for="Description" class="form-label fw-semibold">
+                                <i class="bi bi-file-text"></i> Description *
+                            </label>
+                            <textarea asp-for="Description" class="form-control" rows="3"
+                                      placeholder="Describe the service..." required></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
                         </div>
 
                         <!-- Shortcut -->
                         <div class="mb-3">
-                            <label asp-for="Shortcut" class="form-label fw-semibold"></label>
-                            <input asp-for="Shortcut" class="form-control" />
-                            <span asp-validation-for="Shortcut" class="text-danger"></span>
+                            <label asp-for="Shortcut" class="form-label fw-semibold">
+                                <i class="bi bi-lightning"></i> Shortcut *
+                            </label>
+                            <input asp-for="Shortcut" class="form-control" placeholder="e.g., GC" maxlength="5"
+                                   required/>
+                            <small class="text-muted">Abbreviation for the service (max 5 characters)</small>
+                            <span asp-validation-for="Shortcut" class="text-danger small"></span>
                         </div>
 
                         <!-- Duration -->
                         <div class="mb-3">
                             <label asp-for="EstimatedDurationMinutes" class="form-label fw-semibold">
-                                Estimated Duration (minutes)
+                                <i class="bi bi-hourglass-split"></i> Estimated Duration (minutes) *
                             </label>
-                            <input asp-for="EstimatedDurationMinutes"
-                                   type="number"
-                                   min="1"
-                                   class="form-control" />
-                            <span asp-validation-for="EstimatedDurationMinutes"
-                                  class="text-danger"></span>
+                            <input asp-for="EstimatedDurationMinutes" type="number" min="1" step="15"
+                                   class="form-control" placeholder="e.g., 60" required/>
+                            <small class="text-muted">Duration in minutes</small>
+                            <span asp-validation-for="EstimatedDurationMinutes" class="text-danger small"></span>
                         </div>
 
                         <!-- Category -->
                         <div class="mb-3">
-                            <label asp-for="CategoryId" class="form-label fw-semibold"></label>
-                            <select asp-for="CategoryId"
-                                    asp-items="ViewBag.Categories"
-                                    class="form-select">
-                                <option value="">-- Select Category --</option>
-                            </select>
-                            <span asp-validation-for="CategoryId"
-                                  class="text-danger"></span>
+                            <label asp-for="Category" class="form-label fw-semibold">
+                                <i class="bi bi-tag"></i> Category *
+                            </label>
+                            <input asp-for="Category" class="form-control" placeholder="e.g., General Cleaning, Deep Cleaning" required/>
+                            <small class="text-muted">Category name for organizing services</small>
+                            <span asp-validation-for="Category" class="text-danger small"></span>
                         </div>
 
                         <!-- Base Price -->
                         <div class="mb-4">
-                            <label asp-for="BasePrice" class="form-label fw-semibold"></label>
+                            <label asp-for="BasePrice" class="form-label fw-semibold">
+                                <i class="bi bi-currency-pound"></i> Base Price *
+                            </label>
                             <div class="input-group">
                                 <span class="input-group-text">£</span>
-                                <input asp-for="BasePrice"
-                                       type="number"
-                                       step="0.01"
-                                       min="0"
-                                       class="form-control" />
+                                <input asp-for="BasePrice" type="number" step="0.01" min="0" class="form-control"
+                                       placeholder="0.00" required/>
                             </div>
-                            <span asp-validation-for="BasePrice"
-                                  class="text-danger"></span>
+                            <small class="text-muted">Base price before postcode adjustments</small>
+                            <span asp-validation-for="BasePrice" class="text-danger small"></span>
                         </div>
+
+                        <hr/>
 
                         <!-- Actions -->
                         <div class="d-flex justify-content-end gap-2">
-                            <a asp-area="Admin"
-                               asp-controller="Service"
-                               asp-action="AllServices"
+                            <a asp-area="Admin" asp-controller="Service" asp-action="AllServices"
                                class="btn btn-secondary">
-                                Cancel
+                                <i class="bi bi-x"></i> Cancel
                             </a>
 
                             <button type="submit" class="btn btn-primary">
-                                Create Service
+                                <i class="bi bi-check-circle"></i> Create Service
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
 
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-lightbulb"></i> Tips
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <ul class="small mb-0">
+                        <li>Service name should be descriptive and customer-friendly</li>
+                        <li>Shortcut is used for quick reference (e.g., GC for General Cleaning)</li>
+                        <li>Duration should reflect realistic service time</li>
+                        <li>Base price can be adjusted per postcode area later</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

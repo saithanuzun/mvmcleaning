@@ -1,0 +1,133 @@
+@model mvmclean.backend.Application.Features.SupportTicket.GetAllSupportTicketsResponse
+
+@{
+    ViewData["Title"] = "All Support Tickets";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="mb-1">
+                <i class="bi bi-ticket"></i> Support Tickets Management
+            </h2>
+            <p class="text-muted mb-0">Manage all customer support tickets</p>
+        </div>
+
+        <div class="col-md-4 text-end">
+            <a asp-area="Admin" asp-controller="SupportTicket" asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-list-check"></i> All Support Tickets
+                <span class="badge bg-light text-dark float-end">@Model?.Tickets?.Count ?? 0</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            @if (Model?.Tickets?.Any() == true)
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Subject</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th class="text-center">Messages</th>
+                                <th>Assigned To</th>
+                                <th>Created</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ticket in Model.Tickets)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="font-monospace text-muted">@ticket.Id.ToString().Substring(0, 8)</span>
+                                    </td>
+                                    <td class="fw-semibold">@ticket.Subject</td>
+                                    <td>
+                                        <span class="badge bg-secondary">@ticket.CustomerId.ToString().Substring(0, 8)</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-@ticket.StatusBadgeClass">@ticket.Status</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-info">@ticket.MessageCount</span>
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(ticket.AssignedToName))
+                                        {
+                                            <span>@ticket.AssignedToName</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Unassigned</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (ticket.CreatedAt != default)
+                                        {
+                                            <span>@ticket.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <a asp-area="Admin" asp-controller="SupportTicket" asp-action="Details"
+                                            asp-route-ticketId="@ticket.Id" class="btn btn-sm btn-outline-primary"
+                                            title="View Details">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="p-4 text-center text-muted">
+                    <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                    <p class="mt-2">No support tickets found</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.375rem 0.625rem;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+</style>

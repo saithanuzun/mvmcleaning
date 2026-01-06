@@ -83,8 +83,7 @@ public class Contractor : Core.BaseClasses.AggregateRoot
         if (_coverageAreas.All(c => c.Postcode.Value != postcode.Value))
         {
             _coverageAreas.Add(ContractorCoverage.Create(Id, postcode));
-            // Don't update UpdatedAt here - let EF Core handle it or update it in the handler
-            // UpdatedAt = DateTime.UtcNow;
+
         }
     }
 

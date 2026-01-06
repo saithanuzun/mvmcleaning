@@ -4,10 +4,11 @@ namespace mvmclean.backend.Domain.Aggregates.Contractor.Entities;
 
 public class WorkingHours : Entity
 {
-    public DayOfWeek DayOfWeek { get; }
-    public bool IsWorkingDay { get; }
-    public TimeOnly StartTime { get; }
-    public TimeOnly EndTime { get; }
+    
+    public DayOfWeek DayOfWeek { get; private set; }
+    public bool IsWorkingDay { get; private set; }
+    public TimeOnly StartTime { get; private set; }
+    public TimeOnly EndTime { get; private set; }
     public Contractor Contractor { get; set; }
     public Guid ContractorId { get; set; }
 

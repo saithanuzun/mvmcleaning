@@ -91,7 +91,7 @@ public class AccountController : BaseContractorController
 
         var response = await _mediator.Send(request);
 
-        return Ok(response.ContractorId);
+        return RedirectToAction("index", "Home", new { area = "Contractor" });
     }
 
 

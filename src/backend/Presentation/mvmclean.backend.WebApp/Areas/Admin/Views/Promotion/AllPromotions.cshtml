@@ -1,0 +1,126 @@
+@model mvmclean.backend.Application.Features.Promotion.GetAllPromotionsResponse
+
+@{
+    ViewData["Title"] = "All Promotions";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="mb-1">
+                <i class="bi bi-tag"></i> Promotions Management
+            </h2>
+            <p class="text-muted mb-0">Manage all promotional campaigns</p>
+        </div>
+
+        <div class="col-md-4 text-end">
+            <a asp-area="Admin" asp-controller="Promotion" asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Create Promotion
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-list-check"></i> All Promotions
+                <span class="badge bg-light text-dark float-end">@Model?.Promotions?.Count ?? 0</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            @if (Model?.Promotions?.Any() == true)
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Discount Type</th>
+                                <th>Discount Value</th>
+                                <th>Min Order</th>
+                                <th>Valid Period</th>
+                                <th>Usage</th>
+                                <th>Postcodes</th>
+                                <th>Status</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var promotion in Model.Promotions)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@promotion.Code</td>
+                                    <td>@(promotion.Description.Length > 30 ? promotion.Description.Substring(0, 30) + "..." : promotion.Description)</td>
+                                    <td>
+                                        <span class="badge bg-info">@promotion.DiscountType</span>
+                                    </td>
+                                    <td>
+                                        @if (promotion.DiscountType.ToString() == "Percentage")
+                                        {
+                                            <span>@promotion.DiscountValue%</span>
+                                        }
+                                        else
+                                        {
+                                            <span>£@promotion.DiscountValue.ToString("0.00")</span>
+                                        }
+                                    </td>
+                                    <td>£@promotion.MinimumOrderAmount.ToString("0.00")</td>
+                                    <td>
+                                        <small class="text-muted">
+                                            @promotion.ValidFrom.ToString("dd/MM")<br />
+                                            to @promotion.ValidTo.ToString("dd/MM")
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            @promotion.UsedCount / @(promotion.UsageLimit > 0 ? promotion.UsageLimit.ToString() : "∞")
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-warning">@promotion.ApplicablePostcodesCount</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-@promotion.StatusBadgeClass">
+                                            @(promotion.IsActive ? "Active" : "Inactive")
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a asp-area="Admin" asp-controller="Promotion" asp-action="Details"
+                                            asp-route-promotionId="@promotion.Id" class="btn btn-sm btn-outline-primary"
+                                            title="View Details">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="p-4 text-center text-muted">
+                    <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                    <p class="mt-2">No promotions found</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

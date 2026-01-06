@@ -1,0 +1,225 @@
+@model mvmclean.backend.Application.Features.Promotion.GetPromotionByIdResponse
+
+@{
+    ViewData["Title"] = "Promotion Details";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-tag"></i> Promotion Details
+            </h2>
+            <div class="btn-group" role="group">
+                <a asp-area="Admin" asp-controller="Promotion" asp-action="AllPromotions" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Promotions
+                </a>
+                <button class="btn btn-warning" disabled title="Coming soon">
+                    <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button class="btn btn-danger" disabled title="Coming soon">
+                    <i class="bi bi-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Promotion Information</h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Promotion Code</small></label>
+                            <p class="h5 fw-bold">@Model.Code</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Status</small></label>
+                            <p>
+                                <span class="badge bg-@(Model.IsActive ? "success" : "danger")">
+                                    @(Model.IsActive ? "Active" : "Inactive")
+                                </span>
+                                @if (Model.IsExpired)
+                                {
+                                    <span class="badge bg-warning ms-1">EXPIRED</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="text-muted"><small>Description</small></label>
+                            <p>@Model.Description</p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Discount Type</small></label>
+                            <p>
+                                <span class="badge bg-info">@Model.DiscountType</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Discount Value</small></label>
+                            <p class="h5 fw-bold text-success">
+                                @if (Model.DiscountType.ToString() == "Percentage")
+                                {
+                                    <span>@Model.DiscountValue%</span>
+                                }
+                                else
+                                {
+                                    <span>£@Model.DiscountValue.ToString("0.00")</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Minimum Order Amount</small></label>
+                            <p class="fw-semibold">£@Model.MinimumOrderAmount.ToString("0.00")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Currency</small></label>
+                            <p>@Model.Currency</p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Valid From</small></label>
+                            <p>@Model.ValidFrom.ToString("dd/MM/yyyy HH:mm")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Valid To</small></label>
+                            <p>@Model.ValidTo.ToString("dd/MM/yyyy HH:mm")</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label class="text-muted"><small>Created At</small></label>
+                            <p>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Applicable Postcodes (<span>@Model.ApplicablePostcodes?.Count ?? 0</span>)</h5>
+                </div>
+
+                <div class="card-body">
+                    @if (Model?.ApplicablePostcodes?.Any() == true)
+                    {
+                        <div class="row">
+                            @foreach (var postcode in Model.ApplicablePostcodes)
+                            {
+                                <div class="col-md-3 mb-2">
+                                    <span class="badge bg-secondary py-2 px-3">@postcode</span>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No postcode restrictions - applicable to all areas</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-graph-up"></i> Usage Statistics
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted">Usage Count</small>
+                        <div class="progress" style="height: 25px;">
+                            @{
+                                var percentage = Model.UsageLimit > 0 ? (Model.UsedCount * 100) / Model.UsageLimit : 0;
+                            }
+                            <div class="progress-bar bg-success" role="progressbar" 
+                                 style="width: @percentage%;" 
+                                 aria-valuenow="@Model.UsedCount" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="@Model.UsageLimit">
+                                @Model.UsedCount / @(Model.UsageLimit > 0 ? Model.UsageLimit.ToString() : "Unlimited")
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="mb-3">
+                        <small class="text-muted">Remaining Uses</small>
+                        <p class="h5 fw-bold">
+                            @if (Model.RemainingUses > 0)
+                            {
+                                <span class="text-success">@Model.RemainingUses</span>
+                            }
+                            else if (Model.RemainingUses < 0)
+                            {
+                                <span class="text-info">Unlimited</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">No uses left</span>
+                            }
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <small class="text-muted">Validity</small>
+                        <p>
+                            @if (Model.IsExpired)
+                            {
+                                <span class="text-danger">Expired</span>
+                            }
+                            else if (DateTime.UtcNow < Model.ValidFrom)
+                            {
+                                <span class="text-warning">Not yet active</span>
+                            }
+                            else
+                            {
+                                <span class="text-success">Currently valid</span>
+                            }
+                        </p>
+                    </div>
+
+                    <div>
+                        <small class="text-muted">Days Remaining</small>
+                        <p>
+                            @{
+                                var daysRemaining = (Model.ValidTo - DateTime.UtcNow).Days;
+                            }
+                            @if (daysRemaining > 0)
+                            {
+                                <span class="text-success">@daysRemaining days</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">Expired</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

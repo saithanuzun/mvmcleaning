@@ -1,0 +1,131 @@
+@model mvmclean.backend.Application.Features.Booking.GetAllBookingsResponse
+
+@{
+    ViewData["Title"] = "All Bookings";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="mb-1">
+                <i class="bi bi-calendar-check"></i> Bookings Management
+            </h2>
+            <p class="text-muted mb-0">Manage all customer bookings</p>
+        </div>
+
+        <div class="col-md-4 text-end">
+            <a asp-area="Admin" asp-controller="Booking" asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Create Booking
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-list-check"></i> All Bookings
+                <span class="badge bg-light text-dark float-end">@Model?.Bookings?.Count ?? 0</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            @if (Model?.Bookings?.Any() == true)
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Phone</th>
+                                <th>Customer</th>
+                                <th>Contractor</th>
+                                <th>Postcode</th>
+                                <th>Services</th>
+                                <th>Total Price</th>
+                                <th>Scheduled</th>
+                                <th>Status</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model.Bookings)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@booking.PhoneNumber</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(booking.CustomerName))
+                                        {
+                                            <span>@booking.CustomerName</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(booking.ContractorName))
+                                        {
+                                            <span>@booking.ContractorName</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Unassigned</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">@booking.Postcode</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-info">@booking.ServiceItemCount</span>
+                                    </td>
+                                    <td class="fw-semibold">£@booking.TotalPrice.ToString("0.00")</td>
+                                    <td>
+                                        @if (booking.ScheduledDate.HasValue)
+                                        {
+                                            <span>@booking.ScheduledDate?.ToString("dd/MM/yyyy HH:mm")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-@booking.StatusBadgeClass">@booking.Status</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a asp-area="Admin" asp-controller="Booking" asp-action="Details"
+                                            asp-route-bookingId="@booking.Id" class="btn btn-sm btn-outline-primary"
+                                            title="View Details">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="p-4 text-center text-muted">
+                    <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                    <p class="mt-2">No bookings found</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using mvmclean.backend.Application.Features.Invoice;
 using mvmclean.backend.Application.Features.Services;
 
 namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
@@ -15,11 +16,46 @@ public class InvoiceController : BaseAdminController
     }
 
     [Route("")]
-    public IActionResult Index()
+    [Route("index")]
+    public async Task<IActionResult> Index()
     {
-        return View();
+        return await AllInvoices();
     }
 
+    [Route("all")]
+    [HttpGet]
+    public async Task<IActionResult> AllInvoices()
+    {
+        try
+        {
+            var response = await _mediator.Send(new GetAllInvoicesRequest());
+            return View(response);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error loading invoices: {ex.Message}";
+            return View(new GetAllInvoicesResponse());
+        }
+    }
 
-    
+    [Route("details/{invoiceId}")]
+    [HttpGet]
+    public async Task<IActionResult> Details(Guid invoiceId)
+    {
+        try
+        {
+            var response = await _mediator.Send(new GetInvoiceByIdRequest { InvoiceId = invoiceId });
+            return View(response);
+        }
+        catch (KeyNotFoundException)
+        {
+            TempData["Error"] = "Invoice not found";
+            return RedirectToAction(nameof(AllInvoices));
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error loading invoice: {ex.Message}";
+            return RedirectToAction(nameof(AllInvoices));
+        }
+    }
 }

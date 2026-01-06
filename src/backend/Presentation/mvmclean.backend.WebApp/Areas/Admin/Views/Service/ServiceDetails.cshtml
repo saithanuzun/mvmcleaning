@@ -4,63 +4,103 @@
     ViewData["Title"] = "Service Details";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-7">
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-briefcase"></i> Service Details
+            </h2>
+            <div class="btn-group" role="group">
+                <a asp-area="Admin" asp-controller="Service" asp-action="AllServices" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Services
+                </a>
+                <a asp-area="Admin" asp-controller="Service" asp-action="ServicePricingsDetails"
+                    asp-route-serviceId="@Model.ServiceId" class="btn btn-primary">
+                    <i class="bi bi-tag"></i> View Pricing
+                </a>
+                <button class="btn btn-warning" disabled title="Coming soon">
+                    <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button class="btn btn-danger" disabled title="Coming soon">
+                    <i class="bi bi-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
 
-            <div class="card border-0 shadow-sm">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Service Details</h5>
+                    <h5 class="mb-0">Service Information</h5>
                 </div>
 
                 <div class="card-body">
                     <div class="row mb-3">
-                        <div class="col-4 text-muted">Name</div>
-                        <div class="col-8 fw-semibold">@Model.Name</div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-4 text-muted">Description</div>
-                        <div class="col-8">@Model.Description</div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-4 text-muted">Shortcut</div>
-                        <div class="col-8">
-                            <span class="badge bg-secondary">
-                                @Model.Shortcut
-                            </span>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Service Name</small></label>
+                            <p class="fw-semibold">@Model.Name</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Shortcut</small></label>
+                            <p>
+                                <span class="badge bg-secondary">@Model.Shortcut</span>
+                            </p>
                         </div>
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-4 text-muted">Duration</div>
-                        <div class="col-8">@Model.Duration</div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Duration</small></label>
+                            <p class="fw-semibold">@Model.Duration</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Category</small></label>
+                            <p>
+                                <span class="badge bg-info">@Model.CategoryName</span>
+                            </p>
+                        </div>
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-4 text-muted">Category</div>
-                        <div class="col-8">@Model.CategoryName</div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Base Price</small></label>
+                            <p class="h5 fw-bold text-success">£@Model.BasePrice.ToString("0.00")</p>
+                        </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-4 text-muted">Base Price</div>
-                        <div class="col-8 fw-bold">
-                            £@Model.BasePrice.ToString("0.00")
+                        <div class="col-12">
+                            <label class="text-muted"><small>Description</small></label>
+                            <p>@Model.Description</p>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="card-footer bg-light d-flex justify-content-end">
-                    <a asp-area="Admin"
-                       asp-controller="Service"
-                       asp-action="Index"
-                       class="btn btn-secondary">
-                        Back
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle"></i> Quick Info
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="text-muted"><small>Service ID</small></label>
+                        <p class="small font-monospace">@Model.ServiceId</p>
+                    </div>
+                    <hr />
+                    <a asp-area="Admin" asp-controller="Service" asp-action="CreateServicePricing"
+                        class="btn btn-primary btn-sm w-100">
+                        <i class="bi bi-plus"></i> Add Postcode Pricing
                     </a>
+                    <button class="btn btn-warning btn-sm w-100 mt-2" disabled>
+                        <i class="bi bi-pencil"></i> Edit Service
+                    </button>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

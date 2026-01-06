@@ -1,1 +1,108 @@
-this is admin index
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-1">
+                <i class="bi bi-speedometer2"></i> Admin Dashboard
+            </h2>
+            <p class="text-muted">Welcome to the admin control panel</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; color: #0d6efd; margin-bottom: 10px;">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h5 class="card-title">Contractors</h5>
+                    <p class="text-muted mb-3">Manage all contractors</p>
+                    <a href="@Url.Action("AllContractors", "Contractor")" class="btn btn-primary btn-sm w-100">
+                        View All
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; color: #198754; margin-bottom: 10px;">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+                    <h5 class="card-title">Services</h5>
+                    <p class="text-muted mb-3">Manage all services</p>
+                    <a href="@Url.Action("AllServices", "Service")" class="btn btn-success btn-sm w-100">
+                        View All
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; color: #0dcaf0; margin-bottom: 10px;">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <h5 class="card-title">Bookings</h5>
+                    <p class="text-muted mb-3">View all bookings</p>
+                    <button class="btn btn-info btn-sm w-100" disabled>
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; color: #fd7e14; margin-bottom: 10px;">
+                        <i class="bi bi-gear"></i>
+                    </div>
+                    <h5 class="card-title">Settings</h5>
+                    <p class="text-muted mb-3">System settings</p>
+                    <button class="btn btn-warning btn-sm w-100" disabled>
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h5 class="mb-3">
+                <i class="bi bi-list-check"></i> Quick Actions
+            </h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0">Recent Contractors</h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-0"><em>Loading contractors...</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0">Recent Services</h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-0"><em>Loading services...</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

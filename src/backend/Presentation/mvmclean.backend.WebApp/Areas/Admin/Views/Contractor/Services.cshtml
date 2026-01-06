@@ -1,0 +1,80 @@
+@using mvmclean.backend.Application.Features.Contractor
+
+@model GetContractorByIdResponse
+
+@{
+    ViewData["Title"] = "Contractor Services";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-briefcase"></i> Services - @Model?.FullName
+            </h2>
+            <a href="@Url.Action("Details", "Contractor", new { contractorId = "" })" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Details
+            </a>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Services != null && Model.Services.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-list-check"></i> Services Provided
+                            <span class="badge bg-light text-dark float-end">@Model.Services.Count</span>
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Service Name</th>
+                                        <th>Category</th>
+                                        <th>Description</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var service in Model.Services)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@service.ServiceName</strong>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info">@service.Category</span>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">@service.Description</small>
+                                            </td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-warning" disabled title="Coming soon">
+                                                    <i class="bi bi-eye"></i> View
+                                                </button>
+                                                <button class="btn btn-sm btn-danger" disabled title="Coming soon">
+                                                    <i class="bi bi-trash"></i> Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> This contractor hasn't been assigned any services yet.
+        </div>
+    }
+</div>

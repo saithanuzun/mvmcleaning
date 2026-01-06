@@ -1,0 +1,113 @@
+@using mvmclean.backend.Application.Features.Contractor
+
+@model GetContractorCoveragesResponse
+
+@{
+    ViewData["Title"] = "Contractor Coverage";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-geo-alt"></i> Coverage Areas
+            </h2>
+            <a href="@Url.Action("AllContractors", "Contractor")" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Contractors
+            </a>
+        </div>
+    </div>
+
+    @if (Model != null && Model.CoverageAreas != null && Model.CoverageAreas.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-list-check"></i> Active Coverage Areas
+                            <span class="badge bg-light text-dark float-end">@Model.TotalCount</span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>
+                                            <i class="bi bi-geo-alt"></i> Postcode Area
+                                        </th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var area in Model.CoverageAreas)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@area.PostcodeArea</strong>
+                                            </td>
+                                            <td>
+                                                @if (area.IsActive)
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="bi bi-check-circle-fill"></i> Active
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">
+                                                        <i class="bi bi-x-circle-fill"></i> Inactive
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-warning" disabled>
+                                                    <i class="bi bi-pencil"></i> Edit
+                                                </button>
+                                                <button class="btn btn-sm btn-danger" disabled>
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-info-circle"></i> Summary
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            <strong>Total Areas:</strong>
+                            <span class="badge bg-primary">@Model.CoverageAreas.Count</span>
+                        </p>
+                        <p>
+                            <strong>Active:</strong>
+                            <span class="badge bg-success">@Model.CoverageAreas.Count(x => x.IsActive)</span>
+                        </p>
+                        <p>
+                            <strong>Inactive:</strong>
+                            <span class="badge bg-secondary">@Model.CoverageAreas.Count(x => !x.IsActive)</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No coverage areas found for this contractor.
+        </div>
+    }
+</div>

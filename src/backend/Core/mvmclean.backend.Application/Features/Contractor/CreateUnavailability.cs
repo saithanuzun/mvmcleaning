@@ -29,10 +29,18 @@ public class CreateUnavailabilityHandler : IRequestHandler<CreateUnavailabilityR
     {
         var contractor = await _contractorRepository.GetByIdAsync(Guid.Parse(request.ContractorId), noTracking: false);
 
-        contractor.MarkAsUnavailable(TimeSlot.Create(request.StartTime, request.EndTime));
+        // Convert to UTC if not already
+        var startTimeUtc = request.StartTime.Kind == DateTimeKind.Unspecified 
+            ? DateTime.SpecifyKind(request.StartTime, DateTimeKind.Utc)
+            : request.StartTime.ToUniversalTime();
+
+        var endTimeUtc = request.EndTime.Kind == DateTimeKind.Unspecified
+            ? DateTime.SpecifyKind(request.EndTime, DateTimeKind.Utc)
+            : request.EndTime.ToUniversalTime();
+
+        contractor.MarkAsUnavailable(TimeSlot.Create(startTimeUtc, endTimeUtc));
 
         await _contractorRepository.SaveChangesAsync();
-
 
         return new CreateUnavailabilityResponse
         {

@@ -41,7 +41,7 @@
                     <h5 class="mb-0">Your Working Schedule</h5>
                 </div>
                 <div class="card-body">
-                    @if (Model?.WorkingHours != null && Model.WorkingHours.Count > 0)
+                    @if (Model?.WorkingHours != null && Model.WorkingHours.Any(h => h.IsWorkingDay))
                     {
                             <div class="table-responsive">
                                 <table class="table table-hover">
@@ -55,7 +55,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach (var hours in Model.WorkingHours.OrderBy(h => h.DayOfWeek))
+                                    @foreach (var hours in Model.WorkingHours.Where(h => h.IsWorkingDay).OrderBy(h => h.DayOfWeek))
                                     {
                                                 <tr>
                                                     <td>

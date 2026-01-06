@@ -2,7 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using mvmclean.backend.Domain.Aggregates.Booking;
 using mvmclean.backend.Domain.Aggregates.Contractor;
+using mvmclean.backend.Domain.Aggregates.Invoice;
+using mvmclean.backend.Domain.Aggregates.Promotion;
+using mvmclean.backend.Domain.Aggregates.SeoPage;
 using mvmclean.backend.Domain.Aggregates.Service;
+using mvmclean.backend.Domain.Aggregates.SupportTicket;
 using mvmclean.backend.Infrastructure.Persistence;
 using mvmclean.backend.Infrastructure.Persistence.Repositories;
 
@@ -18,13 +22,17 @@ public static class DependencyInjection
         {
             conf.UseNpgsql(connStr, opt => { opt.EnableRetryOnFailure(); });
         });
-        
+
 
         serviceCollection.AddScoped<IBookingRepository, BookingRepository>();
         serviceCollection.AddScoped<IContractorRepository, ContractorRepository>();
+        serviceCollection.AddScoped<IInvoiceRepository, InvoiceRepository>();
+        serviceCollection.AddScoped<IPromotionRepository, PromotionRepository>();
+        serviceCollection.AddScoped<ISeoPageRepository, SeoPageRepository>();
         serviceCollection.AddScoped<IServiceRepository, ServiceRepository>();
+        serviceCollection.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
 
-        
+
         return serviceCollection;
     }
 }

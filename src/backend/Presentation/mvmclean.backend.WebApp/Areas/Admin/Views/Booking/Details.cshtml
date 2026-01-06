@@ -1,0 +1,185 @@
+@model mvmclean.backend.Application.Features.Booking.GetBookingByIdResponse
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2 class="mb-4">
+                <i class="bi bi-calendar-check"></i> Booking Details
+            </h2>
+            <div class="btn-group" role="group">
+                <a asp-area="Admin" asp-controller="Booking" asp-action="AllBookings" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Bookings
+                </a>
+                <button class="btn btn-warning" disabled title="Coming soon">
+                    <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button class="btn btn-danger" disabled title="Coming soon">
+                    <i class="bi bi-trash"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Booking Information</h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Booking ID</small></label>
+                            <p class="fw-semibold font-monospace">@Model.Id</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Phone Number</small></label>
+                            <p class="fw-semibold">@Model.PhoneNumber</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Postcode</small></label>
+                            <p>
+                                <span class="badge bg-secondary">@Model.Postcode</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Total Price</small></label>
+                            <p class="h5 fw-bold text-success">£@Model.TotalPrice.ToString("0.00")</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Status</small></label>
+                            <p>
+                                <span class="badge bg-primary">@Model.Status</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Creation Status</small></label>
+                            <p>
+                                <span class="badge bg-info">@Model.CreationStatus</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label class="text-muted"><small>Created</small></label>
+                            <p>@Model.CreatedAt?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Service Items (<span>@Model.ServiceItems?.Count ?? 0</span>)</h5>
+                </div>
+
+                <div class="card-body p-0">
+                    @if (Model?.ServiceItems?.Any() == true)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Service</th>
+                                        <th class="text-end">Quantity</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ServiceItems)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold">@item.ServiceName</td>
+                                            <td class="text-end">@item.Quantity</td>
+                                            <td class="text-end">£@item.UnitAdjustedPrice.Amount.ToString("0.00")</td>
+                                            <td class="text-end fw-bold">£@(item.UnitAdjustedPrice.Amount * item.Quantity).ToString("0.00")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-muted">
+                            <p>No service items added</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-person"></i> Customer Information
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model?.Customer != null)
+                    {
+                        <p class="mb-2"><strong>@Model.Customer.FirstName @Model.Customer.LastName</strong></p>
+                        <p class="text-muted small mb-0">Email: @Model.Customer.Email</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Not assigned</p>
+                    }
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-briefcase"></i> Contractor Information
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model?.ContractorId.HasValue == true)
+                    {
+                        <p class="mb-2"><strong>Assigned</strong></p>
+                        <p class="text-muted small mb-0">ID: @Model.ContractorId</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Not assigned</p>
+                    }
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-geo-alt"></i> Service Address
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model?.ServiceAddress != null)
+                    {
+                        <p class="mb-1">@Model.ServiceAddress.Street</p>
+                        <p class="mb-1">@Model.ServiceAddress.City @Model.ServiceAddress.Postcode</p>
+                        <p class="text-muted small mb-0">@Model.ServiceAddress.City</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Not set</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

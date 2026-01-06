@@ -16,7 +16,18 @@ public class ContractorConfiguration : EntityConfiguration<Contractor>
         
         builder.OwnsOne(i => i.PhoneNumber);
         
-        builder.OwnsMany(c => c.UnavailableSlots);
+        builder.OwnsMany(c => c.UnavailableSlots, nav =>
+        {
+            nav.Property(ts => ts.StartTime)
+                .HasConversion(
+                    v => v.Kind == DateTimeKind.Utc ? v : v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+            nav.Property(ts => ts.EndTime)
+                .HasConversion(
+                    v => v.Kind == DateTimeKind.Utc ? v : v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+        });
         
         builder.HasMany(c => c.CoverageAreas)
             .WithOne(ca => ca.Contractor)
@@ -27,8 +38,9 @@ public class ContractorConfiguration : EntityConfiguration<Contractor>
             .WithOne(i=>i.Contractor)
             .HasForeignKey(x => x.ContractorId);
         
-        // Services collection (List<ServiceItem>)
-        builder.OwnsMany(c => c.Services);
+        builder.HasMany(c => c.Services)
+            .WithOne(i => i.Contractor)
+            .HasForeignKey(x => x.ContractorId);
         
         // Reviews collection
         builder.HasMany<Review>()

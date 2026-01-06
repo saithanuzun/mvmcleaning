@@ -267,17 +267,23 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 name: "ServiceItem",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ContractorId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ServiceId = table.Column<Guid>(type: "uuid", nullable: false),
                     ServiceName = table.Column<string>(type: "text", nullable: false),
                     Category = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false)
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceItem", x => new { x.ContractorId, x.Id });
+                    table.PrimaryKey("PK_ServiceItem", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ServiceItem_Contractors_ContractorId",
                         column: x => x.ContractorId,
@@ -321,14 +327,18 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DayOfWeek = table.Column<int>(type: "integer", nullable: false),
+                    IsWorkingDay = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    StartTime = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    EndTime = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
                     ContractorId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeletedBy = table.Column<string>(type: "text", nullable: true)
+                    DeletedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -800,6 +810,11 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 name: "IX_SeoPageKeyword_SeoPageId1",
                 table: "SeoPageKeyword",
                 column: "SeoPageId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceItem_ContractorId",
+                table: "ServiceItem",
+                column: "ContractorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Services_CategoryId",

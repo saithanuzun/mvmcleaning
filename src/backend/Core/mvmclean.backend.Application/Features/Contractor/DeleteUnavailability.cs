@@ -36,7 +36,16 @@ public class DeleteUnavailabilityHandler : IRequestHandler<DeleteUnavailabilityR
             throw new Exception($"Contractor not found: {request.ContractorId}");
         }
 
-        contractor.RemoveUnavailableSlot(TimeSlot.Create(request.StartTime, request.EndTime));
+        // Convert to UTC if not already
+        var startTimeUtc = request.StartTime.Kind == DateTimeKind.Unspecified 
+            ? DateTime.SpecifyKind(request.StartTime, DateTimeKind.Utc)
+            : request.StartTime.ToUniversalTime();
+
+        var endTimeUtc = request.EndTime.Kind == DateTimeKind.Unspecified
+            ? DateTime.SpecifyKind(request.EndTime, DateTimeKind.Utc)
+            : request.EndTime.ToUniversalTime();
+
+        contractor.RemoveUnavailableSlot(TimeSlot.Create(startTimeUtc, endTimeUtc));
 
         await _contractorRepository.SaveChangesAsync();
 

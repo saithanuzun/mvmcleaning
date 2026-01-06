@@ -127,7 +127,7 @@
                     </div>
                 }
 
-                @if (Model.WorkingHours != null && Model.WorkingHours.Count > 0)
+                @if (Model.WorkingHours != null && Model.WorkingHours.Any(h => h.IsWorkingDay))
                 {
                     <div class="card shadow-sm mt-4">
                         <div class="card-header bg-primary text-white">
@@ -135,7 +135,7 @@
                         </div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
-                                @foreach (var hours in Model.WorkingHours)
+                                @foreach (var hours in Model.WorkingHours.Where(h => h.IsWorkingDay))
                                 {
                                     <li class="list-group-item">
                                         <strong>@hours.DayOfWeek:</strong> @hours.StartTime.ToString("hh:mm tt") - @hours.EndTime.ToString("hh:mm tt")

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using mvmclean.backend.Application.Features.SeoPage;
 using mvmclean.backend.Application.Features.Services;
 
 namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
@@ -15,11 +16,46 @@ public class SeoPageController : BaseAdminController
     }
 
     [Route("")]
-    public IActionResult Index()
+    [Route("index")]
+    public async Task<IActionResult> Index()
     {
-        return View();
+        return await AllPages();
     }
-    
 
-    
+    [Route("all")]
+    [HttpGet]
+    public async Task<IActionResult> AllPages()
+    {
+        try
+        {
+            var response = await _mediator.Send(new GetAllSeoPagesRequest());
+            return View(response);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error loading SEO pages: {ex.Message}";
+            return View(new GetAllSeoPagesResponse());
+        }
+    }
+
+    [Route("details/{pageId}")]
+    [HttpGet]
+    public async Task<IActionResult> Details(Guid pageId)
+    {
+        try
+        {
+            var response = await _mediator.Send(new GetSeoPageByIdRequest { PageId = pageId });
+            return View(response);
+        }
+        catch (KeyNotFoundException)
+        {
+            TempData["Error"] = "SEO Page not found";
+            return RedirectToAction(nameof(AllPages));
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error loading SEO page: {ex.Message}";
+            return RedirectToAction(nameof(AllPages));
+        }
+    }
 }
