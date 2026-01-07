@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.SpaServices.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using mvmclean.backend.Application;
 using mvmclean.backend.Infrastructure;
@@ -7,6 +8,7 @@ using mvmclean.backend.Infrastructure.Seeding;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient();
 
 // Add SPA services for React app
 builder.Services.AddSpaStaticFiles(configuration =>
@@ -69,10 +71,8 @@ app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseSpaStaticFiles();
 
 app.UseRouting();
-
 
 app.UseAuthorization();
 
@@ -85,25 +85,29 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // Configure SPA to serve React app under /shop route
-app.Map("/shop", shop =>
+app.Map("/shop", appBuilder =>
 {
-    shop.UseSpa(spa =>
+    var distPath = Path.Combine(builder.Environment.ContentRootPath, "ClientApp/dist");
+    
+    appBuilder.UseStaticFiles(new StaticFileOptions
     {
-        spa.Options.SourcePath = "ClientApp";
+        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(distPath),
+        RequestPath = new Microsoft.AspNetCore.Http.PathString("")
+    });
 
-        if (app.Environment.IsDevelopment())
+    appBuilder.Run(async context =>
+    {
+        // Fallback to index.html for SPA routing
+        var indexPath = Path.Combine(distPath, "index.html");
+        if (System.IO.File.Exists(indexPath))
         {
-            // Dev mode: proxy to Vite dev server (npm run dev)
-            spa.UseProxyToSpaDevelopmentServer("http://localhost:5173");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(indexPath);
         }
         else
         {
-            // Production mode: serve built files from ClientApp/dist
-            spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions
-            {
-                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-                    Path.Combine(builder.Environment.ContentRootPath, "ClientApp/dist"))
-            };
+            context.Response.StatusCode = 404;
+            await context.Response.WriteAsync("index.html not found");
         }
     });
 });

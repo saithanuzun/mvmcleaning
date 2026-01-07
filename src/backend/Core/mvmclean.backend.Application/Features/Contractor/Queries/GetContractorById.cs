@@ -20,6 +20,12 @@ public class GetContractorByIdResponse
     public string PhoneNumber { get; set; }
     public bool IsActive { get; set; }
     
+    // Address information
+    public string? Street { get; set; }
+    public string? City { get; set; }
+    public string? Postcode { get; set; }
+    public string? AdditionalInfo { get; set; }
+    
     public List<Review> Reviews { get; set; }
     
     public List<ServiceItem> Services { get; set; }
@@ -52,6 +58,10 @@ public class GetContractorByIdHandler : IRequestHandler<GetContractorByIdRequest
             Email = contractor.Email,
             PhoneNumber = contractor.PhoneNumber.ToString(),
             IsActive = contractor.IsActive,
+            Street = contractor.Address?.Street,
+            City = contractor.Address?.City,
+            Postcode = contractor.Address?.Postcode.Value,
+            AdditionalInfo = contractor.Address?.AdditionalInfo,
             Reviews = contractor.Reviews.ToList(),
             Services = contractor.Services.ToList(),
             WorkingHours = contractor.WorkingHours.ToList(),

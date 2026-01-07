@@ -10,6 +10,10 @@
         <Exec Command="npm run build" WorkingDirectory="ClientApp" />
     </Target>
 
+    <Target Name="BuildClientApp" BeforeTargets="Build">
+        <Exec Command="npm run build" WorkingDirectory="ClientApp" Condition="!Exists('ClientApp/dist')" />
+    </Target>
+
     <ItemGroup>
       <Folder Include="Areas\Admin\wwwroot\" />
       <Folder Include="Areas\Contractor\wwwroot\" />

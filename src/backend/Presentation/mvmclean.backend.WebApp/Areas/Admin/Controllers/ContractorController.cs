@@ -121,7 +121,6 @@ public class ContractorController : BaseAdminController
 
     [Route("activate/{contractorId}")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Activate(string contractorId)
     {
         try
@@ -133,18 +132,17 @@ public class ContractorController : BaseAdminController
             });
 
             TempData["Success"] = response.Message;
-            return RedirectToAction(nameof(Details), new { contractorId });
+            return RedirectToAction("AllContractors");
         }
         catch (Exception ex)
         {
             TempData["Error"] = $"Error activating contractor: {ex.Message}";
-            return RedirectToAction(nameof(AllContractors));
+            return RedirectToAction("AllContractors");
         }
     }
 
     [Route("deactivate/{contractorId}")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Deactivate(string contractorId)
     {
         try

@@ -43,7 +43,12 @@ public class AssignContractorHandler : IRequestHandler<AssignContractorRequest,A
             
         booking.SelectContractor(contractor);
         
-        booking.AssignTimeSlot(TimeSlot.Create(request.DateTime,request.DateTime + request.Duration),contractor );
+        // Convert unspecified DateTime to UTC for PostgreSQL compatibility
+        var dateTime = request.DateTime.Kind == DateTimeKind.Unspecified
+            ? DateTime.SpecifyKind(request.DateTime, DateTimeKind.Utc)
+            : request.DateTime.ToUniversalTime();
+        
+        booking.AssignTimeSlot(TimeSlot.Create(dateTime, dateTime + request.Duration), contractor);
         
         
         return new AssignContractorResponse

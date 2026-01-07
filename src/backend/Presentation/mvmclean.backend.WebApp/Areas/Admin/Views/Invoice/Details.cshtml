@@ -20,12 +20,43 @@
                 <button class="btn btn-warning" disabled title="Coming soon">
                     <i class="bi bi-pencil"></i> Edit
                 </button>
-                <button class="btn btn-danger" disabled title="Coming soon">
-                    <i class="bi bi-trash"></i> Delete
-                </button>
+                @if (Model.Status != mvmclean.backend.Domain.Aggregates.Invoice.Enums.InvoiceStatus.Paid)
+                {
+                    <form method="post" asp-area="Admin" asp-controller="Invoice" asp-action="MarkAsPaid" 
+                        asp-route-invoiceId="@Model.Id" style="display: inline;">
+                        <button type="submit" class="btn btn-success" onclick="return confirm('Mark this invoice as paid?')">
+                            <i class="bi bi-check-circle"></i> Mark as Paid
+                        </button>
+                    </form>
+                }
             </div>
         </div>
     </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model.IsOverdue && Model.Status != mvmclean.backend.Domain.Aggregates.Invoice.Enums.InvoiceStatus.Paid)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> <strong>OVERDUE!</strong> This invoice is overdue by 
+            @((DateTime.UtcNow - Model.DueDate).Days) day(s)
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
     <div class="row">
         <div class="col-lg-8">
@@ -42,38 +73,83 @@
                         </div>
                         <div class="col-md-6">
                             <label class="text-muted"><small>Invoice ID</small></label>
-                            <p class="fw-semibold font-monospace">@Model.Id</p>
+                            <p class="fw-semibold font-monospace small">@Model.Id.ToString().Substring(0, 8)}...</p>
                         </div>
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label class="text-muted"><small>Issue Date</small></label>
+                            <p>@Model.IssueDate.ToString("dd/MM/yyyy")</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted"><small>Due Date</small></label>
+                            <p>@Model.DueDate.ToString("dd/MM/yyyy")</p>
+                        </div>
+                        <div class="col-md-4">
                             <label class="text-muted"><small>Status</small></label>
                             <p>
-                                <span class="badge bg-primary">@Model.Status</span>
+                                <span class="badge bg-@Model.StatusBadgeClass">@Model.Status</span>
+                                @if (Model.IsOverdue)
+                                {
+                                    <span class="badge bg-danger ms-1">OVERDUE</span>
+                                }
                             </p>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-muted"><small>Created Date</small></label>
-                            <p>@Model.CreatedAt.ToString("dd/MM/yyyy")</p>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-12">
-                            <label class="text-muted"><small>Description</small></label>
-                            <p>@Model.Description</p>
+                    @if (Model.PaidDate.HasValue)
+                    {
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label class="text-muted"><small>Payment Date</small></label>
+                                <p>@Model.PaidDate.Value.ToString("dd/MM/yyyy")</p>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Booking ID</small></label>
+                            <p class="font-monospace small">@Model.BookingId.ToString().Substring(0, 8)}...</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted"><small>Customer ID</small></label>
+                            <p class="font-monospace small">@Model.CustomerId.ToString().Substring(0, 8)}...</p>
                         </div>
                     </div>
 
                     <hr />
 
-                    <div class="row">
-                        <div class="col-12">
-                            <label class="text-muted"><small>Total Amount</small></label>
-                            <p class="h4 fw-bold text-success">@Model.Currency @Model.Amount.ToString("0.00")</p>
+                    <!-- Line Items Section -->
+                    @if (Model.LineItems?.Any() == true)
+                    {
+                        <h6 class="mb-3">Invoice Line Items</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Description</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-center">Qty</th>
+                                        <th class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.LineItems)
+                                    {
+                                        <tr>
+                                            <td>@item.Description</td>
+                                            <td class="text-end">£@item.UnitPrice.ToString("0.00")</td>
+                                            <td class="text-center">@item.Quantity</td>
+                                            <td class="text-end fw-bold">£@item.LineTotal.ToString("0.00")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
-                    </div>
+                        <hr />
+                    }
                 </div>
             </div>
         </div>
@@ -82,23 +158,39 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-secondary text-white">
                     <h6 class="mb-0">
-                        <i class="bi bi-info-circle"></i> Invoice Summary
+                        <i class="bi bi-calculator"></i> Invoice Summary
                     </h6>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
                         <small class="text-muted">Subtotal</small>
-                        <p class="mb-0">£0.00</p>
+                        <p class="mb-0 fw-semibold">£@Model.Subtotal.ToString("0.00")</p>
                     </div>
                     <div class="mb-3">
                         <small class="text-muted">Discount</small>
-                        <p class="mb-0">-£0.00</p>
+                        <p class="mb-0 fw-semibold">
+                            @if (Model.DiscountAmount > 0)
+                            {
+                                <span>-£@Model.DiscountAmount.ToString("0.00")</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </p>
                     </div>
                     <hr />
                     <div>
-                        <small class="text-muted">Total</small>
-                        <p class="h5 fw-bold">@Model.Currency @Model.Amount.ToString("0.00")</p>
+                        <small class="text-muted d-block mb-2">Total Due</small>
+                        <p class="h5 fw-bold text-success">£@Model.TotalAmount.ToString("0.00")</p>
                     </div>
+
+                    @if (Model.Status == mvmclean.backend.Domain.Aggregates.Invoice.Enums.InvoiceStatus.Paid && Model.PaidDate.HasValue)
+                    {
+                        <div class="alert alert-success small mt-3" role="alert">
+                            <i class="bi bi-check-circle"></i> Paid on @Model.PaidDate.Value.ToString("dd/MM/yyyy")
+                        </div>
+                    }
                 </div>
             </div>
         </div>

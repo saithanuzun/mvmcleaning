@@ -83,10 +83,13 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
             setError('');
 
             const dateStr = date.toISOString().split('T')[0];
+            const contractorIds = bookingData.contractors || [];
+            
             const response = await api.availability.getSlots(
                 bookingData.postcode,
                 dateStr,
-                bookingData.totalDuration
+                bookingData.totalDuration,
+                contractorIds
             );
 
             if (response.success && response.data) {

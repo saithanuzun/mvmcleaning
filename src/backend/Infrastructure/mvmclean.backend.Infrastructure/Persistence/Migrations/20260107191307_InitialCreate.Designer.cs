@@ -12,7 +12,7 @@ using mvmclean.backend.Infrastructure.Persistence;
 namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MVMdbContext))]
-    [Migration("20260107173214_InitialCreate")]
+    [Migration("20260107191307_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -1430,6 +1430,68 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", b =>
                 {
+                    b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<Guid>("ContractorId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("AdditionalInfo")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<double?>("Latitude")
+                                .HasColumnType("double precision");
+
+                            b1.Property<double?>("Longitude")
+                                .HasColumnType("double precision");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("ContractorId");
+
+                            b1.ToTable("Contractors");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ContractorId");
+
+                            b1.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Postcode", "Postcode", b2 =>
+                                {
+                                    b2.Property<Guid>("AddressContractorId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<string>("Area")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("District")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Sector")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Value")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.HasKey("AddressContractorId");
+
+                                    b2.ToTable("Contractors");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("AddressContractorId");
+                                });
+
+                            b1.Navigation("Postcode")
+                                .IsRequired();
+                        });
+
                     b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Email", "Email", b1 =>
                         {
                             b1.Property<Guid>("ContractorId")
@@ -1528,6 +1590,8 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                             b1.Navigation("Contractor");
                         });
+
+                    b.Navigation("Address");
 
                     b.Navigation("Email")
                         .IsRequired();

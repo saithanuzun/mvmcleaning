@@ -77,7 +77,13 @@ public class CreateManualBookingHandler : IRequestHandler<CreateManualBookingReq
 
         // Assign time slot
         var duration = TimeSpan.FromMinutes(request.DurationMinutes);
-        var timeSlot = TimeSlot.Create(request.ScheduledDateTime, request.ScheduledDateTime.Add(duration));
+        
+        // Convert unspecified DateTime to UTC for PostgreSQL compatibility
+        var scheduledDateTime = request.ScheduledDateTime.Kind == DateTimeKind.Unspecified
+            ? DateTime.SpecifyKind(request.ScheduledDateTime, DateTimeKind.Utc)
+            : request.ScheduledDateTime.ToUniversalTime();
+        
+        var timeSlot = TimeSlot.Create(scheduledDateTime, scheduledDateTime.Add(duration));
         booking.AssignTimeSlot(timeSlot, contractor);
 
         // Add services to cart

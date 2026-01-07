@@ -15,6 +15,8 @@ public class ContractorConfiguration : EntityConfiguration<Contractor>
         builder.OwnsOne(i => i.Email);
         
         builder.OwnsOne(i => i.PhoneNumber);
+        builder.OwnsOne(i => i.Address, i=>i.OwnsOne(i=>i.Postcode));
+
         
         builder.OwnsMany(c => c.UnavailableSlots, nav =>
         {

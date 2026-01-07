@@ -53,13 +53,22 @@ public class CreatePromotionHandler : IRequestHandler<CreatePromotionRequest, Cr
 
         var discountType = (DiscountType)request.DiscountType;
 
+        // Convert unspecified DateTime to UTC for PostgreSQL compatibility
+        var validFrom = request.ValidFrom.Kind == DateTimeKind.Unspecified 
+            ? DateTime.SpecifyKind(request.ValidFrom, DateTimeKind.Utc)
+            : request.ValidFrom.ToUniversalTime();
+        
+        var validTo = request.ValidTo.Kind == DateTimeKind.Unspecified 
+            ? DateTime.SpecifyKind(request.ValidTo, DateTimeKind.Utc)
+            : request.ValidTo.ToUniversalTime();
+
         var promotion = Domain.Aggregates.Promotion.Promotion.Create(
             request.Code,
             request.Description,
             discountType,
             request.DiscountValue,
-            request.ValidFrom,
-            request.ValidTo,
+            validFrom,
+            validTo,
             request.UsageLimit
         );
 

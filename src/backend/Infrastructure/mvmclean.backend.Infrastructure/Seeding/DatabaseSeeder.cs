@@ -1,6 +1,7 @@
 using MediatR;
 using mvmclean.backend.Application.Features.Services.Commands;
 using mvmclean.backend.Application.Features.Contractor.Commands;
+using mvmclean.backend.Application.Features.Booking.Commands;
 using Microsoft.Extensions.Logging;
 
 namespace mvmclean.backend.Infrastructure.Seeding;
@@ -11,13 +12,13 @@ public class DatabaseSeeder
     private readonly ILogger<DatabaseSeeder> _logger;
     private readonly string _seederFilePath;
 
-    private readonly bool _seed = true;
+    private readonly bool _seed = false;
 
     public DatabaseSeeder(IMediator mediator, ILogger<DatabaseSeeder> logger)
     {
         _mediator = mediator;
         _logger = logger;
-        
+        _seederFilePath = Path.Combine(AppContext.BaseDirectory, ".seeded");
     }
 
     public async Task SeedAsync()
@@ -49,6 +50,9 @@ public class DatabaseSeeder
 
             // Seed unavailability slots
             await SeedUnavailabilitySlotsAsync(contractorIds);
+
+            // Seed past bookings
+            await SeedBookingsAsync(serviceIds, contractorIds);
 
             // Mark as seeded
             File.WriteAllText(_seederFilePath, DateTime.UtcNow.ToString("o"));
@@ -177,13 +181,112 @@ public class DatabaseSeeder
                     BasePrice = 349.99m,
                     EstimatedDurationMinutes = 300,
                     Category = "End of Tenancy Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "4 Bed End of Tenancy Cleaning",
+                    Description = "Complete deep clean for 4 bed properties - full house deep clean with all surfaces, windows and carpets",
+                    Shortcut = "4BED_EOT",
+                    BasePrice = 449.99m,
+                    EstimatedDurationMinutes = 360,
+                    Category = "End of Tenancy Cleaning"
+                }
+            };
+
+            // Window Cleaning Services
+            var windowCleaningServices = new List<CreateServiceRequest>
+            {
+                new CreateServiceRequest
+                {
+                    Name = "Residential Window Cleaning",
+                    Description = "Professional window cleaning for residential properties including frames and sills",
+                    Shortcut = "WINDOW_RES",
+                    BasePrice = 89.99m,
+                    EstimatedDurationMinutes = 90,
+                    Category = "Window Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Commercial Window Cleaning",
+                    Description = "Professional window cleaning for commercial properties and office buildings",
+                    Shortcut = "WINDOW_COM",
+                    BasePrice = 149.99m,
+                    EstimatedDurationMinutes = 120,
+                    Category = "Window Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Conservatory Roof Cleaning",
+                    Description = "Specialist cleaning for conservatory roofs and glass panels including protective treatment",
+                    Shortcut = "CONSERV_ROOF",
+                    BasePrice = 129.99m,
+                    EstimatedDurationMinutes = 100,
+                    Category = "Window Cleaning"
+                }
+            };
+
+            // Oven Cleaning Services
+            var ovenCleaningServices = new List<CreateServiceRequest>
+            {
+                new CreateServiceRequest
+                {
+                    Name = "Single Oven Cleaning",
+                    Description = "Professional oven cleaning including interior deep clean and racks",
+                    Shortcut = "OVEN_SINGLE",
+                    BasePrice = 59.99m,
+                    EstimatedDurationMinutes = 60,
+                    Category = "Oven Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Double Oven Cleaning",
+                    Description = "Professional cleaning for double ovens including interiors and racks",
+                    Shortcut = "OVEN_DOUBLE",
+                    BasePrice = 99.99m,
+                    EstimatedDurationMinutes = 90,
+                    Category = "Oven Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Oven + Hob + Extractor Cleaning",
+                    Description = "Complete kitchen appliance cleaning - ovens, hobs and extractor hoods",
+                    Shortcut = "KITCHEN_SUITE",
+                    BasePrice = 159.99m,
+                    EstimatedDurationMinutes = 120,
+                    Category = "Oven Cleaning"
+                }
+            };
+
+            // Gutter Cleaning Services
+            var gutterCleaningServices = new List<CreateServiceRequest>
+            {
+                new CreateServiceRequest
+                {
+                    Name = "Single Story Gutter Cleaning",
+                    Description = "Professional gutter cleaning and clearing for single story properties",
+                    Shortcut = "GUTTER_1STORY",
+                    BasePrice = 79.99m,
+                    EstimatedDurationMinutes = 75,
+                    Category = "Gutter Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Two Story Gutter Cleaning",
+                    Description = "Professional gutter cleaning and clearing for two story properties including downpipes",
+                    Shortcut = "GUTTER_2STORY",
+                    BasePrice = 129.99m,
+                    EstimatedDurationMinutes = 120,
+                    Category = "Gutter Cleaning"
                 }
             };
 
             // Combine all services
             var allServices = carpetCleaningServices.Concat(sofaCleaningServices)
                 .Concat(jetWashingServices)
-                .Concat(eotCleaningServices).ToList();
+                .Concat(eotCleaningServices)
+                .Concat(windowCleaningServices)
+                .Concat(ovenCleaningServices)
+                .Concat(gutterCleaningServices).ToList();
 
             foreach (var service in allServices)
             {
@@ -227,7 +330,11 @@ public class DatabaseSeeder
                     Email = "sait.hanuzun@example.com",
                     Username = "saithanuzun",
                     Password = "123",
-                    ImageUrl = null
+                    ImageUrl = null,
+                    Street = "42 Baker Street",
+                    City = "London",
+                    PostcodeValue = "W1A 1AA",
+                    AdditionalInfo = "Office 5, Ground Floor"
                 },
                 new CreateContractorRequest
                 {
@@ -237,7 +344,11 @@ public class DatabaseSeeder
                     Email = "ahmed.hassan@example.com",
                     Username = "ahmedhassan",
                     Password = "123",
-                    ImageUrl = null
+                    ImageUrl = null,
+                    Street = "123 Belgrave Road",
+                    City = "Leicester",
+                    PostcodeValue = "LE1 3RA",
+                    AdditionalInfo = "Unit 7, Industrial Estate"
                 },
                 new CreateContractorRequest
                 {
@@ -247,7 +358,11 @@ public class DatabaseSeeder
                     Email = "emily.thompson@example.com",
                     Username = "emilythompson",
                     Password = "123",
-                    ImageUrl = null
+                    ImageUrl = null,
+                    Street = "78 Victoria Square",
+                    City = "London",
+                    PostcodeValue = "SW1A 2AA",
+                    AdditionalInfo = "Flat 2, First Floor"
                 }
             };
 
@@ -257,7 +372,19 @@ public class DatabaseSeeder
                 {
                     var response = await _mediator.Send(contractor);
                     contractorIds.Add(response.ContractorId.ToString());
-                    _logger.LogInformation($"Contractor created: {contractor.FirstName} {contractor.LastName} (ID: {response.ContractorId})");
+                    _logger.LogInformation($"Contractor created: {contractor.FirstName} {contractor.LastName} (ID: {response.ContractorId}) - {contractor.Street}, {contractor.City} {contractor.PostcodeValue}");
+                    
+                    // Activate the contractor
+                    var activateRequest = new UpdateContractorStatusRequest
+                    {
+                        ContractorId = response.ContractorId.ToString(),
+                        IsActive = true
+                    };
+                    var activateResponse = await _mediator.Send(activateRequest);
+                    if (activateResponse.Success)
+                    {
+                        _logger.LogInformation($"Contractor activated: {contractor.FirstName} {contractor.LastName}");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -434,19 +561,77 @@ public class DatabaseSeeder
         {
             _logger.LogInformation("Seeding postcode pricing...");
 
-            // London postcodes - more expensive (1.2x multiplier, +£20 fixed)
+            // Central London postcodes - premium pricing (1.3x multiplier, +£30 fixed)
+            var centralLondonPostcodes = new List<string> 
+            { 
+                "SW1A 0AA", "SW1A 1AA", "SW1A 2AA",
+                "W1A 1AA", "W1A 2AA", "W1B 1AA",
+                "EC1A 1AA", "EC1A 2AA", "EC1B 1AA"
+            };
+
+            // Greater London postcodes - standard London pricing (1.2x multiplier, +£20 fixed)
             var londonPostcodes = new List<string> 
             { 
-                "SW1A 0AA", "SW1A 1AA", "N1 1AA", "E1 6AN", "W1A 1AA", "SW2 1AA", "SW3 1AA"
+                "N1 1AA", "N1 2AA", "N1 3AA",
+                "E1 6AN", "E1 7AA", "E1 8AA",
+                "SW2 1AA", "SW2 2AA", "SW2 3AA",
+                "SW3 1AA", "SW3 2AA", "SW3 3AA",
+                "NW1 1AA", "NW1 2AA"
             };
 
-            // Leicester postcodes - standard pricing (1.0x multiplier, no adjustment)
-            var leicesterPostcodes = new List<string>
+            // Midlands postcodes - slightly higher (1.1x multiplier, +£10 fixed)
+            var midlandsPostcodes = new List<string>
             {
-                "LE1 3RA", "LE1 4TA", "LE2 0AA", "LE3 1AA", "LE4 4AA", "LE5 0AA"
+                "LE1 3RA", "LE1 4TA", "LE1 5AA", "LE1 6AA", "LE1 7AA",
+                "LE2 0AA", "LE2 1AA", "LE2 2AA", "LE2 3AA", "LE2 4AA",
+                "LE3 1AA", "LE3 2AA",
+                "LE4 4AA", "LE4 5AA",
+                "LE5 0AA", "LE5 1AA"
             };
 
-            // Apply London pricing to all services
+            // Standard UK postcodes - base pricing (1.0x multiplier, no adjustment)
+            var standardPostcodes = new List<string>
+            {
+                "M1 1AA", "M1 2AA", "M2 1AA",
+                "B1 1AA", "B1 2AA", "B2 1AA",
+                "S1 1AA", "S1 2AA", "S2 1AA",
+                "L1 1AA", "L1 2AA", "L2 1AA",
+                "CF10 1AA", "CF10 2AA", "CF11 1AA"
+            };
+
+            // Remote/Rural areas - reduced pricing (0.85x multiplier, -£10 fixed)
+            var remotePostcodes = new List<string>
+            {
+                "PA1 1AA", "PA2 1AA", "PA3 1AA",
+                "IV1 1AA", "IV2 1AA",
+                "ZE1 1AA", "ZE2 1AA"
+            };
+
+            // Apply Central London pricing
+            foreach (var serviceId in serviceIds)
+            {
+                foreach (var postcode in centralLondonPostcodes)
+                {
+                    try
+                    {
+                        var request = new AddServicePostcodePricingRequest
+                        {
+                            ServiceId = serviceId.ToString(),
+                            Postcode = postcode,
+                            Multiplier = 1.3m,
+                            FixedAdjustment = 30m
+                        };
+                        await _mediator.Send(request);
+                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (1.3x multiplier, +£30)");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning($"Postcode pricing for {postcode} may already exist: {ex.Message}");
+                    }
+                }
+            }
+
+            // Apply Greater London pricing
             foreach (var serviceId in serviceIds)
             {
                 foreach (var postcode in londonPostcodes)
@@ -460,7 +645,6 @@ public class DatabaseSeeder
                             Multiplier = 1.2m,
                             FixedAdjustment = 20m
                         };
-
                         await _mediator.Send(request);
                         _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (1.2x multiplier, +£20)");
                     }
@@ -471,10 +655,10 @@ public class DatabaseSeeder
                 }
             }
 
-            // Apply Leicester pricing to all services
+            // Apply Midlands pricing
             foreach (var serviceId in serviceIds)
             {
-                foreach (var postcode in leicesterPostcodes)
+                foreach (var postcode in midlandsPostcodes)
                 {
                     try
                     {
@@ -482,12 +666,59 @@ public class DatabaseSeeder
                         {
                             ServiceId = serviceId.ToString(),
                             Postcode = postcode,
-                            Multiplier = 0.9m,
-                            FixedAdjustment = -5m
+                            Multiplier = 1.1m,
+                            FixedAdjustment = 10m
                         };
-
                         await _mediator.Send(request);
-                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (0.9x multiplier, -£5)");
+                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (1.1x multiplier, +£10)");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning($"Postcode pricing for {postcode} may already exist: {ex.Message}");
+                    }
+                }
+            }
+
+            // Apply standard UK pricing (no adjustment)
+            foreach (var serviceId in serviceIds)
+            {
+                foreach (var postcode in standardPostcodes)
+                {
+                    try
+                    {
+                        var request = new AddServicePostcodePricingRequest
+                        {
+                            ServiceId = serviceId.ToString(),
+                            Postcode = postcode,
+                            Multiplier = 1.0m,
+                            FixedAdjustment = 0m
+                        };
+                        await _mediator.Send(request);
+                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (1.0x multiplier, no adjustment)");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning($"Postcode pricing for {postcode} may already exist: {ex.Message}");
+                    }
+                }
+            }
+
+            // Apply remote area pricing (discounted)
+            foreach (var serviceId in serviceIds)
+            {
+                foreach (var postcode in remotePostcodes)
+                {
+                    try
+                    {
+                        var request = new AddServicePostcodePricingRequest
+                        {
+                            ServiceId = serviceId.ToString(),
+                            Postcode = postcode,
+                            Multiplier = 0.85m,
+                            FixedAdjustment = -10m
+                        };
+                        await _mediator.Send(request);
+                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (0.85x multiplier, -£10)");
                     }
                     catch (Exception ex)
                     {
@@ -501,6 +732,205 @@ public class DatabaseSeeder
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error seeding postcode pricing.");
+            throw;
+        }
+    }
+
+    private async Task SeedBookingsAsync(List<Guid> serviceIds, List<string> contractorIds)
+    {
+        try
+        {
+            _logger.LogInformation("Seeding past bookings...");
+
+            // Sample customer data for past bookings
+            var bookingRequests = new List<CreateBookingCompleteRequest>
+            {
+                // London bookings with contractors
+                new CreateBookingCompleteRequest
+                {
+                    CustomerName = "John Smith",
+                    CustomerEmail = "john.smith@example.com",
+                    CustomerPhone = "07900111111",
+                    Address = "10 Downing Street",
+                    Postcode = "SW1A 2AA",
+                    ContractorId = contractorIds[0],
+                    ScheduledStartTime = DateTime.UtcNow.AddDays(-30).AddHours(10),
+                    ScheduledEndTime = DateTime.UtcNow.AddDays(-30).AddHours(11),
+                    TotalAmount = 89.99m,
+                    ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
+                    {
+                        new() { ServiceId = serviceIds[0], ServiceName = "1 Bed Carpet Cleaning", Quantity = 1, Price = 89.99m }
+                    }
+                },
+                new CreateBookingCompleteRequest
+                {
+                    CustomerName = "Sarah Johnson",
+                    CustomerEmail = "sarah.johnson@example.com",
+                    CustomerPhone = "07900222222",
+                    Address = "25 Oxford Street",
+                    Postcode = "W1A 1AA",
+                    ContractorId = contractorIds[0],
+                    ScheduledStartTime = DateTime.UtcNow.AddDays(-25).AddHours(14),
+                    ScheduledEndTime = DateTime.UtcNow.AddDays(-25).AddHours(16),
+                    TotalAmount = 149.99m,
+                    ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
+                    {
+                        new() { ServiceId = serviceIds[1], ServiceName = "2 Bed Carpet Cleaning", Quantity = 1, Price = 149.99m }
+                    }
+                },
+                new CreateBookingCompleteRequest
+                {
+                    CustomerName = "Michael Brown",
+                    CustomerEmail = "michael.brown@example.com",
+                    CustomerPhone = "07900333333",
+                    Address = "15 Park Lane",
+                    Postcode = "W1A 2AA",
+                    ContractorId = contractorIds[2],
+                    ScheduledStartTime = DateTime.UtcNow.AddDays(-20).AddHours(9),
+                    ScheduledEndTime = DateTime.UtcNow.AddDays(-20).AddHours(10.5),
+                    TotalAmount = 79.99m,
+                    ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
+                    {
+                        new() { ServiceId = serviceIds[4], ServiceName = "2 Seater Sofa Cleaning", Quantity = 1, Price = 79.99m }
+                    }
+                },
+                // Leicester bookings
+                new CreateBookingCompleteRequest
+                {
+                    CustomerName = "Emma Wilson",
+                    CustomerEmail = "emma.wilson@example.com",
+                    CustomerPhone = "07900444444",
+                    Address = "42 High Street",
+                    Postcode = "LE1 3RA",
+                    ContractorId = contractorIds[1],
+                    ScheduledStartTime = DateTime.UtcNow.AddDays(-18).AddHours(11),
+                    ScheduledEndTime = DateTime.UtcNow.AddDays(-18).AddHours(12.5),
+                    TotalAmount = 69.99m,
+                    ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
+                    {
+                        new() { ServiceId = serviceIds[4], ServiceName = "2 Seater Sofa Cleaning", Quantity = 1, Price = 69.99m }
+                    }
+                },
+                new CreateBookingCompleteRequest
+                {
+                    CustomerName = "David Taylor",
+                    CustomerEmail = "david.taylor@example.com",
+                    CustomerPhone = "07900555555",
+                    Address = "89 Market Street",
+                    Postcode = "LE1 4TA",
+                    ContractorId = contractorIds[1],
+                    ScheduledStartTime = DateTime.UtcNow.AddDays(-15).AddHours(13),
+                    ScheduledEndTime = DateTime.UtcNow.AddDays(-15).AddHours(15),
+                    TotalAmount = 149.99m,
+                    ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
+                    {
+                        new() { ServiceId = serviceIds[8], ServiceName = "Residential Window Cleaning", Quantity = 1, Price = 149.99m }
+                    }
+                },
+                new CreateBookingCompleteRequest
+                {
+                    CustomerName = "Lisa Anderson",
+                    CustomerEmail = "lisa.anderson@example.com",
+                    CustomerPhone = "07900666666",
+                    Address = "72 Victoria Road",
+                    Postcode = "LE2 0AA",
+                    ContractorId = contractorIds[1],
+                    ScheduledStartTime = DateTime.UtcNow.AddDays(-12).AddHours(10),
+                    ScheduledEndTime = DateTime.UtcNow.AddDays(-12).AddHours(11),
+                    TotalAmount = 59.99m,
+                    ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
+                    {
+                        new() { ServiceId = serviceIds[10], ServiceName = "Single Oven Cleaning", Quantity = 1, Price = 59.99m }
+                    }
+                },
+                // Mixed location bookings
+                new CreateBookingCompleteRequest
+                {
+                    CustomerName = "Robert Davis",
+                    CustomerEmail = "robert.davis@example.com",
+                    CustomerPhone = "07900777777",
+                    Address = "33 Bell Street",
+                    Postcode = "N1 1AA",
+                    ContractorId = contractorIds[0],
+                    ScheduledStartTime = DateTime.UtcNow.AddDays(-10).AddHours(15),
+                    ScheduledEndTime = DateTime.UtcNow.AddDays(-10).AddHours(16.5),
+                    TotalAmount = 89.99m,
+                    ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
+                    {
+                        new() { ServiceId = serviceIds[6], ServiceName = "50m² Jet Wash", Quantity = 1, Price = 89.99m }
+                    }
+                },
+                new CreateBookingCompleteRequest
+                {
+                    CustomerName = "Jennifer Martinez",
+                    CustomerEmail = "jennifer.martinez@example.com",
+                    CustomerPhone = "07900888888",
+                    Address = "56 Elm Avenue",
+                    Postcode = "SW3 1AA",
+                    ContractorId = contractorIds[2],
+                    ScheduledStartTime = DateTime.UtcNow.AddDays(-8).AddHours(11),
+                    ScheduledEndTime = DateTime.UtcNow.AddDays(-8).AddHours(13),
+                    TotalAmount = 99.99m,
+                    ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
+                    {
+                        new() { ServiceId = serviceIds[11], ServiceName = "Double Oven Cleaning", Quantity = 1, Price = 99.99m }
+                    }
+                },
+                new CreateBookingCompleteRequest
+                {
+                    CustomerName = "Christopher Lee",
+                    CustomerEmail = "christopher.lee@example.com",
+                    CustomerPhone = "07900999999",
+                    Address = "99 Oak Gardens",
+                    Postcode = "E1 6AN",
+                    ContractorId = contractorIds[0],
+                    ScheduledStartTime = DateTime.UtcNow.AddDays(-5).AddHours(9),
+                    ScheduledEndTime = DateTime.UtcNow.AddDays(-5).AddHours(11),
+                    TotalAmount = 159.99m,
+                    ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
+                    {
+                        new() { ServiceId = serviceIds[2], ServiceName = "3 Bed Carpet Cleaning", Quantity = 1, Price = 159.99m }
+                    }
+                },
+                new CreateBookingCompleteRequest
+                {
+                    CustomerName = "Rachel White",
+                    CustomerEmail = "rachel.white@example.com",
+                    CustomerPhone = "07901000000",
+                    Address = "12 Cedar Lane",
+                    Postcode = "LE3 1AA",
+                    ContractorId = contractorIds[1],
+                    ScheduledStartTime = DateTime.UtcNow.AddDays(-3).AddHours(14),
+                    ScheduledEndTime = DateTime.UtcNow.AddDays(-3).AddHours(15.5),
+                    TotalAmount = 79.99m,
+                    ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
+                    {
+                        new() { ServiceId = serviceIds[15], ServiceName = "Single Story Gutter Cleaning", Quantity = 1, Price = 79.99m }
+                    }
+                }
+            };
+
+            foreach (var bookingRequest in bookingRequests)
+            {
+                try
+                {
+                    var response = await _mediator.Send(bookingRequest);
+                    if (response.Success)
+                    {
+                        _logger.LogInformation($"Past booking created: {bookingRequest.CustomerName} - {bookingRequest.Postcode} (ID: {response.BookingId})");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning($"Booking for '{bookingRequest.CustomerName}' may already exist or error occurred: {ex.Message}");
+                }
+            }
+
+            _logger.LogInformation("Past bookings seeding completed.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error seeding bookings.");
             throw;
         }
     }

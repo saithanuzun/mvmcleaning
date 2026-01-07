@@ -36,15 +36,20 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
 
         setLoading(true);
         try {
-            const response = await api.postcode.validate(postcode);
+            // Call the new combined endpoint that validates, creates booking, and gets contractors
+            const response = await api.postcode.validateAndBook(postcode, phone);
 
-            if (response.success && response.data.isValid) {
-                if (response.data.isCovered) {
-                    updateBookingData({postcode: postcode.toUpperCase(), phone});
-                    navigate('/services');
-                } else {
-                    setError('Sorry, we don\'t currently service this postcode area. Please check back soon!');
-                }
+            if (response.success && response.data.isCovered) {
+                // Save booking data and contractors
+                updateBookingData({
+                    postcode: postcode.toUpperCase(),
+                    phone,
+                    bookingId: response.data.bookingId,
+                    contractors: response.data.contractors
+                });
+                navigate('/services');
+            } else if (response.success && !response.data.isCovered) {
+                setError('Sorry, we don\'t currently service this postcode area. Please check back soon!');
             } else {
                 setError('Please enter a valid UK postcode');
             }

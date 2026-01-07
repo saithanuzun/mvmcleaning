@@ -74,14 +74,14 @@
                                         <span class="badge bg-info">@contractor.ServiceCount</span>
                                     </td>
                                     <td class="text-center">
-                                        <a asp-area="Admin" asp-controller="Contractor" asp-action="Details"
-                                            asp-route-contractorId="@contractor.Id" class="btn btn-sm btn-outline-primary"
+                                        <a href="/Admin/Contractor/Details/@contractor.Id" class="btn btn-sm btn-outline-primary"
                                             title="View Details">
                                             <i class="bi bi-eye"></i>
                                         </a>
                                         @if (contractor.IsActive)
                                         {
-                                            <form asp-area="Admin" asp-controller="Contractor" asp-action="Deactivate" asp-route-contractorId="@contractor.Id" method="post" style="display:inline;">
+                                            <form action="/Admin/Contractor/Deactivate/@contractor.Id" method="post" style="display:inline;">
+                                                <input type="hidden" name="__RequestVerificationToken" value="" />
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" title="Deactivate">
                                                     <i class="bi bi-x-circle"></i>
                                                 </button>
@@ -89,7 +89,8 @@
                                         }
                                         else
                                         {
-                                            <form asp-area="Admin" asp-controller="Contractor" asp-action="Activate" asp-route-contractorId="@contractor.Id" method="post" style="display:inline;">
+                                            <form action="/Admin/Contractor/Activate/@contractor.Id" method="post" style="display:inline;">
+                                                <input type="hidden" name="__RequestVerificationToken" value="" />
                                                 <button type="submit" class="btn btn-sm btn-outline-success" title="Activate">
                                                     <i class="bi bi-check-circle"></i>
                                                 </button>

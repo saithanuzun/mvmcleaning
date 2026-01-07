@@ -29,6 +29,10 @@ const api = {
         validate: async (postcode) => {
             const response = await apiClient.post('/api/postcode/validate', { postcode });
             return response.data;
+        },
+        validateAndBook: async (postcode, phone) => {
+            const response = await apiClient.post('/api/postcode/validate-and-book', { postcode, phone });
+            return response.data;
         }
     },
 
@@ -88,9 +92,9 @@ const api = {
 
     // Availability API
     availability: {
-        getSlots: async (postcode, date, durationMinutes) => {
+        getSlots: async (postcode, date, durationMinutes, contractorIds = []) => {
             const response = await apiClient.get('/api/availability/date', {
-                params: { postcode, date, durationMinutes }
+                params: { postcode, date, durationMinutes, contractorIds: contractorIds.join(',') }
             });
             return response.data;
         }

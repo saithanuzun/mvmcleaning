@@ -1,0 +1,662 @@
+@model mvmclean.backend.WebApp.Areas.Admin.Controllers.CreateBookingFormModel
+
+@{
+    ViewData["Title"] = "Create Booking";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="mb-1">
+                <i class="bi bi-plus-circle"></i> Create New Booking
+            </h2>
+            <p class="text-muted mb-0">Manually create a booking for a customer</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="/Admin/Booking/AllBookings" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Bookings
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <form method="post" action="/Admin/Booking/Create">
+
+        <div class="row">
+            <!-- Customer Information -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-person"></i> Customer Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="CustomerName" class="form-label">Customer Name *</label>
+                            <input name="CustomerName" type="text" class="form-control" placeholder="e.g., John Smith" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="CustomerEmail" class="form-label">Email Address *</label>
+                            <input name="CustomerEmail" type="email" class="form-control" placeholder="customer@example.com" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="CustomerPhone" class="form-label">Phone Number *</label>
+                            <input name="CustomerPhone" type="tel" class="form-control" placeholder="07900123456" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Address" class="form-label">Street Address *</label>
+                            <input name="Address" type="text" class="form-control" placeholder="e.g., 10 Downing Street" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Postcode" class="form-label">Postcode *</label>
+                            <input name="Postcode" type="text" class="form-control" placeholder="e.g., SW1A 2AA" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scheduling & Contractor -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Scheduling & Contractor</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="ScheduledDate" class="form-label">Scheduled Date *</label>
+                            <input name="ScheduledDate" type="date" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ScheduledTime" class="form-label">Scheduled Time *</label>
+                            <input name="ScheduledTime" type="time" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="DurationMinutes" class="form-label">Duration (Minutes) *</label>
+                            <input name="DurationMinutes" type="number" class="form-control" value="60" min="15" step="15" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ContractorId" class="form-label">Select Contractor *</label>
+                            <div class="input-group">
+                                <select name="ContractorId" class="form-select" required id="contractorSelect">
+                                    <option value="">-- Select a Contractor --</option>
+                                    @if (ViewBag.Contractors != null)
+                                    {
+                                        @foreach (var contractor in ViewBag.Contractors)
+                                        {
+                                            <option value="@contractor.Id">@contractor.FullName (@(contractor.IsActive ? "Active" : "Inactive"))</option>
+                                        }
+                                    }
+                                </select>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#activateModal" id="activateContractorBtn" title="Activate selected contractor">
+                                    <i class="bi bi-check-circle"></i> Activate
+                                </button>
+                            </div>
+                            <small class="form-text text-muted d-block mt-2">Can't find your contractor? Activate them from the dropdown above.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Selection -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-basket"></i> Services</h5>
+            </div>
+            <div class="card-body">
+                <div id="servicesContainer" class="row g-3">
+                    <div class="col-12">
+                        <p class="text-muted">Select services to add to this booking.</p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#serviceModal">
+                        <i class="bi bi-plus"></i> Add Service
+                    </button>
+                </div>
+
+                <div id="selectedServices" class="mt-4">
+                    <h6>Selected Services:</h6>
+                    <div id="selectedServicesList" class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="servicesTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No services selected</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-3 row">
+                    <div class="col-md-6">
+                        <label for="TotalAmount" class="form-label fw-bold">Total Amount *</label>
+                        <input name="TotalAmount" id="TotalAmount" type="number" class="form-control" step="0.01" min="0" placeholder="0.00" required />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="bi bi-check-circle"></i> Create Booking
+                </button>
+                <a href="/Admin/Booking/AllBookings" class="btn btn-secondary btn-lg">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Service Selection Modal -->
+<div class="modal fade" id="serviceModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Select Services</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="servicesList" class="row g-3">
+                    @if (ViewBag.Services != null)
+                    {
+                        @foreach (var service in ViewBag.Services)
+                        {
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title">@service.Name</h6>
+                                        <p class="card-text small text-muted">@service.Description</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="fw-bold text-primary">£@service.BasePrice</span>
+                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addService('@service.ServiceId', '@service.Name', @service.BasePrice)">
+                                                <i class="bi bi-plus"></i> Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Activate Contractor Modal -->
+<div class="modal fade" id="activateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">Activate Contractor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to activate this contractor?</p>
+                <p class="text-muted small">Once activated, they will be available for new bookings.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" action="/Admin/Booking/ActivateContractor" style="display:inline;">
+                    <input type="hidden" name="__RequestVerificationToken" value="@ViewBag.RequestVerificationToken" />
+                    <input type="hidden" name="contractorId" id="contractorIdInput" />
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-check-circle"></i> Activate
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedServices = [];
+
+function addService(serviceId, serviceName, price) {
+    // Check if already added
+    if (selectedServices.find(s => s.id === serviceId)) {
+        alert('Service already added');
+        return;
+    }
+
+    const service = {
+        id: serviceId,
+        name: serviceName,
+        price: price,
+        quantity: 1
+    };
+
+    selectedServices.push(service);
+    updateServicesList();
+    updateTotalAmount();
+
+    // Close modal
+    bootstrap.Modal.getInstance(document.getElementById('serviceModal')).hide();
+}
+
+function removeService(serviceId) {
+    selectedServices = selectedServices.filter(s => s.id !== serviceId);
+    updateServicesList();
+    updateTotalAmount();
+}
+
+function updateQuantity(serviceId, quantity) {
+    const service = selectedServices.find(s => s.id === serviceId);
+    if (service) {
+        service.quantity = Math.max(1, parseInt(quantity));
+        updateServicesList();
+        updateTotalAmount();
+    }
+}
+
+function updateServicesList() {
+    const tbody = document.getElementById('servicesTableBody');
+    const container = document.getElementById('servicesContainer');
+
+    if (selectedServices.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No services selected</td></tr>';
+        container.innerHTML = '<div class="col-12"><p class="text-muted">Select services to add to this booking.</p></div>';
+        return;
+    }
+
+    // Update table
+    tbody.innerHTML = selectedServices.map(service => `
+        <tr>
+            <td>${service.name}</td>
+            <td>
+                <input type="number" min="1" value="${service.quantity}" class="form-control form-control-sm" style="width: 80px;" 
+                       onchange="updateQuantity('${service.id}', this.value)">
+                <input type="hidden" name="ServiceIds" value="${service.id}">
+                <input type="hidden" name="ServiceNames" value="${service.name}">
+                <input type="hidden" name="ServicePrices" value="${service.price}">
+                <input type="hidden" name="ServiceQuantities" value="${service.quantity}">
+            </td>
+            <td>£${service.price.toFixed(2)}</td>
+            <td>£${(service.price * service.quantity).toFixed(2)}</td>
+            <td>
+                <button type="button" class="btn btn-sm btn-danger" onclick="removeService('${service.id}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+
+    // Update hidden input fields in form
+    container.innerHTML = selectedServices.map(service => `
+        <input type="hidden" name="ServiceIds" value="${service.id}">
+        <input type="hidden" name="ServiceNames" value="${service.name}">
+        <input type="hidden" name="ServicePrices" value="${service.price}">
+        <input type="hidden" name="ServiceQuantities" value="${service.quantity}">
+    `).join('');
+}
+
+function updateTotalAmount() {
+    const total = selectedServices.reduce((sum, service) => sum + (service.price * service.quantity), 0);
+    document.getElementById('TotalAmount').value = total.toFixed(2);
+}
+
+// Activate contractor button functionality
+document.getElementById('activateContractorBtn').addEventListener('click', function() {
+    const contractorId = document.getElementById('contractorSelect').value;
+    if (!contractorId) {
+        alert('Please select a contractor first');
+        return;
+    }
+    document.getElementById('contractorIdInput').value = contractorId;
+});
+</script>
+
+        <div class="row">
+            <!-- Customer Information -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-person"></i> Customer Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="CustomerName" class="form-label">Customer Name *</label>
+                            <input asp-for="CustomerName" type="text" class="form-control" placeholder="e.g., John Smith" required />
+                            <span asp-validation-for="CustomerName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CustomerEmail" class="form-label">Email Address *</label>
+                            <input asp-for="CustomerEmail" type="email" class="form-control" placeholder="customer@example.com" required />
+                            <span asp-validation-for="CustomerEmail" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CustomerPhone" class="form-label">Phone Number *</label>
+                            <input asp-for="CustomerPhone" type="tel" class="form-control" placeholder="07900123456" required />
+                            <span asp-validation-for="CustomerPhone" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label">Street Address *</label>
+                            <input asp-for="Address" type="text" class="form-control" placeholder="e.g., 10 Downing Street" required />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Postcode" class="form-label">Postcode *</label>
+                            <input asp-for="Postcode" type="text" class="form-control" placeholder="e.g., SW1A 2AA" required />
+                            <span asp-validation-for="Postcode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scheduling & Contractor -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Scheduling & Contractor</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="ScheduledDate" class="form-label">Scheduled Date *</label>
+                            <input asp-for="ScheduledDate" type="date" class="form-control" required />
+                            <span asp-validation-for="ScheduledDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ScheduledTime" class="form-label">Scheduled Time *</label>
+                            <input asp-for="ScheduledTime" type="time" class="form-control" required />
+                            <span asp-validation-for="ScheduledTime" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DurationMinutes" class="form-label">Duration (Minutes) *</label>
+                            <input asp-for="DurationMinutes" type="number" class="form-control" value="60" min="15" step="15" required />
+                            <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ContractorId" class="form-label">Select Contractor *</label>
+                            <div class="input-group">
+                                <select asp-for="ContractorId" class="form-select" required id="contractorSelect">
+                                    <option value="">-- Select a Contractor --</option>
+                                    @if (ViewBag.Contractors != null)
+                                    {
+                                        @foreach (var contractor in ViewBag.Contractors)
+                                        {
+                                            <option value="@contractor.Id">@contractor.FullName (@(contractor.IsActive ? "Active" : "Inactive"))</option>
+                                        }
+                                    }
+                                </select>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#activateModal" id="activateContractorBtn" title="Activate selected contractor">
+                                    <i class="bi bi-check-circle"></i> Activate
+                                </button>
+                            </div>
+                            <span asp-validation-for="ContractorId" class="text-danger"></span>
+                            <small class="form-text text-muted d-block mt-2">Can't find your contractor? Activate them from the dropdown above.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Selection -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-basket"></i> Services</h5>
+            </div>
+            <div class="card-body">
+                <div id="servicesContainer" class="row g-3">
+                    <div class="col-12">
+                        <p class="text-muted">Select services to add to this booking.</p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#serviceModal">
+                        <i class="bi bi-plus"></i> Add Service
+                    </button>
+                </div>
+
+                <div id="selectedServices" class="mt-4">
+                    <h6>Selected Services:</h6>
+                    <div id="selectedServicesList" class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="servicesTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No services selected</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-3 row">
+                    <div class="col-md-6">
+                        <label for="TotalAmount" class="form-label fw-bold">Total Amount *</label>
+                        <input asp-for="TotalAmount" type="number" class="form-control" step="0.01" min="0" placeholder="0.00" required />
+                        <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="bi bi-check-circle"></i> Create Booking
+                </button>
+                <a asp-area="Admin" asp-controller="Booking" asp-action="AllBookings" class="btn btn-secondary btn-lg">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Service Selection Modal -->
+<div class="modal fade" id="serviceModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Select Services</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="servicesList" class="row g-3">
+                    @if (ViewBag.Services != null)
+                    {
+                        @foreach (var service in ViewBag.Services)
+                        {
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title">@service.Name</h6>
+                                        <p class="card-text small text-muted">@service.Description</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="fw-bold text-primary">£@service.BasePrice</span>
+                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addService('@service.ServiceId', '@service.Name', @service.BasePrice)">
+                                                <i class="bi bi-plus"></i> Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Activate Contractor Modal -->
+<div class="modal fade" id="activateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">Activate Contractor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to activate this contractor?</p>
+                <p class="text-muted small">Once activated, they will be available for new bookings.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" asp-action="ActivateContractor" asp-controller="Booking" asp-area="Admin" style="display:inline;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="contractorId" id="contractorIdInput" />
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-check-circle"></i> Activate
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedServices = [];
+
+function addService(serviceId, serviceName, price) {
+    // Check if already added
+    if (selectedServices.find(s => s.id === serviceId)) {
+        alert('Service already added');
+        return;
+    }
+
+    const service = {
+        id: serviceId,
+        name: serviceName,
+        price: price,
+        quantity: 1
+    };
+
+    selectedServices.push(service);
+    updateServicesList();
+    updateTotalAmount();
+
+    // Close modal
+    bootstrap.Modal.getInstance(document.getElementById('serviceModal')).hide();
+}
+
+function removeService(serviceId) {
+    selectedServices = selectedServices.filter(s => s.id !== serviceId);
+    updateServicesList();
+    updateTotalAmount();
+}
+
+function updateQuantity(serviceId, quantity) {
+    const service = selectedServices.find(s => s.id === serviceId);
+    if (service) {
+        service.quantity = Math.max(1, parseInt(quantity));
+        updateServicesList();
+        updateTotalAmount();
+    }
+}
+
+function updateServicesList() {
+    const tbody = document.getElementById('servicesTableBody');
+    const container = document.getElementById('servicesContainer');
+
+    if (selectedServices.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No services selected</td></tr>';
+        container.innerHTML = '<div class="col-12"><p class="text-muted">Select services to add to this booking.</p></div>';
+        return;
+    }
+
+    // Update table
+    tbody.innerHTML = selectedServices.map(service => `
+        <tr>
+            <td>${service.name}</td>
+            <td>
+                <input type="number" min="1" value="${service.quantity}" class="form-control form-control-sm" style="width: 80px;" 
+                       onchange="updateQuantity('${service.id}', this.value)">
+                <input type="hidden" name="ServiceIds" value="${service.id}">
+                <input type="hidden" name="ServiceNames" value="${service.name}">
+                <input type="hidden" name="ServicePrices" value="${service.price}">
+                <input type="hidden" name="ServiceQuantities" value="${service.quantity}">
+            </td>
+            <td>£${service.price.toFixed(2)}</td>
+            <td>£${(service.price * service.quantity).toFixed(2)}</td>
+            <td>
+                <button type="button" class="btn btn-sm btn-danger" onclick="removeService('${service.id}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+
+    // Update visual containers in form
+    container.innerHTML = selectedServices.map(service => `
+        <input type="hidden" name="ServiceIds" value="${service.id}">
+        <input type="hidden" name="ServiceNames" value="${service.name}">
+        <input type="hidden" name="ServicePrices" value="${service.price}">
+        <input type="hidden" name="ServiceQuantities" value="${service.quantity}">
+    `).join('');
+}
+
+function updateTotalAmount() {
+    const total = selectedServices.reduce((sum, service) => sum + (service.price * service.quantity), 0);
+    document.getElementById('TotalAmount').value = total.toFixed(2);
+}
+
+// Activate contractor button functionality
+document.getElementById('activateContractorBtn').addEventListener('click', function() {
+    const contractorId = document.getElementById('contractorSelect').value;
+    if (!contractorId) {
+        alert('Please select a contractor first');
+        return;
+    }
+    document.getElementById('contractorIdInput').value = contractorId;
+});
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -2,6 +2,8 @@ using MediatR;
 using mvmclean.backend.Domain.Aggregates.Booking;
 using mvmclean.backend.Domain.Aggregates.Booking.Entities;
 using mvmclean.backend.Domain.Aggregates.Booking.Enums;
+using ContractorAggregate = mvmclean.backend.Domain.Aggregates.Contractor.Contractor;
+using mvmclean.backend.Domain.Aggregates.Contractor;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Application.Features.Booking.Commands;
@@ -38,10 +40,12 @@ public class CreateBookingCompleteResponse
 public class CreateBookingCompleteHandler : IRequestHandler<CreateBookingCompleteRequest, CreateBookingCompleteResponse>
 {
     private readonly IBookingRepository _bookingRepository;
+    private readonly IContractorRepository _contractorRepository;
 
-    public CreateBookingCompleteHandler(IBookingRepository bookingRepository)
+    public CreateBookingCompleteHandler(IBookingRepository bookingRepository, IContractorRepository contractorRepository)
     {
         _bookingRepository = bookingRepository;
+        _contractorRepository = contractorRepository;
     }
 
     public async Task<CreateBookingCompleteResponse> Handle(CreateBookingCompleteRequest request, CancellationToken cancellationToken)
@@ -53,14 +57,31 @@ public class CreateBookingCompleteHandler : IRequestHandler<CreateBookingComplet
                 Postcode.Create(request.Postcode),
                 PhoneNumber.Create(request.CustomerPhone));
 
-            // Note: SelectContractor requires the actual Contractor entity, so we'll just set the ContractorId
-            // This would need to be enhanced with proper contractor selection logic
+            // Get and assign contractor
+            ContractorAggregate? contractor = null;
             if (Guid.TryParse(request.ContractorId, out var contractorId))
             {
-                // For now, we'll need to get the contractor from repository
-                // In a real implementation, you'd inject IContractorRepository
-                // For this simplified version, we'll skip SelectContractor and manually set it
-                // booking.SelectContractor(contractor);
+                contractor = await _contractorRepository.GetByIdAsync(contractorId);
+                if (contractor != null && contractor.IsActive)
+                {
+                    booking.SelectContractor(contractor);
+                }
+                else
+                {
+                    return new CreateBookingCompleteResponse
+                    {
+                        Success = false,
+                        Message = "Selected contractor is not active or not found"
+                    };
+                }
+            }
+            else
+            {
+                return new CreateBookingCompleteResponse
+                {
+                    Success = false,
+                    Message = "Invalid contractor ID"
+                };
             }
 
             // Add service items to cart
@@ -73,9 +94,9 @@ public class CreateBookingCompleteHandler : IRequestHandler<CreateBookingComplet
                     serviceItem.Quantity);
             }
 
-            // Assign time slot (requires contractor entity, so we'll skip for now)
-            // var timeSlot = TimeSlot.Create(request.ScheduledStartTime, request.ScheduledEndTime);
-            // booking.AssignTimeSlot(timeSlot, contractor);
+            // Assign time slot
+            var timeSlot = TimeSlot.Create(request.ScheduledStartTime, request.ScheduledEndTime);
+            booking.AssignTimeSlot(timeSlot, contractor);
 
             // Parse customer name (assuming format: "FirstName LastName")
             var nameParts = request.CustomerName.Split(' ', 2);

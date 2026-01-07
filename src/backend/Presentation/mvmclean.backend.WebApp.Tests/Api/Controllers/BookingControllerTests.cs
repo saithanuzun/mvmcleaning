@@ -130,7 +130,9 @@ public class BookingControllerTests
     public async Task GetBookingById_WithNullId_ReturnsBadRequest()
     {
         // Act
+#pragma warning disable CS8625
         var result = await _controller.GetBookingById(null);
+#pragma warning restore CS8625
 
         // Assert
         var badResult = Assert.IsType<ObjectResult>(result);

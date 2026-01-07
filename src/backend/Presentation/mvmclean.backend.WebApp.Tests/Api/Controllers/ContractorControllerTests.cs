@@ -70,7 +70,9 @@ public class ContractorControllerTests
     public async Task GetContractorsByPostcode_WithNullPostcode_ReturnsBadRequest()
     {
         // Act
+#pragma warning disable CS8625
         var result = await _controller.GetContractorsByPostcode(null);
+#pragma warning restore CS8625
 
         // Assert
         var objectResult = Assert.IsType<ObjectResult>(result);

@@ -18,6 +18,7 @@ public class Contractor : Core.BaseClasses.AggregateRoot
     public int BookedCount { get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }
     public Email Email { get; private set; }
+    public Address? Address { get; private set; }
     public bool IsActive { get; private set; }
 
     private readonly List<Review> _reviews = new();
@@ -44,7 +45,8 @@ public class Contractor : Core.BaseClasses.AggregateRoot
         string email,
         string? imageUrl,
         string username,
-        string password)
+        string password,
+        Address? address = null)
     {
         var contractor = new Contractor
         {
@@ -53,6 +55,7 @@ public class Contractor : Core.BaseClasses.AggregateRoot
             LastName = lastName,
             PhoneNumber = PhoneNumber.Create(phoneNumber),
             Email = Email.Create(email),
+            Address = address,
             IsActive = false,
             ImageUrl = imageUrl,
             CreatedAt = DateTime.UtcNow,
