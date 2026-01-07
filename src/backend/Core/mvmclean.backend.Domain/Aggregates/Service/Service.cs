@@ -39,18 +39,16 @@ public class Service : AggregateRoot
             Description = description?.Trim(),
             Shortcut = shortcut?.Trim().ToUpper(),
             EstimatedDuration = estimatedDuration,
-            BasePrice = Money.Create(basePrice), // Store base price as-is
+            BasePrice = Money.Create(basePrice), 
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
     }
     
-    public void AddCategory(string categoryName)
+    public void AddCategory(Category category)
     {
-        if (Category != null && Category.Name == categoryName)
-            return;
-
-        Category = Category.Create(categoryName);
+        
+        Category = category;
         CategoryId = Category.Id;
     }
 

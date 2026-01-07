@@ -1,20 +1,15 @@
 using MediatR;
 using mvmclean.backend.Domain.Aggregates.Booking;
-using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Application.Features.Booking.Commands;
 
-public class AddCartItemRequest : IRequest<AddCartItemResponse>
+public class RemoveCartItemRequest : IRequest<RemoveCartItemResponse>
 {
     public string BookingId { get; set; }
-    public string ServiceName { get; set; }
     public string ServiceItemId { get; set; }
-    public decimal Price { get; set; }
-    public int Quantity { get; set; } = 1;
-    public int DurationMinutes { get; set; }
 }
 
-public class AddCartItemResponse
+public class RemoveCartItemResponse
 {
     public string BookingId { get; set; }
     public bool Success { get; set; }
@@ -23,50 +18,43 @@ public class AddCartItemResponse
     public int TotalDurationMinutes { get; set; }
 }
 
-public class AddCartItemHandler : IRequestHandler<AddCartItemRequest, AddCartItemResponse>
+public class RemoveCartItemHandler : IRequestHandler<RemoveCartItemRequest, RemoveCartItemResponse>
 {
     private readonly IBookingRepository _bookingRepository;
 
-    public AddCartItemHandler(IBookingRepository bookingRepository)
+    public RemoveCartItemHandler(IBookingRepository bookingRepository)
     {
         _bookingRepository = bookingRepository;
     }
 
-    public async Task<AddCartItemResponse> Handle(AddCartItemRequest request, CancellationToken cancellationToken)
+    public async Task<RemoveCartItemResponse> Handle(RemoveCartItemRequest request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(request.BookingId))
-            return new AddCartItemResponse
+            return new RemoveCartItemResponse
             {
                 Success = false,
                 Message = "Booking ID is required"
             };
 
         if (string.IsNullOrEmpty(request.ServiceItemId))
-            return new AddCartItemResponse
+            return new RemoveCartItemResponse
             {
                 Success = false,
                 Message = "Service Item ID is required"
             };
 
         if (!Guid.TryParse(request.BookingId, out var bookingId))
-            return new AddCartItemResponse
+            return new RemoveCartItemResponse
             {
                 Success = false,
                 Message = "Invalid Booking ID format"
             };
 
         if (!Guid.TryParse(request.ServiceItemId, out var serviceItemId))
-            return new AddCartItemResponse
+            return new RemoveCartItemResponse
             {
                 Success = false,
                 Message = "Invalid Service Item ID format"
-            };
-
-        if (request.Quantity <= 0)
-            return new AddCartItemResponse
-            {
-                Success = false,
-                Message = "Quantity must be greater than 0"
             };
 
         try
@@ -75,42 +63,38 @@ public class AddCartItemHandler : IRequestHandler<AddCartItemRequest, AddCartIte
             var booking = await _bookingRepository.GetByIdAsync(bookingId, noTracking: false);
 
             if (booking == null)
-                return new AddCartItemResponse
+                return new RemoveCartItemResponse
                 {
                     Success = false,
                     Message = "Booking not found"
                 };
 
-            // Use domain method to add service to cart
-            // This method handles updating quantity if service already exists
-            booking.AddServiceToCart(
-                request.ServiceName,
-                serviceItemId,
-                Money.Create(request.Price),
-                request.Quantity);
+            // Use domain method to remove service from cart
+            booking.RemoveServiceFromCart(serviceItemId);
 
             // Save changes
             await _bookingRepository.SaveChangesAsync();
 
-            // Calculate total duration in minutes
+            // Calculate total duration from remaining items
+            // Note: Duration is multiplied by quantity for total service time
             int totalDurationMinutes = booking.ServiceItems
-                .Sum(item => request.DurationMinutes * item.Quantity);
+                .Sum(item => (int)item.Quantity * 60); // Default 60 min per service, adjust as needed
 
-            return new AddCartItemResponse
+            return new RemoveCartItemResponse
             {
                 BookingId = booking.Id.ToString(),
                 Success = true,
-                Message = "Service added to cart successfully",
+                Message = "Service removed from cart successfully",
                 TotalPrice = booking.TotalPrice.Amount,
                 TotalDurationMinutes = totalDurationMinutes
             };
         }
         catch (Exception ex)
         {
-            return new AddCartItemResponse
+            return new RemoveCartItemResponse
             {
                 Success = false,
-                Message = $"Error adding service to cart: {ex.Message}"
+                Message = $"Error removing service from cart: {ex.Message}"
             };
         }
     }

@@ -1,5 +1,4 @@
 using mvmclean.backend.Domain.Aggregates.Booking.Enums;
-using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
 using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 

@@ -1,6 +1,7 @@
 using MediatR;
 using mvmclean.backend.Domain.Aggregates.Contractor;
 using mvmclean.backend.Domain.Aggregates.Contractor.Entities;
+using mvmclean.backend.Domain.Aggregates.Contractor.ValueObjects;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Application.Features.Contractor.Queries;

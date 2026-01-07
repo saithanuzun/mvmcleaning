@@ -1,6 +1,7 @@
 using MediatR;
 using mvmclean.backend.Domain.Aggregates.Contractor;
 using mvmclean.backend.Domain.Aggregates.Contractor.Entities;
+using mvmclean.backend.Domain.Aggregates.Contractor.ValueObjects;
 using mvmclean.backend.Domain.Aggregates.Service;
 
 namespace mvmclean.backend.Application.Features.Contractor.Commands;
@@ -46,7 +47,9 @@ public class AddServiceToContractorHandler : IRequestHandler<AddServiceToContrac
                 Message = "Invalid service ID"
             };
 
+        // Load contractor with tracking enabled (noTracking: false)
         var contractor = await _contractorRepository.GetByIdAsync(contractorId, noTracking: false);
+
         if (contractor == null)
             return new AddServiceToContractorResponse
             {
@@ -55,6 +58,7 @@ public class AddServiceToContractorHandler : IRequestHandler<AddServiceToContrac
             };
 
         var service = await _serviceRepository.GetByIdAsync(serviceId);
+
         if (service == null)
             return new AddServiceToContractorResponse
             {
@@ -65,6 +69,7 @@ public class AddServiceToContractorHandler : IRequestHandler<AddServiceToContrac
         var serviceItem = new ServiceItem
         {
             ContractorId = contractorId,
+            Contractor = contractor,
             ServiceId = serviceId,
             ServiceName = service.Name,
             Category = service.Category?.Name ?? "Uncategorized",

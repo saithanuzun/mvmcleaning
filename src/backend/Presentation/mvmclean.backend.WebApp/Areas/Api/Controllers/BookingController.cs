@@ -1,9 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using mvmclean.backend.Application.Features.Booking.Commands;
+using mvmclean.backend.Application.Features.Booking.Queries;
 using mvmclean.backend.Application.Services;
-using mvmclean.backend.WebApp.Areas.Api.Models;
-using AppCommands = mvmclean.backend.Application.Features.Booking.Commands;
-using AppQueries = mvmclean.backend.Application.Features.Booking.Queries;
+
 
 namespace mvmclean.backend.WebApp.Areas.Api.Controllers;
 
@@ -20,81 +20,18 @@ public class BookingController : BaseApiController
     }
 
     /// <summary>
-    /// Creates a new booking and generates payment link
+    /// Create a new booking with postcode and telephone number
     /// </summary>
     [HttpPost("create")]
-    public async Task<IActionResult> CreateBooking([FromBody] CreateBookingApiRequest request)
+    public async Task<IActionResult> CreateBooking([FromBody] CreateBookingRequest request)
     {
+        if (!ModelState.IsValid)
+            return Error("Invalid request data");
+
         try
         {
-            // Validate request
-            if (string.IsNullOrWhiteSpace(request.CustomerName))
-                return Error("Customer name is required");
-
-            if (string.IsNullOrWhiteSpace(request.CustomerEmail))
-                return Error("Customer email is required");
-
-            if (string.IsNullOrWhiteSpace(request.CustomerPhone))
-                return Error("Customer phone is required");
-
-            if (string.IsNullOrWhiteSpace(request.Address))
-                return Error("Address is required");
-
-            if (string.IsNullOrWhiteSpace(request.Postcode))
-                return Error("Postcode is required");
-
-            if (request.ScheduledSlot == null)
-                return Error("Scheduled slot is required");
-
-            if (!request.Services.Any())
-                return Error("At least one service is required");
-
-            // Create booking
-            var createBookingRequest = new AppCommands.CreateBookingCompleteRequest
-            {
-                CustomerName = request.CustomerName,
-                CustomerEmail = request.CustomerEmail,
-                CustomerPhone = request.CustomerPhone,
-                Address = request.Address,
-                Postcode = request.Postcode,
-                ContractorId = request.ContractorId.ToString(),
-                ScheduledStartTime = request.ScheduledSlot.StartTime,
-                ScheduledEndTime = request.ScheduledSlot.EndTime,
-                ServiceItems = request.Services.Select(s => new AppCommands.CreateBookingCompleteRequest.ServiceItemDto
-                {
-                    ServiceId = s.ServiceId,
-                    ServiceName = s.ServiceName,
-                    Quantity = s.Quantity,
-                    Price = s.Price
-                }).ToList(),
-                TotalAmount = request.TotalAmount
-            };
-
-            var bookingResponse = await _mediator.Send(createBookingRequest);
-
-            if (!bookingResponse.Success)
-            {
-                return Error(bookingResponse.Message);
-            }
-
-            // Create Stripe payment link
-            var successUrl = $"{Request.Scheme}://{Request.Host}/shop/payment-success?session_id={{CHECKOUT_SESSION_ID}}";
-            var cancelUrl = $"{Request.Scheme}://{Request.Host}/shop/postcode";
-
-            var paymentLink = await _stripeService.CreatePaymentLinkAsync(
-                bookingResponse.BookingId,
-                request.TotalAmount,
-                "gbp",
-                $"Booking #{bookingResponse.BookingId.ToString().Substring(0, 8)} - {request.CustomerName}",
-                successUrl,
-                cancelUrl);
-
-            return Success(new Models.CreateBookingResponse
-            {
-                BookingId = bookingResponse.BookingId,
-                PaymentUrl = paymentLink,
-                Message = "Booking created successfully"
-            });
+            var response = await _mediator.Send(request);
+            return Success(response, "Booking created successfully");
         }
         catch (Exception ex)
         {
@@ -103,76 +40,93 @@ public class BookingController : BaseApiController
     }
 
     /// <summary>
-    /// Gets booking details by ID
+    /// Get booking details by ID
     /// </summary>
     [HttpGet("{bookingId}")]
-    public async Task<IActionResult> GetBooking(Guid bookingId)
+    public async Task<IActionResult> GetBookingById(string bookingId)
     {
+        if (string.IsNullOrEmpty(bookingId))
+            return Error("Booking ID is required");
+
         try
         {
-            var booking = await _mediator.Send(new AppQueries.GetBookingByIdRequest { BookingId = bookingId.ToString() });
+            if (!Guid.TryParse(bookingId, out var id))
+                return Error("Invalid booking ID format");
 
-            if (booking == null)
+            var request = new GetBookingByIdRequest
             {
-                return Error("Booking not found", 404);
-            }
+                BookingId = bookingId
+            };
 
-            return Success(new BookingDetailsResponse
+            var response = await _mediator.Send(request);
+
+            return Success(new
             {
-                Id = booking.Id,
-                CustomerName = booking.Customer?.FullName ?? "Unknown",
-                CustomerEmail = booking.Customer?.Email?.Value ?? "",
-                CustomerPhone = booking.PhoneNumber,
-                Address = booking.ServiceAddress?.Street ?? "",
-                Postcode = booking.Postcode,
-                Status = booking.Status.ToString(),
-                TotalAmount = booking.TotalPrice,
-                ScheduledSlot = booking.ScheduledSlot != null ? new ScheduledSlotDto
+                id = response.Id,
+                phoneNumber = response.PhoneNumber,
+                postcode = response.Postcode,
+                contractorId = response.ContractorId,
+                customerId = response.CustomerId,
+                customer = response.Customer != null ? new
                 {
-                    StartTime = booking.ScheduledSlot.StartTime,
-                    EndTime = booking.ScheduledSlot.EndTime
+                    id = response.Customer.Id,
+                    name = response.Customer.FullName,
+                    email = response.Customer.Email,
+                    phoneNumber = response.Customer.PhoneNumber?.ToString()
                 } : null,
-                Services = booking.ServiceItems?.Select(s => new ServiceItemDto
+                serviceItems = response.ServiceItems?.Select(item => new
                 {
-                    ServiceId = s.ServiceId,
-                    ServiceName = s.ServiceName,
-                    Quantity = s.Quantity,
-                    Price = s.UnitAdjustedPrice.Amount
+                    id = item.Id,
+                    serviceName = item.ServiceName,
+                    serviceId = item.ServiceId,
+                    unitPrice = item.UnitAdjustedPrice?.Amount ?? 0,
+                    quantity = item.Quantity,
+                    totalPrice = (item.UnitAdjustedPrice?.Amount ?? 0) * item.Quantity
                 }).ToList(),
-                CreatedAt = booking.CreatedAt
-            });
+                serviceAddress = response.ServiceAddress != null ? new
+                {
+                    street = response.ServiceAddress.Street,
+                    city = response.ServiceAddress.City,
+                    additionalInfo = response.ServiceAddress.AdditionalInfo
+                } : null,
+                scheduledSlot = response.ScheduledSlot != null ? new
+                {
+                    startTime = response.ScheduledSlot.StartTime,
+                    endTime = response.ScheduledSlot.EndTime,
+                    duration = (int)(response.ScheduledSlot.EndTime - response.ScheduledSlot.StartTime).TotalMinutes
+                } : null,
+                totalPrice = response.TotalPrice,
+                currency = response.Currency,
+                paymentId = response.PaymentId,
+                status = response.Status.ToString(),
+                creationStatus = response.CreationStatus.ToString(),
+                createdAt = response.CreatedAt,
+                updatedAt = response.UpdatedAt
+            }, "Booking retrieved successfully");
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return Error(ex.Message, 404);
         }
         catch (Exception ex)
         {
-            return Error($"Error fetching booking: {ex.Message}", 500);
+            return Error($"Error retrieving booking: {ex.Message}", 500);
         }
     }
 
     /// <summary>
-    /// Verifies payment and confirms booking
+    /// Verify payment and confirm booking
     /// </summary>
     [HttpPost("verify-payment")]
-    public async Task<IActionResult> VerifyPayment([FromBody] VerifyPaymentRequest request)
+    public async Task<IActionResult> VerifyPayment([FromBody] VerifyPaymentAndConfirmBookingRequest request)
     {
+        if (!ModelState.IsValid)
+            return Error("Invalid request data");
+
         try
         {
-            var result = await _mediator.Send(new AppCommands.VerifyPaymentAndConfirmBookingRequest
-            {
-                BookingId = request.BookingId,
-                SessionId = request.SessionId
-            });
-
-            if (!result.Success)
-            {
-                return Error(result.Message);
-            }
-
-            return Success(new
-            {
-                bookingId = result.BookingId,
-                status = result.Status,
-                message = result.Message
-            });
+            var response = await _mediator.Send(request);
+            return Success(response, "Payment verified successfully");
         }
         catch (Exception ex)
         {

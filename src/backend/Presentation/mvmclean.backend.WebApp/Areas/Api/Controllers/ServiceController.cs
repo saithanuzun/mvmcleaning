@@ -10,10 +10,5 @@ public class ServiceController : BaseApiController
     {
     }
 
-    [HttpGet("bypostcode/{postcode}")]
-    public IActionResult GetServicesByPostcode(string postcode)
-    {
-        // This is a stub - actual implementation is in ServicesController
-        return Success("Use ServicesController instead");
-    }
+
 }

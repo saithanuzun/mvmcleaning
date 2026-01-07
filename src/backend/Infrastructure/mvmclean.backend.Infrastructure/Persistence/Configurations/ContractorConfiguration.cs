@@ -37,10 +37,8 @@ public class ContractorConfiguration : EntityConfiguration<Contractor>
         builder.HasMany(c => c.WorkingHours)
             .WithOne(i=>i.Contractor)
             .HasForeignKey(x => x.ContractorId);
-        
-        builder.HasMany(c => c.Services)
-            .WithOne(i => i.Contractor)
-            .HasForeignKey(x => x.ContractorId);
+
+        builder.OwnsMany(c => c.Services);
         
         // Reviews collection
         builder.HasMany<Review>()

@@ -1,8 +1,8 @@
 using mvmclean.backend.Domain.Core.BaseClasses;
 
-namespace mvmclean.backend.Domain.Aggregates.Contractor.Entities;
+namespace mvmclean.backend.Domain.Aggregates.Contractor.ValueObjects;
 
-public class ServiceItem : Entity
+public class ServiceItem : ValueObject
 {
     public Guid ContractorId { get; set; }
     public Contractor Contractor { get; set; }
@@ -12,4 +12,8 @@ public class ServiceItem : Entity
 
     public string Description { get; set; }
 
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        throw new NotImplementedException();
+    }
 }

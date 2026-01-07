@@ -1,8 +1,6 @@
-using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
 using mvmclean.backend.Domain.Aggregates.Invoice.Enums;
 using mvmclean.backend.Domain.Aggregates.Invoice.Events;
 using mvmclean.backend.Domain.Aggregates.Invoice.ValueObjects;
-using mvmclean.backend.Domain.Core.Interfaces;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Domain.Aggregates.Invoice;

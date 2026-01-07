@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using mvmclean.backend.Application;
 using mvmclean.backend.Infrastructure;
 using mvmclean.backend.Infrastructure.Persistence;
+using mvmclean.backend.Infrastructure.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,26 @@ builder.Services.AddApplicationRegistration();
 
 
 var app = builder.Build();
+
+// Apply migrations and seed database
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<MVMdbContext>();
+    try
+    {
+        // Apply any pending migrations
+        await dbContext.Database.MigrateAsync();
+        
+        // Seed initial data
+        var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+        await seeder.SeedAsync();
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating or seeding the database");
+    }
+}
 
 if (!app.Environment.IsDevelopment())
 {
