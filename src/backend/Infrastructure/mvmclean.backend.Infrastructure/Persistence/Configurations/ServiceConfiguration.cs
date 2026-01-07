@@ -26,14 +26,12 @@ public class ServiceConfiguration : EntityConfiguration<Service>
         // Category relationship
         builder.HasOne(s => s.Category)
             .WithMany(c => c.Services)
-            .HasForeignKey(s => s.CategoryId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(s => s.CategoryId);
         
         // PostcodePricings collection
         builder.HasMany(s => s.PostcodePricings)
             .WithOne(p => p.Service)
-            .HasForeignKey(p => p.ServiceId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(p => p.ServiceId);
         
     }
 }

@@ -1,4 +1,4 @@
-@model mvmclean.backend.Application.Features.Booking.GetAllBookingsResponse
+@model mvmclean.backend.Application.Features.Booking.Queries.GetAllBookingsResponse
 
 @{
     ViewData["Title"] = "All Bookings";
@@ -110,8 +110,19 @@
                                         <a asp-area="Admin" asp-controller="Booking" asp-action="Details"
                                             asp-route-bookingId="@booking.Id" class="btn btn-sm btn-outline-primary"
                                             title="View Details">
-                                            <i class="bi bi-eye"></i> View
+                                            <i class="bi bi-eye"></i>
                                         </a>
+                                        @if (booking.Status.ToString() != "Completed" && booking.Status.ToString() != "Cancelled")
+                                        {
+                                            @if (booking.Status.ToString() != "Confirmed")
+                                            {
+                                                <form asp-area="Admin" asp-controller="Booking" asp-action="Confirm" asp-route-bookingId="@booking.Id" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-sm btn-outline-success" title="Confirm Booking">
+                                                        <i class="bi bi-check-circle"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                        }
                                     </td>
                                 </tr>
                             }

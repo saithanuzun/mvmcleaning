@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using mvmclean.backend.Application.Features.Contractor;
+using mvmclean.backend.Application.Features.Contractor.Commands;
+using mvmclean.backend.Application.Features.Contractor.Queries;
 
 namespace mvmclean.backend.WebApp.Areas.Contractor.Controllers;
 

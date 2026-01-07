@@ -7,6 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+// Add SPA services for React app
+builder.Services.AddSpaStaticFiles(configuration =>
+{
+    configuration.RootPath = "ClientApp/dist";
+});
+
 builder.Services.AddAuthentication()
     .AddCookie("AdminCookie", options =>
     {
@@ -42,6 +48,7 @@ app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSpaStaticFiles();
 
 app.UseRouting();
 
@@ -55,5 +62,19 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Configure SPA to serve React app under /shop route
+app.Map("/shop", shop =>
+{
+    shop.UseSpa(spa =>
+    {
+        spa.Options.SourcePath = "ClientApp";
+
+        if (app.Environment.IsDevelopment())
+        {
+            spa.UseProxyToSpaDevelopmentServer("http://localhost:5173");
+        }
+    });
+});
 
 app.Run();

@@ -1,7 +1,7 @@
-using mvmclean.backend.Domain.Aggregates.Service;
 using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
+namespace mvmclean.backend.Domain.Aggregates.Service.Entities;
 
 public class PostcodePricing : Entity
 {

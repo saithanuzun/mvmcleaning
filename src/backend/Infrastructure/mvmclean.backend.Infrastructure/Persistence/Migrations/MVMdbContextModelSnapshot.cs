@@ -74,7 +74,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ContractorId")
+                    b.Property<Guid>("ContractorId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -888,26 +888,29 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
-                        .HasColumnType("text");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -917,7 +920,8 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -1146,7 +1150,8 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.HasOne("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", null)
                         .WithMany()
                         .HasForeignKey("ContractorId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.HasOne("mvmclean.backend.Domain.Aggregates.Booking.Entities.Customer", "Customer")
                         .WithMany("Bookings")
@@ -1977,7 +1982,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.HasOne("mvmclean.backend.Domain.Aggregates.Service.Entities.Category", "Category")
                         .WithMany("Services")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Money", "BasePrice", b1 =>

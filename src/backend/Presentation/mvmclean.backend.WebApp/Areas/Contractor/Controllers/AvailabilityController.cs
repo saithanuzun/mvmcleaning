@@ -2,7 +2,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mvmclean.backend.Application.Features.Contractor;
+using mvmclean.backend.Application.Features.Contractor.Commands;
+using mvmclean.backend.Application.Features.Contractor.Queries;
 using mvmclean.backend.Application.Features.Booking;
+using mvmclean.backend.Application.Features.Booking.Commands;
+using mvmclean.backend.Application.Features.Booking.Queries;
 
 namespace mvmclean.backend.WebApp.Areas.Contractor.Controllers;
 
@@ -113,6 +117,7 @@ public class AvailabilityController : BaseContractorController
 
     [Route("working-days/add")]
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddWorkingDay(string dayOfWeek, string startTime, string endTime)
     {
         if (ContractorId == null)
@@ -161,6 +166,47 @@ public class AvailabilityController : BaseContractorController
 
             var response = await _mediator.Send(request);
             TempData["Success"] = $"Working hours for {parsedDay} have been set successfully";
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+        }
+
+        return RedirectToAction("WorkingDays");
+    }
+
+    [Route("working-days/delete")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteWorkingDay(string dayOfWeek)
+    {
+        if (ContractorId == null)
+            return RedirectToAction("Index", "Home");
+
+        try
+        {
+            if (!Enum.TryParse<DayOfWeek>(dayOfWeek, out var parsedDay))
+            {
+                TempData["Error"] = "Invalid day of week";
+                return RedirectToAction("WorkingDays");
+            }
+
+            var request = new DeleteWorkingDayRequest
+            {
+                ContractorId = ContractorId.ToString(),
+                DayOfWeek = parsedDay
+            };
+
+            var response = await _mediator.Send(request);
+
+            if (response.Success)
+            {
+                TempData["Success"] = response.Message;
+            }
+            else
+            {
+                TempData["Error"] = response.Message;
+            }
         }
         catch (Exception ex)
         {

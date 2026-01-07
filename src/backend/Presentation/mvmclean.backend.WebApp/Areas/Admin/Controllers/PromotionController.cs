@@ -2,7 +2,13 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mvmclean.backend.Application.Features.Promotion;
+using mvmclean.backend.Application.Features.Promotion.Commands;
+using mvmclean.backend.Application.Features.Promotion.Queries;
+using mvmclean.backend.Application.Features.Promotion.Commands;
+using mvmclean.backend.Application.Features.Promotion.Queries;
 using mvmclean.backend.Application.Features.Services;
+using mvmclean.backend.Application.Features.Services.Commands;
+using mvmclean.backend.Application.Features.Services.Queries;
 
 namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
 
@@ -55,6 +61,82 @@ public class PromotionController : BaseAdminController
         catch (Exception ex)
         {
             TempData["Error"] = $"Error loading promotion: {ex.Message}";
+            return RedirectToAction(nameof(AllPromotions));
+        }
+    }
+
+    [Route("create")]
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View(new CreatePromotionRequest());
+    }
+
+    [Route("create")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreatePromotionRequest request)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            var response = await _mediator.Send(request);
+            TempData["Success"] = response.Message;
+            return RedirectToAction(nameof(AllPromotions));
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error creating promotion: {ex.Message}";
+            return View(request);
+        }
+    }
+
+    [Route("activate/{promotionId}")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Activate(Guid promotionId)
+    {
+        try
+        {
+            var response = await _mediator.Send(new UpdatePromotionStatusRequest
+            {
+                PromotionId = promotionId,
+                IsActive = true
+            });
+
+            TempData["Success"] = response.Message;
+            return RedirectToAction(nameof(Details), new { promotionId });
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error activating promotion: {ex.Message}";
+            return RedirectToAction(nameof(AllPromotions));
+        }
+    }
+
+    [Route("deactivate/{promotionId}")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Deactivate(Guid promotionId)
+    {
+        try
+        {
+            var response = await _mediator.Send(new UpdatePromotionStatusRequest
+            {
+                PromotionId = promotionId,
+                IsActive = false
+            });
+
+            TempData["Success"] = response.Message;
+            return RedirectToAction(nameof(Details), new { promotionId });
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error deactivating promotion: {ex.Message}";
             return RedirectToAction(nameof(AllPromotions));
         }
     }

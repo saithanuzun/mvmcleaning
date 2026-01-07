@@ -2,6 +2,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mvmclean.backend.Application.Features.Services;
+using mvmclean.backend.Application.Features.Services.Commands;
+using mvmclean.backend.Application.Features.Services.Queries;
+using mvmclean.backend.Application.Features.Services.Commands;
+using mvmclean.backend.Application.Features.Services.Queries;
 
 namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
 
@@ -57,25 +61,31 @@ public class ServiceController : BaseAdminController
     
     
     [Route("CreateService")]
+    [HttpGet]
     public IActionResult CreateService()
     {
         return View(new CreateServiceRequest());
     }
-    
+
     [Route("CreateService")]
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateService(CreateServiceRequest request)
     {
         try
         {
             if (!ModelState.IsValid)
             {
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    TempData["Error"] = $"Validation error: {error.ErrorMessage}";
+                }
                 return View(request);
             }
-            
+
             var response = await _mediator.Send(request);
             TempData["Success"] = "Service created successfully!";
-            return RedirectToAction("ServiceDetails", new {serviceId = response.ServiceId});
+            return RedirectToAction("AllServices");
         }
         catch (Exception ex)
         {
@@ -83,6 +93,7 @@ public class ServiceController : BaseAdminController
             return View(request);
         }
     }
+    
 
     [Route("ServicePricings")]
     public async Task<IActionResult> ServicePricingsDetails(Guid serviceId)
@@ -131,7 +142,85 @@ public class ServiceController : BaseAdminController
     {
         return View(new AddServicePostcodePricingRequest());
     }
-    
-   
-    
+
+    [Route("edit/{serviceId}")]
+    [HttpGet]
+    public async Task<IActionResult> Edit(Guid serviceId)
+    {
+        try
+        {
+            var service = await _mediator.Send(new GetServiceByIdRequest { ServiceId = serviceId });
+            var request = new UpdateServiceRequest
+            {
+                ServiceId = serviceId,
+                Name = service.Name,
+                Description = service.Description,
+                Shortcut = service.Shortcut,
+                BasePrice = service.BasePrice,
+                EstimatedDurationMinutes = Convert.ToInt32(service.Duration)
+            };
+            return View(request);
+        }
+        catch (KeyNotFoundException)
+        {
+            TempData["Error"] = "Service not found";
+            return RedirectToAction("AllServices");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error loading service: {ex.Message}";
+            return RedirectToAction("AllServices");
+        }
+    }
+
+    [Route("edit/{serviceId}")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(UpdateServiceRequest request)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            var response = await _mediator.Send(request);
+            TempData["Success"] = response.Message;
+            return RedirectToAction("ServiceDetails", new { serviceId = request.ServiceId });
+        }
+        catch (KeyNotFoundException)
+        {
+            TempData["Error"] = "Service not found";
+            return RedirectToAction("AllServices");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error updating service: {ex.Message}";
+            return View(request);
+        }
+    }
+
+    [Route("delete/{serviceId}")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(Guid serviceId)
+    {
+        try
+        {
+            var response = await _mediator.Send(new DeleteServiceRequest { ServiceId = serviceId });
+            TempData["Success"] = response.Message;
+            return RedirectToAction("AllServices");
+        }
+        catch (KeyNotFoundException)
+        {
+            TempData["Error"] = "Service not found";
+            return RedirectToAction("AllServices");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error deleting service: {ex.Message}";
+            return RedirectToAction("AllServices");
+        }
+    }
 }

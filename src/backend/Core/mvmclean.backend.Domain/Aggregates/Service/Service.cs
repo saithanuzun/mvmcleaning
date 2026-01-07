@@ -47,7 +47,7 @@ public class Service : AggregateRoot
     
     public void AddCategory(string categoryName)
     {
-        if (Category.Name == categoryName)
+        if (Category != null && Category.Name == categoryName)
             return;
 
         Category = Category.Create(categoryName);

@@ -38,4 +38,20 @@ public class WorkingHours : Entity
     public static WorkingHours CreateDayOff(DayOfWeek dayOfWeek)
         => new(dayOfWeek, false, default, default);
 
+    public void SetAsNonWorkingDay()
+    {
+        IsWorkingDay = false;
+        StartTime = default;
+        EndTime = default;
+    }
+
+    public void UpdateWorkingHours(TimeOnly startTime, TimeOnly endTime)
+    {
+        if (startTime >= endTime)
+            throw new ArgumentException("Start time must be before end time");
+
+        IsWorkingDay = true;
+        StartTime = startTime;
+        EndTime = endTime;
+    }
 }

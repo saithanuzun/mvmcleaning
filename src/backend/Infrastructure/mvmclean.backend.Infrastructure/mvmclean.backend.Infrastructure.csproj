@@ -30,6 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Core\mvmclean.backend.Application\mvmclean.backend.Application.csproj" />
       <ProjectReference Include="..\..\Core\mvmclean.backend.Domain\mvmclean.backend.Domain.csproj" />
     </ItemGroup>
 

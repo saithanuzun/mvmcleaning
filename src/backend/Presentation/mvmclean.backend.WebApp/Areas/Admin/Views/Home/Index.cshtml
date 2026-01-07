@@ -1,3 +1,5 @@
+@model mvmclean.backend.Application.Features.Admin.Queries.GetDashboardStatsResponse
+
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
@@ -12,95 +14,287 @@
         </div>
     </div>
 
+    <!-- Statistics Cards -->
     <div class="row">
         <div class="col-md-3 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <div style="font-size: 2.5rem; color: #0d6efd; margin-bottom: 10px;">
-                        <i class="bi bi-people"></i>
+            <div class="card shadow-sm border-0 bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-1 opacity-75">Contractors</h6>
+                            <h2 class="mb-0">@Model.TotalContractors</h2>
+                            <small class="opacity-75">@Model.ActiveContractors Active</small>
+                        </div>
+                        <div>
+                            <i class="bi bi-people" style="font-size: 3rem; opacity: 0.3;"></i>
+                        </div>
                     </div>
-                    <h5 class="card-title">Contractors</h5>
-                    <p class="text-muted mb-3">Manage all contractors</p>
-                    <a href="@Url.Action("AllContractors", "Contractor")" class="btn btn-primary btn-sm w-100">
-                        View All
+                    <a href="@Url.Action("AllContractors", "Contractor")" class="btn btn-light btn-sm w-100 mt-3">
+                        <i class="bi bi-eye"></i> View All
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-3 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <div style="font-size: 2.5rem; color: #198754; margin-bottom: 10px;">
-                        <i class="bi bi-briefcase"></i>
+            <div class="card shadow-sm border-0 bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-1 opacity-75">Services</h6>
+                            <h2 class="mb-0">@Model.TotalServices</h2>
+                            <small class="opacity-75">Total Available</small>
+                        </div>
+                        <div>
+                            <i class="bi bi-box" style="font-size: 3rem; opacity: 0.3;"></i>
+                        </div>
                     </div>
-                    <h5 class="card-title">Services</h5>
-                    <p class="text-muted mb-3">Manage all services</p>
-                    <a href="@Url.Action("AllServices", "Service")" class="btn btn-success btn-sm w-100">
-                        View All
+                    <a href="@Url.Action("AllServices", "Service")" class="btn btn-light btn-sm w-100 mt-3">
+                        <i class="bi bi-eye"></i> View All
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-3 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <div style="font-size: 2.5rem; color: #0dcaf0; margin-bottom: 10px;">
-                        <i class="bi bi-calendar-check"></i>
+            <div class="card shadow-sm border-0 bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-1 opacity-75">Bookings</h6>
+                            <h2 class="mb-0">@Model.TotalBookings</h2>
+                            <small class="opacity-75">@Model.PendingBookings Pending</small>
+                        </div>
+                        <div>
+                            <i class="bi bi-calendar-check" style="font-size: 3rem; opacity: 0.3;"></i>
+                        </div>
                     </div>
-                    <h5 class="card-title">Bookings</h5>
-                    <p class="text-muted mb-3">View all bookings</p>
-                    <button class="btn btn-info btn-sm w-100" disabled>
-                        Coming Soon
-                    </button>
+                    <a href="@Url.Action("AllBookings", "Booking")" class="btn btn-light btn-sm w-100 mt-3">
+                        <i class="bi bi-eye"></i> View All
+                    </a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-3 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <div style="font-size: 2.5rem; color: #fd7e14; margin-bottom: 10px;">
-                        <i class="bi bi-gear"></i>
+            <div class="card shadow-sm border-0 bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-1 opacity-75">Completed</h6>
+                            <h2 class="mb-0">@Model.CompletedBookings</h2>
+                            <small class="opacity-75">Bookings Done</small>
+                        </div>
+                        <div>
+                            <i class="bi bi-check-circle" style="font-size: 3rem; opacity: 0.3;"></i>
+                        </div>
                     </div>
-                    <h5 class="card-title">Settings</h5>
-                    <p class="text-muted mb-3">System settings</p>
-                    <button class="btn btn-warning btn-sm w-100" disabled>
-                        Coming Soon
-                    </button>
+                    <a href="@Url.Action("AllBookings", "Booking")" class="btn btn-light btn-sm w-100 mt-3">
+                        <i class="bi bi-eye"></i> View Details
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row mt-4">
+    <!-- Booking Status Overview -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-bar-chart"></i> Booking Status Overview
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded">
+                                <i class="bi bi-hourglass-split text-warning" style="font-size: 2rem;"></i>
+                                <h3 class="mt-2 mb-0">@Model.PendingBookings</h3>
+                                <small class="text-muted">Pending</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded">
+                                <i class="bi bi-check-circle text-info" style="font-size: 2rem;"></i>
+                                <h3 class="mt-2 mb-0">@Model.ConfirmedBookings</h3>
+                                <small class="text-muted">Confirmed</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded">
+                                <i class="bi bi-check-circle-fill text-success" style="font-size: 2rem;"></i>
+                                <h3 class="mt-2 mb-0">@Model.CompletedBookings</h3>
+                                <small class="text-muted">Completed</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-3">
         <div class="col-md-12">
             <h5 class="mb-3">
-                <i class="bi bi-list-check"></i> Quick Actions
+                <i class="bi bi-lightning-fill"></i> Quick Actions
             </h5>
         </div>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <a href="@Url.Action("CreateService", "Service")" class="btn btn-outline-primary w-100 py-3">
+                <i class="bi bi-plus-circle"></i><br>
+                Create Service
+            </a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="@Url.Action("Create", "Promotion")" class="btn btn-outline-success w-100 py-3">
+                <i class="bi bi-tag"></i><br>
+                Create Promotion
+            </a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="@Url.Action("AllContractors", "Contractor")" class="btn btn-outline-info w-100 py-3">
+                <i class="bi bi-people"></i><br>
+                Manage Contractors
+            </a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="@Url.Action("Index", "Settings")" class="btn btn-outline-warning w-100 py-3">
+                <i class="bi bi-gear"></i><br>
+                System Settings
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
     <div class="row">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
+        <!-- Recent Contractors -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
                 <div class="card-header bg-primary text-white">
-                    <h6 class="mb-0">Recent Contractors</h6>
+                    <h6 class="mb-0">
+                        <i class="bi bi-people"></i> Recent Contractors
+                    </h6>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted mb-0"><em>Loading contractors...</em></p>
+                    @if (Model.RecentContractors.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var contractor in Model.RecentContractors)
+                            {
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-0">@contractor.FullName</h6>
+                                            <small class="text-muted">@contractor.Email</small><br>
+                                            <small class="text-muted">@contractor.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                        </div>
+                                        <span class="badge @(contractor.IsActive ? "bg-success" : "bg-secondary")">
+                                            @(contractor.IsActive ? "Active" : "Inactive")
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <a href="@Url.Action("AllContractors", "Contractor")" class="btn btn-sm btn-primary w-100 mt-3">
+                            View All Contractors
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">No contractors yet</p>
+                    }
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card shadow-sm">
+        <!-- Recent Services -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
                 <div class="card-header bg-success text-white">
-                    <h6 class="mb-0">Recent Services</h6>
+                    <h6 class="mb-0">
+                        <i class="bi bi-box"></i> Recent Services
+                    </h6>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted mb-0"><em>Loading services...</em></p>
+                    @if (Model.RecentServices.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var service in Model.RecentServices)
+                            {
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-0">@service.Name</h6>
+                                            <small class="text-muted">@service.Category</small><br>
+                                            <small class="text-muted">@service.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                        </div>
+                                        <span class="badge bg-primary">
+                                            £@service.BasePrice.ToString("F2")
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <a href="@Url.Action("AllServices", "Service")" class="btn btn-sm btn-success w-100 mt-3">
+                            View All Services
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">No services yet</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Bookings -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-calendar-check"></i> Recent Bookings
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentBookings.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var booking in Model.RecentBookings)
+                            {
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-0">@booking.CustomerName</h6>
+                                            <small class="text-muted">@booking.Id.ToString().Substring(0, 8)...</small><br>
+                                            <small class="text-muted">@booking.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                        </div>
+                                        <span class="badge @(booking.Status switch {
+                                            "Pending" => "bg-warning",
+                                            "Confirmed" => "bg-info",
+                                            "Completed" => "bg-success",
+                                            "Cancelled" => "bg-danger",
+                                            _ => "bg-secondary"
+                                        })">
+                                            @booking.Status
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <a href="@Url.Action("AllBookings", "Booking")" class="btn btn-sm btn-info w-100 mt-3">
+                            View All Bookings
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">No bookings yet</p>
+                    }
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-@model mvmclean.backend.Application.Features.Services.CreateServiceRequest
+@model mvmclean.backend.Application.Features.Services.Commands.CreateServiceRequest
 
 @{
     ViewData["Title"] = "Create Service";
@@ -10,7 +10,7 @@
             <h2 class="mb-4">
                 <i class="bi bi-plus-circle"></i> Create New Service
             </h2>
-            <a asp-area="Admin" asp-controller="Service" asp-action="AllServices" class="btn btn-secondary">
+            <a href="@Url.Action("AllServices", "Service", new { area = "Admin" })" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Back to Services
             </a>
         </div>
@@ -26,85 +26,82 @@
                 </div>
 
                 <div class="card-body">
-                    <form asp-area="Admin" asp-controller="Service" asp-action="CreateService" method="post">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
 
+                    <form id="createServiceForm" method="post" action="/Admin/Service/CreateService">
                         @Html.AntiForgeryToken()
 
                         <!-- Name -->
                         <div class="mb-3">
-                            <label asp-for="Name" class="form-label fw-semibold">
+                            <label for="Name" class="form-label fw-semibold">
                                 <i class="bi bi-chat-dots"></i> Service Name *
                             </label>
-                            <input asp-for="Name" class="form-control" placeholder="e.g., General Cleaning" required/>
-                            <span asp-validation-for="Name" class="text-danger small"></span>
+                            <input type="text" id="Name" name="Name" value="@Model?.Name" class="form-control" placeholder="e.g., General Cleaning" required />
                         </div>
 
                         <!-- Description -->
                         <div class="mb-3">
-                            <label asp-for="Description" class="form-label fw-semibold">
+                            <label for="Description" class="form-label fw-semibold">
                                 <i class="bi bi-file-text"></i> Description *
                             </label>
-                            <textarea asp-for="Description" class="form-control" rows="3"
-                                      placeholder="Describe the service..." required></textarea>
-                            <span asp-validation-for="Description" class="text-danger small"></span>
+                            <textarea id="Description" name="Description" class="form-control" rows="3" placeholder="Describe the service..." required>@Model?.Description</textarea>
                         </div>
 
                         <!-- Shortcut -->
                         <div class="mb-3">
-                            <label asp-for="Shortcut" class="form-label fw-semibold">
+                            <label for="Shortcut" class="form-label fw-semibold">
                                 <i class="bi bi-lightning"></i> Shortcut *
                             </label>
-                            <input asp-for="Shortcut" class="form-control" placeholder="e.g., GC" maxlength="5"
-                                   required/>
+                            <input type="text" id="Shortcut" name="Shortcut" value="@Model?.Shortcut" class="form-control" placeholder="e.g., GC" maxlength="5" required />
                             <small class="text-muted">Abbreviation for the service (max 5 characters)</small>
-                            <span asp-validation-for="Shortcut" class="text-danger small"></span>
                         </div>
 
                         <!-- Duration -->
                         <div class="mb-3">
-                            <label asp-for="EstimatedDurationMinutes" class="form-label fw-semibold">
+                            <label for="EstimatedDurationMinutes" class="form-label fw-semibold">
                                 <i class="bi bi-hourglass-split"></i> Estimated Duration (minutes) *
                             </label>
-                            <input asp-for="EstimatedDurationMinutes" type="number" min="1" step="15"
-                                   class="form-control" placeholder="e.g., 60" required/>
+                            <input type="number" id="EstimatedDurationMinutes" name="EstimatedDurationMinutes" value="@Model?.EstimatedDurationMinutes" class="form-control" placeholder="e.g., 60" min="1" required />
                             <small class="text-muted">Duration in minutes</small>
-                            <span asp-validation-for="EstimatedDurationMinutes" class="text-danger small"></span>
                         </div>
 
                         <!-- Category -->
                         <div class="mb-3">
-                            <label asp-for="Category" class="form-label fw-semibold">
+                            <label for="Category" class="form-label fw-semibold">
                                 <i class="bi bi-tag"></i> Category *
                             </label>
-                            <input asp-for="Category" class="form-control" placeholder="e.g., General Cleaning, Deep Cleaning" required/>
+                            <input type="text" id="Category" name="Category" value="@Model?.Category" class="form-control" placeholder="e.g., General Cleaning, Deep Cleaning" required />
                             <small class="text-muted">Category name for organizing services</small>
-                            <span asp-validation-for="Category" class="text-danger small"></span>
                         </div>
 
                         <!-- Base Price -->
                         <div class="mb-4">
-                            <label asp-for="BasePrice" class="form-label fw-semibold">
+                            <label for="BasePrice" class="form-label fw-semibold">
                                 <i class="bi bi-currency-pound"></i> Base Price *
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text">£</span>
-                                <input asp-for="BasePrice" type="number" step="0.01" min="0" class="form-control"
-                                       placeholder="0.00" required/>
+                                <input type="number" id="BasePrice" name="BasePrice" value="@Model?.BasePrice" step="0.01" min="0" class="form-control" placeholder="0.00" required />
                             </div>
                             <small class="text-muted">Base price before postcode adjustments</small>
-                            <span asp-validation-for="BasePrice" class="text-danger small"></span>
                         </div>
 
                         <hr/>
 
                         <!-- Actions -->
                         <div class="d-flex justify-content-end gap-2">
-                            <a asp-area="Admin" asp-controller="Service" asp-action="AllServices"
+                            <a href="@Url.Action("AllServices", "Service", new { area = "Admin" })"
                                class="btn btn-secondary">
                                 <i class="bi bi-x"></i> Cancel
                             </a>
 
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" id="submitBtn" class="btn btn-primary">
                                 <i class="bi bi-check-circle"></i> Create Service
                             </button>
                         </div>
@@ -130,3 +127,24 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('createServiceForm').addEventListener('submit', function(e) {
+            console.log('Form submitting...');
+            console.log('Form data:', {
+                Name: document.getElementById('Name').value,
+                Description: document.getElementById('Description').value,
+                Shortcut: document.getElementById('Shortcut').value,
+                EstimatedDurationMinutes: document.getElementById('EstimatedDurationMinutes').value,
+                Category: document.getElementById('Category').value,
+                BasePrice: document.getElementById('BasePrice').value
+            });
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', function(e) {
+            console.log('Submit button clicked');
+        });
+    </script>
+}

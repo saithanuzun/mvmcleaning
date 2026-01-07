@@ -9,7 +9,7 @@ public class BookingConfirmedEventHandler : INotificationHandler<BookingConfirme
     {
         //todo
         // Send SMS
-        // Send email
+        // Send email and [post contractor unavailibity
 
         Console.WriteLine(
             $"Quotation created: {notification}, "

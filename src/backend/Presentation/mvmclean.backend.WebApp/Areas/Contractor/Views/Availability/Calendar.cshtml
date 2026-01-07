@@ -8,25 +8,45 @@
             <h2 class="mb-4">
                 <i class="bi bi-calendar3"></i> Availability Calendar
             </h2>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <a href="@Url.Action("Index", "Availability")" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i> Back to Overview
-                </a>
-                <div class="legend d-flex gap-3">
-                    <span class="badge bg-primary d-flex align-items-center p-2"><i class="bi bi-circle-fill me-1"></i>
-                        Booking</span>
-                    <span class="badge bg-danger d-flex align-items-center p-2"><i class="bi bi-circle-fill me-1"></i>
-                        Unavailable</span>
-                    <span class="badge bg-light text-dark border d-flex align-items-center p-2"><i
-                            class="bi bi-circle-fill me-1" style="color: #f0f0f0;"></i> Off Hours</span>
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <div class="d-flex gap-2">
+                    <a href="@Url.Action("Index", "Availability")" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                    <a href="@Url.Action("WorkingDays", "Availability")" class="btn btn-outline-primary">
+                        <i class="bi bi-clock"></i> Working Days
+                    </a>
+                    <a href="@Url.Action("Unavailability", "Availability")" class="btn btn-outline-danger">
+                        <i class="bi bi-calendar-x"></i> Unavailability
+                    </a>
+                </div>
+                <div class="legend d-flex gap-2 flex-wrap">
+                    <span class="badge bg-primary d-flex align-items-center p-2">
+                        <i class="bi bi-circle-fill me-1"></i> Booking
+                    </span>
+                    <span class="badge bg-danger d-flex align-items-center p-2">
+                        <i class="bi bi-circle-fill me-1"></i> Unavailable
+                    </span>
+                    <span class="badge bg-light text-dark border d-flex align-items-center p-2">
+                        <i class="bi bi-circle-fill me-1" style="color: #f0f0f0;"></i> Off Hours
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="card shadow-sm">
-        <div class="card-body p-0">
-            <div id="calendar" style="height: 800px;"></div>
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-calendar-event"></i> Your Schedule
+            </h5>
+        </div>
+        <div class="card-body p-3">
+            <div class="alert alert-info mb-3">
+                <i class="bi bi-info-circle"></i>
+                <strong>Tip:</strong> Click on a time slot to view details. Blue = Bookings, Red = Unavailable, Grey = Outside working hours.
+            </div>
+            <div id="calendar"></div>
         </div>
     </div>
 </div>
@@ -46,32 +66,11 @@
                 slotMinTime: '06:00:00',
                 slotMaxTime: '22:00:00',
                 allDaySlot: false,
-                height: 'auto',
-                aspectRatio: 1.5,
-
-                // Fetch events and business hours from server
-                events: {
-                    url: '@Url.Action("GetCalendarEvents", "Availability")',
-                    failure: function () {
-                        alert('there was an error while fetching events!');
-                    }
-                },
-
-                // Dynamic business hours (grey out non-working times)
-                bookingDataFromServer: function (info, successCallback, failureCallback) {
-                    fetch('@Url.Action("GetCalendarEvents", "Availability")' + '?start=' + info.startStr + '&end=' + info.endStr)
-                        .then(response => response.json())
-                        .then(data => {
-                            // Update business hours
-                            calendar.setOption('businessHours', data.businessHours);
-                            // Return events
-                            successCallback(data.events);
-                        })
-                        .catch(error => {
-                            console.error('Error fetching calendar data:', error);
-                            failureCallback(error);
-                        });
-                },
+                height: 700,
+                expandRows: true,
+                nowIndicator: true,
+                selectable: false,
+                editable: false,
 
                 // Using a custom function to fetch both events and set business hours
                 events: function (info, successCallback, failureCallback) {
@@ -79,12 +78,15 @@
                         .then(response => response.json())
                         .then(data => {
                             // Update business hours dynamically
-                            calendar.setOption('businessHours', data.businessHours);
+                            if (data.businessHours && data.businessHours.length > 0) {
+                                calendar.setOption('businessHours', data.businessHours);
+                            }
                             // Return events
                             successCallback(data.events);
                         })
                         .catch(error => {
                             console.error('Error fetching calendar data:', error);
+                            alert('Error loading calendar data. Please refresh the page.');
                             failureCallback(error);
                         });
                 },
@@ -93,10 +95,35 @@
                     if (info.event.url) {
                         window.location.href = info.event.url;
                         info.jsEvent.preventDefault();
+                    } else {
+                        // Show event details in alert for unavailable slots
+                        alert('Event: ' + info.event.title + '\nStart: ' + info.event.start.toLocaleString() + '\nEnd: ' + info.event.end.toLocaleString());
                     }
+                },
+
+                eventDidMount: function(info) {
+                    // Add tooltip
+                    info.el.title = info.event.title + '\n' +
+                                   info.event.start.toLocaleString() + ' - ' +
+                                   (info.event.end ? info.event.end.toLocaleString() : '');
                 }
             });
+
             calendar.render();
         });
     </script>
+
+    <style>
+        #calendar {
+            font-size: 0.9rem;
+        }
+
+        .fc-event {
+            cursor: pointer;
+        }
+
+        .fc-timegrid-slot {
+            height: 3em;
+        }
+    </style>
 }

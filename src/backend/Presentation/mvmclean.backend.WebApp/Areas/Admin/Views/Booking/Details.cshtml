@@ -1,10 +1,26 @@
-@model mvmclean.backend.Application.Features.Booking.GetBookingByIdResponse
+@model mvmclean.backend.Application.Features.Booking.Queries.GetBookingByIdResponse
 
 @{
     ViewData["Title"] = "Booking Details";
 }
 
 <div class="container-fluid mt-4">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <div class="row mb-4">
         <div class="col-md-12">
             <h2 class="mb-4">
@@ -14,12 +30,30 @@
                 <a asp-area="Admin" asp-controller="Booking" asp-action="AllBookings" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Back to Bookings
                 </a>
-                <button class="btn btn-warning" disabled title="Coming soon">
-                    <i class="bi bi-pencil"></i> Edit
-                </button>
-                <button class="btn btn-danger" disabled title="Coming soon">
-                    <i class="bi bi-trash"></i> Cancel
-                </button>
+                @if (Model.Status.ToString() != "Completed" && Model.Status.ToString() != "Cancelled")
+                {
+                    @if (Model.Status.ToString() != "Confirmed")
+                    {
+                        <form asp-area="Admin" asp-controller="Booking" asp-action="Confirm" asp-route-bookingId="@Model.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Confirm
+                            </button>
+                        </form>
+                    }
+                    @if (Model.Status.ToString() == "Confirmed")
+                    {
+                        <form asp-area="Admin" asp-controller="Booking" asp-action="Complete" asp-route-bookingId="@Model.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-all"></i> Mark Complete
+                            </button>
+                        </form>
+                    }
+                    <form asp-area="Admin" asp-controller="Booking" asp-action="Cancel" asp-route-bookingId="@Model.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </button>
+                    </form>
+                }
             </div>
         </div>
     </div>

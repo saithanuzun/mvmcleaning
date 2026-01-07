@@ -1,4 +1,4 @@
-namespace mvmclean.backend.WebApp.Models;
+namespace mvmclean.backend.WebApp.Models.Error;
 
 public class ErrorViewModel
 {

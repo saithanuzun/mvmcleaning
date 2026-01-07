@@ -1,15 +1,9 @@
 // src/pages/PaymentPage.jsx
-import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {loadStripe} from '@stripe/stripe-js';
-import {Elements, CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
-const stripePromise = loadStripe('pk_test_51YourTestKeyHere'); // Replace with your Stripe publishable key
-
-const PaymentForm = ({bookingData, updateBookingData}) => {
-    const stripe = useStripe();
-    const elements = useElements();
+const PaymentPage = ({ bookingData, updateBookingData }) => {
     const navigate = useNavigate();
 
     const [customerDetails, setCustomerDetails] = useState({
@@ -22,6 +16,13 @@ const PaymentForm = ({bookingData, updateBookingData}) => {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+
+    // Redirect if incomplete booking data
+    useEffect(() => {
+        if (!bookingData.postcode || !bookingData.basket || !bookingData.selectedTimeSlot) {
+            navigate('/');
+        }
+    }, [bookingData, navigate]);
 
     const handleInputChange = (e) => {
         setCustomerDetails({
@@ -40,16 +41,21 @@ const PaymentForm = ({bookingData, updateBookingData}) => {
         return null;
     };
 
+    const createDateTime = (date, timeString) => {
+        // Parse time string (e.g., "09:00" or "09:00:00")
+        const [hours, minutes] = timeString.split(':').map(Number);
+        const dateTime = new Date(date);
+        dateTime.setHours(hours, minutes, 0, 0);
+        return dateTime.toISOString();
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const validationError = validateForm();
         if (validationError) {
             setError(validationError);
-            return;
-        }
-
-        if (!stripe || !elements) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
         }
 
@@ -57,352 +63,327 @@ const PaymentForm = ({bookingData, updateBookingData}) => {
         setError('');
 
         try {
-            // Update booking data with customer details
-            updateBookingData({customerDetails});
+            // Prepare booking data for API
+            const bookingRequest = {
+                customerName: customerDetails.name,
+                customerEmail: customerDetails.email,
+                customerPhone: bookingData.phone,
+                address: `${customerDetails.address}, ${customerDetails.city}`,
+                postcode: bookingData.postcode,
+                contractorId: bookingData.contractorId,
+                scheduledSlot: {
+                    startTime: createDateTime(bookingData.selectedDate, bookingData.selectedTimeSlot.startTime),
+                    endTime: createDateTime(bookingData.selectedDate, bookingData.selectedTimeSlot.endTime)
+                },
+                services: bookingData.basket.items.map(item => ({
+                    serviceId: item.serviceId,
+                    serviceName: item.serviceName,
+                    quantity: item.quantity,
+                    price: item.price
+                })),
+                totalAmount: bookingData.totalAmount
+            };
 
-            // 1. Create payment intent on your backend
-            const paymentIntentResponse = await axios.post('http://localhost:5000/api/create-payment-intent', {
-                amount: Math.round(bookingData.totalAmount * 100), // Convert to pence
-                currency: 'gbp',
-                customerDetails,
-                bookingDetails: {
-                    postcode: bookingData.postcode,
-                    phone: bookingData.phone,
-                    services: bookingData.selectedServicesData,
-                    timeSlot: bookingData.selectedTimeSlot
-                }
-            });
-
-            const {clientSecret} = paymentIntentResponse.data;
-
-            // 2. Get card element
-            const cardElement = elements.getElement(CardElement);
-
-            // 3. Confirm card payment
-            const {error: stripeError, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: {
-                    card: cardElement,
-                    billing_details: {
-                        name: customerDetails.name,
-                        email: customerDetails.email,
-                        address: {
-                            line1: customerDetails.address,
-                            city: customerDetails.city,
-                            postal_code: customerDetails.postcode
-                        }
-                    }
-                }
-            });
-
-            if (stripeError) {
-                setError(stripeError.message);
-                setLoading(false);
-                return;
+            // Add notes to address if provided
+            if (customerDetails.notes) {
+                bookingRequest.address += ` (Notes: ${customerDetails.notes})`;
             }
 
-            if (paymentIntent.status === 'succeeded') {
-                // 4. Save booking to your backend
-                await axios.post('http://localhost:5000/api/create-booking', {
-                    paymentIntentId: paymentIntent.id,
+            // Create booking and get payment URL
+            const response = await api.booking.create(bookingRequest);
+
+            if (response.success && response.data) {
+                // Store booking ID for payment verification
+                localStorage.setItem('pending_booking_id', response.data.bookingId);
+
+                // Update booking data
+                updateBookingData({
                     customerDetails,
-                    bookingDetails: {
-                        postcode: bookingData.postcode,
-                        phone: bookingData.phone,
-                        services: bookingData.selectedServicesData,
-                        timeSlot: bookingData.selectedTimeSlot,
-                        totalAmount: bookingData.totalAmount
-                    }
+                    bookingId: response.data.bookingId
                 });
 
-                // 5. Redirect to confirmation page
-                navigate('/booking-confirmation', {
-                    state: {
-                        bookingId: paymentIntent.id,
-                        customerName: customerDetails.name,
-                        bookingDetails: bookingData
-                    }
-                });
+                // Redirect to payment URL (Stripe Payment Link)
+                window.location.href = response.data.paymentUrl;
+            } else {
+                setError(response.message || 'Failed to create booking. Please try again.');
             }
         } catch (err) {
-            setError(err.response?.data?.message || 'Payment failed. Please try again.');
-            console.error(err);
+            console.error('Booking creation error:', err);
+            setError(err.response?.data?.message || 'Failed to create booking. Please try again.');
         } finally {
             setLoading(false);
         }
     };
 
-    // Stripe Card Element styles
-    const cardElementOptions = {
-        style: {
-            base: {
-                fontSize: '16px',
-                color: '#424770',
-                '::placeholder': {
-                    color: '#aab7c4',
-                },
-                padding: '10px',
-            },
-            invalid: {
-                color: '#9e2146',
-            },
-        },
-        hidePostalCode: true,
+    const formatTime = (timeString) => {
+        return new Date(`1970-01-01T${timeString}`).toLocaleTimeString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+    };
+
+    const formatDateFull = (date) => {
+        if (!date) return '';
+        return date.toLocaleDateString('en-GB', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-                Complete Your Booking
-            </h1>
-            <p className="text-gray-600 mb-8 text-center">
-                Enter your details and payment information
-            </p>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 py-8 px-4">
+            <div className="max-w-4xl mx-auto">
+                {/* Header */}
+                <div className="text-center mb-8">
+                    <div className="inline-block px-4 py-2 rounded-full mb-4" style={{ backgroundColor: '#46C6CE20' }}>
+                        <span className="font-bold text-sm" style={{ color: '#194376' }}>Step 4 of 4</span>
+                    </div>
+                    <h1 className="text-4xl font-bold mb-2" style={{ color: '#194376' }}>
+                        Complete Your Booking
+                    </h1>
+                    <p className="text-gray-600 text-lg">
+                        Enter your details to proceed to payment
+                    </p>
+                </div>
 
-            {/* Booking Summary */}
-            <div className="bg-blue-50 rounded-2xl p-6 mb-8 border border-blue-100">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Booking Summary</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <p className="text-sm text-gray-500 mb-1">Services</p>
-                        <p className="font-semibold text-gray-800">
-                            {bookingData.selectedServicesData?.map(s => s.name).join(', ')}
-                        </p>
+                {/* Error Message */}
+                {error && (
+                    <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-4 mb-8 animate-in fade-in">
+                        <div className="flex items-start">
+                            <svg className="h-5 w-5 text-red-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p className="text-red-700 font-medium">{error}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p className="text-sm text-gray-500 mb-1">Date & Time</p>
-                        <p className="font-semibold text-gray-800">
-                            {bookingData.selectedTimeSlot && (
-                                <>
-                                    {new Date(bookingData.selectedTimeSlot.date).toLocaleDateString('en-GB', {
-                                        weekday: 'long',
-                                        day: 'numeric',
-                                        month: 'long'
-                                    })} at {bookingData.selectedTimeSlot.startTime}
-                                </>
-                            )}
-                        </p>
+                )}
+
+                {/* Booking Summary */}
+                <div className="bg-white rounded-2xl p-6 mb-8 border-2 shadow-lg" style={{ borderColor: '#46C6CE' }}>
+                    <div className="flex items-center mb-4">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3" style={{ background: '#194376' }}>
+                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-800">Booking Summary</h3>
                     </div>
-                    <div>
-                        <p className="text-sm text-gray-500 mb-1">Location</p>
-                        <p className="font-semibold text-gray-800">{bookingData.postcode}</p>
-                    </div>
-                    <div className="text-right">
-                        <p className="text-sm text-gray-500 mb-1">Total Amount</p>
-                        <p className="font-bold text-3xl" style={{color: '#194376'}}>
-                            £{bookingData.totalAmount?.toFixed(2)}
-                        </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-gray-50 p-4 rounded-xl">
+                            <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Services</p>
+                            <p className="font-bold text-gray-800 text-sm leading-tight">
+                                {bookingData.basket?.items?.map(item => item.serviceName).join(', ') || 'No services'}
+                            </p>
+                        </div>
+                        <div className="bg-gray-50 p-4 rounded-xl">
+                            <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Date & Time</p>
+                            <p className="font-bold text-gray-800 text-sm">
+                                {bookingData.selectedDate && bookingData.selectedTimeSlot && (
+                                    <>
+                                        {formatDateFull(bookingData.selectedDate)}
+                                        <br />
+                                        {formatTime(bookingData.selectedTimeSlot.startTime)} - {formatTime(bookingData.selectedTimeSlot.endTime)}
+                                    </>
+                                )}
+                            </p>
+                        </div>
+                        <div className="bg-gray-50 p-4 rounded-xl">
+                            <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Location</p>
+                            <p className="font-bold text-gray-800">{bookingData.postcode}</p>
+                            <p className="text-xs text-gray-600 mt-1">Phone: {bookingData.phone}</p>
+                        </div>
+                        <div className="bg-gray-50 p-4 rounded-xl">
+                            <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Contractor</p>
+                            <p className="font-bold text-gray-800">{bookingData.contractorName || 'Assigned'}</p>
+                            <div className="mt-2">
+                                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Total</p>
+                                <p className="font-bold text-2xl" style={{ color: '#194376' }}>
+                                    £{bookingData.totalAmount?.toFixed(2) || '0.00'}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Customer Details Section */}
-                <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
-                    <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                        <svg className="w-6 h-6 mr-2" style={{color: '#194376'}} fill="none" stroke="currentColor"
-                             viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                        Customer Details
-                    </h3>
+                <form onSubmit={handleSubmit} className="space-y-8">
+                    {/* Customer Details Section */}
+                    <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
+                        <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                            <svg className="w-6 h-6 mr-2" style={{ color: '#194376' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            Your Details
+                        </h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label className="block text-gray-700 text-sm font-semibold mb-2">
-                                Full Name *
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={customerDetails.name}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent outline-none transition"
-                                style={{'--tw-ring-color': '#194376'}}
-                                placeholder="John Smith"
-                                required
-                            />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">
+                                    Full Name *
+                                </label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={customerDetails.name}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#46C6CE] focus:ring-2 focus:ring-[#46C6CE]/20 outline-none transition-all"
+                                    placeholder="John Smith"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">
+                                    Email Address *
+                                </label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={customerDetails.email}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#46C6CE] focus:ring-2 focus:ring-[#46C6CE]/20 outline-none transition-all"
+                                    placeholder="john@example.com"
+                                    required
+                                />
+                            </div>
                         </div>
 
-                        <div>
-                            <label className="block text-gray-700 text-sm font-semibold mb-2">
-                                Email Address *
-                            </label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={customerDetails.email}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent outline-none transition"
-                                style={{'--tw-ring-color': '#194376'}}
-                                placeholder="john@example.com"
-                                required
-                            />
-                        </div>
-                    </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">
+                                    Address *
+                                </label>
+                                <input
+                                    type="text"
+                                    name="address"
+                                    value={customerDetails.address}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#46C6CE] focus:ring-2 focus:ring-[#46C6CE]/20 outline-none transition-all"
+                                    placeholder="123 Main Street"
+                                    required
+                                />
+                            </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label className="block text-gray-700 text-sm font-semibold mb-2">
-                                Address *
-                            </label>
-                            <input
-                                type="text"
-                                name="address"
-                                value={customerDetails.address}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent outline-none transition"
-                                style={{'--tw-ring-color': '#194376'}}
-                                placeholder="123 Main Street"
-                                required
-                            />
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">
+                                    City *
+                                </label>
+                                <input
+                                    type="text"
+                                    name="city"
+                                    value={customerDetails.city}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#46C6CE] focus:ring-2 focus:ring-[#46C6CE]/20 outline-none transition-all"
+                                    placeholder="London"
+                                    required
+                                />
+                            </div>
                         </div>
 
-                        <div>
-                            <label className="block text-gray-700 text-sm font-semibold mb-2">
-                                City *
-                            </label>
-                            <input
-                                type="text"
-                                name="city"
-                                value={customerDetails.city}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent outline-none transition"
-                                style={{'--tw-ring-color': '#194376'}}
-                                placeholder="London"
-                                required
-                            />
-                        </div>
-                    </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">
+                                    Postcode
+                                </label>
+                                <input
+                                    type="text"
+                                    name="postcode"
+                                    value={customerDetails.postcode}
+                                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-gray-50 text-gray-600"
+                                    readOnly
+                                />
+                            </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="block text-gray-700 text-sm font-semibold mb-2">
-                                Postcode
-                            </label>
-                            <input
-                                type="text"
-                                name="postcode"
-                                value={customerDetails.postcode}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50"
-                                readOnly
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-700 text-sm font-semibold mb-2">
-                                Special Instructions (Optional)
-                            </label>
-                            <textarea
-                                name="notes"
-                                value={customerDetails.notes}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent outline-none transition"
-                                style={{'--tw-ring-color': '#194376'}}
-                                placeholder="Any special instructions for our team..."
-                                rows="3"
-                            />
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">
+                                    Special Instructions (Optional)
+                                </label>
+                                <textarea
+                                    name="notes"
+                                    value={customerDetails.notes}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#46C6CE] focus:ring-2 focus:ring-[#46C6CE]/20 outline-none transition-all"
+                                    placeholder="Any special instructions..."
+                                    rows="3"
+                                />
+                            </div>
                         </div>
                     </div>
 
-                    <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                    {/* Terms and Conditions */}
+                    <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border-2" style={{ borderColor: '#46C6CE40' }}>
                         <div className="flex items-start">
                             <input
                                 type="checkbox"
                                 id="terms"
                                 required
-                                className="mt-1 mr-3 h-5 w-5 rounded focus:ring-0"
-                                style={{
-                                    accentColor: '#194376',
-                                    '--tw-ring-color': '#194376'
-                                }}
+                                className="mt-1 mr-3 h-5 w-5 rounded border-2 focus:ring-2 focus:ring-offset-2"
+                                style={{ accentColor: '#194376', borderColor: '#194376' }}
                             />
-                            <label htmlFor="terms" className="text-sm text-gray-700">
-                                I agree to the Terms of Service and understand that this booking is subject to
-                                availability confirmation. I authorize the charge of booking selected services.
+                            <label htmlFor="terms" className="text-sm text-gray-700 leading-relaxed">
+                                I agree to the Terms of Service and understand that this booking is subject to availability confirmation.
+                                I authorize the charge for the selected services and understand that payment will be processed securely via Stripe.
                             </label>
                         </div>
                     </div>
 
-                </div>
-
-
-                {/* Terms and Conditions */}
-
-                {/* Error Message */}
-                {error && (
-                    <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
-                        <div className="flex">
-                            <svg className="h-5 w-5 text-red-500 mr-2" fill="none" stroke="currentColor"
-                                 viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    {/* Navigation Buttons */}
+                    <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t-2 border-gray-200">
+                        <button
+                            type="button"
+                            onClick={() => navigate('/time-slots')}
+                            className="px-8 py-4 border-2 border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all w-full sm:w-auto flex items-center justify-center gap-2"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
                             </svg>
-                            <p className="text-red-700">{error}</p>
-                        </div>
+                            Back to Time Slots
+                        </button>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className={`
+                                px-8 py-4 font-bold rounded-xl transition-all w-full sm:w-auto flex items-center justify-center gap-2
+                                ${loading
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-[#194376] text-white hover:shadow-2xl transform hover:scale-105 active:scale-95'
+                                }
+                            `}
+                        >
+                            {loading ? (
+                                <>
+                                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Creating Booking...
+                                </>
+                            ) : (
+                                <>
+                                    Proceed to Payment
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </>
+                            )}
+                        </button>
                     </div>
-                )}
+                </form>
 
-                {/* Navigation Buttons */}
-                <div
-                    className="flex flex-col sm:flex-row justify-between items-center pt-8 border-t border-gray-200 gap-4">
-                    <button
-                        type="button"
-                        onClick={() => navigate('/time-slots')}
-                        className="px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition flex items-center"
-                    >
-                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                  d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                {/* Payment Info */}
+                <div className="mt-6 text-center">
+                    <div className="inline-flex items-center gap-2 text-sm text-gray-600">
+                        <svg className="w-4 h-4 text-[#46C6CE]" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                         </svg>
-                        Back to Time Slots
-                    </button>
-
-                    <button
-                        type="submit"
-                        disabled={loading || !stripe}
-                        className={`
-              px-8 py-3 font-semibold rounded-lg transition flex items-center
-              ${loading || !stripe
-                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                            : 'text-white transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl'
-                        }
-            `}
-                        style={!loading && stripe ? {backgroundColor: '#194376'} : {}}
-                    >
-                        {loading ? (
-                            <>
-                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                            strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor"
-                                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Processing Payment...
-                            </>
-                        ) : (
-                            <>
-                                Pay £{bookingData.totalAmount?.toFixed(2)}
-                                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                          d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                                </svg>
-                            </>
-                        )}
-                    </button>
+                        Secure payment powered by Stripe
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
-    );
-};
-
-const PaymentPage = ({bookingData, updateBookingData}) => {
-    return (
-        <Elements stripe={stripePromise}>
-            <PaymentForm bookingData={bookingData} updateBookingData={updateBookingData}/>
-        </Elements>
     );
 };
 

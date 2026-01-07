@@ -14,7 +14,7 @@ public class Booking : Core.BaseClasses.AggregateRoot
     public Postcode Postcode { get; set; }
 
     //second step assign contractor
-    public Guid? ContractorId { get; private set; }
+    public Guid ContractorId { get; private set; }
 
     //third step add booking items
     private readonly List<BookingItem> _serviceItems = new();
@@ -189,9 +189,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
 
     public void Confirm()
     {
-        if (Status != BookingStatus.Pending)
-            throw new InvalidOperationException("Only pending bookings can be confirmed");
-
         if (ContractorId == null)
             throw new InvalidOperationException("Cannot confirm booking without assigned contractor");
 
@@ -201,7 +198,7 @@ public class Booking : Core.BaseClasses.AggregateRoot
         Status = BookingStatus.Confirmed;
         UpdatedAt = DateTime.UtcNow;
 
-        //AddDomainEvent(new BookingConfirmedEvent(Id, ContractorId.Value, TotalPrice));
+        AddDomainEvent(new BookingConfirmedEvent(Id, ContractorId, TotalPrice, ScheduledSlot));
     }
 
     public void Start()
@@ -215,9 +212,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
 
     public void Complete()
     {
-        if (Status != BookingStatus.InProgress)
-            throw new InvalidOperationException("Only in-progress bookings can be completed");
-
         Status = BookingStatus.Completed;
         UpdatedAt = DateTime.UtcNow;
     }

@@ -80,6 +80,19 @@ public class Promotion : AggregateRoot
     {
         ApplicablePostcodes.Add(postcodePrefix);
     }
-    
 
+    public void Activate()
+    {
+        IsActive = true;
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+    }
+
+    public void SetMinimumOrderAmount(decimal amount)
+    {
+        MinimumOrderAmount = Money.Create(amount);
+    }
 }

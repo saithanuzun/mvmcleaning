@@ -5,6 +5,7 @@ import PostcodePage from './pages/PostcodePage';
 import ServicesPage from './pages/ServicesPage';
 import TimeSlotsPage from './pages/TimeSlotsPage';
 import PaymentPage from './pages/BookingPage';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import ProgressBar from './components/ProgressBar';
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
     };
 
     return (
-        <Router>
+        <Router basename="/shop">
             <div className="min-h-screen bg-gray-50">
                 <ProgressBar />
                 <div className="container mx-auto px-4 py-8">
@@ -43,6 +44,10 @@ function App() {
                         <Route
                             path="/payment"
                             element={<PaymentPage bookingData={bookingData} updateBookingData={updateBookingData} />}
+                        />
+                        <Route
+                            path="/payment-success"
+                            element={<PaymentSuccessPage />}
                         />
                     </Routes>
                 </div>

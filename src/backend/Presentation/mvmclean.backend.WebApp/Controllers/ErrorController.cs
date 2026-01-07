@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using mvmclean.backend.Infrastructure.Persistence;
 using mvmclean.backend.WebApp.Models;
+using mvmclean.backend.WebApp.Models.Error;
 
 namespace mvmclean.backend.WebApp.Controllers;
 

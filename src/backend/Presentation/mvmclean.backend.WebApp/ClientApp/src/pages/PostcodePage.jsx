@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 import Logo from '../assets/Logo.png'; 
 
 const PostcodePage = ({bookingData, updateBookingData}) => {
@@ -36,17 +36,21 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
 
         setLoading(true);
         try {
-            const response = await axios.get(`https://api.postcodes.io/postcodes/${postcode}/validate`);
+            const response = await api.postcode.validate(postcode);
 
-            if (response.data.result) {
-                updateBookingData({postcode: postcode.toUpperCase(), phone});
-                navigate('/services');
+            if (response.success && response.data.isValid) {
+                if (response.data.isCovered) {
+                    updateBookingData({postcode: postcode.toUpperCase(), phone});
+                    navigate('/services');
+                } else {
+                    setError('Sorry, we don\'t currently service this postcode area. Please check back soon!');
+                }
             } else {
                 setError('Please enter a valid UK postcode');
             }
         } catch (err) {
             setError('Error checking postcode. Please try again.');
-            console.error(err);
+            console.error('Postcode validation error:', err);
         } finally {
             setLoading(false);
         }

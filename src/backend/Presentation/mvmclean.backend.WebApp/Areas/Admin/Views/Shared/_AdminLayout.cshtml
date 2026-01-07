@@ -135,6 +135,50 @@
                         </button>
                         
                         <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" id="quickActionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-lightning-fill"></i> Quick Actions
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quickActionsDropdown">
+                                        <li>
+                                            <h6 class="dropdown-header">
+                                                <i class="bi bi-plus-circle"></i> Create New
+                                            </h6>
+                                        </li>
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Service" asp-action="CreateService">
+                                            <i class="bi bi-box"></i> Service
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Promotion" asp-action="Create">
+                                            <i class="bi bi-tag"></i> Promotion
+                                        </a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <h6 class="dropdown-header">
+                                                <i class="bi bi-list-ul"></i> View All
+                                            </h6>
+                                        </li>
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Booking" asp-action="AllBookings">
+                                            <i class="bi bi-calendar-check"></i> All Bookings
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Contractor" asp-action="AllContractors">
+                                            <i class="bi bi-people"></i> All Contractors
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Service" asp-action="AllServices">
+                                            <i class="bi bi-box"></i> All Services
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Promotion" asp-action="AllPromotions">
+                                            <i class="bi bi-tag"></i> All Promotions
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Invoice" asp-action="Index">
+                                            <i class="bi bi-receipt"></i> All Invoices
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="SupportTicket" asp-action="Index">
+                                            <i class="bi bi-life-preserver"></i> Support Tickets
+                                        </a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </nav>

@@ -1,12 +1,14 @@
 // src/pages/TimeSlotsPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
     const [timeSlots, setTimeSlots] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedSlot, setSelectedSlot] = useState(bookingData.selectedTimeSlot || null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [loadingSlots, setLoadingSlots] = useState(false);
     const [error, setError] = useState('');
     const [currentMonth, setCurrentMonth] = useState(0); // 0 = current month, 1 = next month, etc.
     const navigate = useNavigate();
@@ -65,38 +67,42 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
 
     const [availableDates] = useState(generateDates());
 
-    const mockTimeSlots = [
-        { id: 1, date: new Date().toISOString().split('T')[0], startTime: '08:00', endTime: '08:30', available: true },
-        { id: 2, date: new Date().toISOString().split('T')[0], startTime: '08:30', endTime: '09:00', available: true },
-        { id: 3, date: new Date().toISOString().split('T')[0], startTime: '09:00', endTime: '09:30', available: true },
-        { id: 4, date: new Date().toISOString().split('T')[0], startTime: '09:30', endTime: '10:00', available: true },
-        { id: 5, date: new Date().toISOString().split('T')[0], startTime: '10:00', endTime: '10:30', available: true },
-        { id: 6, date: new Date().toISOString().split('T')[0], startTime: '10:30', endTime: '11:00', available: true },
-        { id: 7, date: new Date().toISOString().split('T')[0], startTime: '11:00', endTime: '11:30', available: true },
-        { id: 8, date: new Date().toISOString().split('T')[0], startTime: '11:30', endTime: '12:00', available: true },
-        { id: 9, date: new Date().toISOString().split('T')[0], startTime: '12:00', endTime: '12:30', available: true },
-        { id: 10, date: new Date().toISOString().split('T')[0], startTime: '12:30', endTime: '13:00', available: true },
-        { id: 11, date: new Date().toISOString().split('T')[0], startTime: '13:00', endTime: '13:30', available: true },
-        { id: 12, date: new Date().toISOString().split('T')[0], startTime: '13:30', endTime: '14:00', available: true },
-        { id: 13, date: new Date().toISOString().split('T')[0], startTime: '14:00', endTime: '14:30', available: true },
-        { id: 14, date: new Date().toISOString().split('T')[0], startTime: '14:30', endTime: '15:00', available: true },
-        { id: 15, date: new Date().toISOString().split('T')[0], startTime: '15:00', endTime: '15:30', available: true },
-        { id: 16, date: new Date().toISOString().split('T')[0], startTime: '15:30', endTime: '16:00', available: true },
-        { id: 17, date: new Date().toISOString().split('T')[0], startTime: '16:00', endTime: '16:30', available: true },
-        { id: 18, date: new Date().toISOString().split('T')[0], startTime: '16:30', endTime: '17:00', available: true },
-        { id: 19, date: new Date().toISOString().split('T')[0], startTime: '17:00', endTime: '17:30', available: false },
-        { id: 20, date: new Date().toISOString().split('T')[0], startTime: '17:30', endTime: '18:00', available: false },
-        { id: 21, date: new Date().toISOString().split('T')[0], startTime: '18:00', endTime: '18:30', available: false },
-        { id: 22, date: new Date().toISOString().split('T')[0], startTime: '18:30', endTime: '19:00', available: false },
-    ];
-
+    // Redirect if no postcode or basket
     useEffect(() => {
-        setTimeout(() => {
-            setTimeSlots(mockTimeSlots);
-            setLoading(false);
-            setSelectedDate(new Date());
-        }, 1000);
-    }, []);
+        if (!bookingData.postcode || !bookingData.basket) {
+            navigate('/services');
+        }
+    }, [bookingData.postcode, bookingData.basket, navigate]);
+
+    // Fetch available time slots when date is selected
+    const fetchTimeSlots = async (date) => {
+        if (!date || !bookingData.postcode || !bookingData.totalDuration) return;
+
+        try {
+            setLoadingSlots(true);
+            setError('');
+
+            const dateStr = date.toISOString().split('T')[0];
+            const response = await api.availability.getSlots(
+                bookingData.postcode,
+                dateStr,
+                bookingData.totalDuration
+            );
+
+            if (response.success && response.data) {
+                setTimeSlots(response.data.availableSlots || []);
+            } else {
+                setError(response.message || 'Failed to load available time slots');
+                setTimeSlots([]);
+            }
+        } catch (err) {
+            console.error('Error fetching time slots:', err);
+            setError('Failed to load available time slots. Please try again.');
+            setTimeSlots([]);
+        } finally {
+            setLoadingSlots(false);
+        }
+    };
 
     const formatDate = (date) => {
         return date.toLocaleDateString('en-GB', {
@@ -123,10 +129,9 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
         });
     };
 
-    const getTimeSlotsForDate = (date) => {
-        if (!date) return [];
-        const dateStr = date.toISOString().split('T')[0];
-        return timeSlots.filter(slot => slot.date === dateStr);
+    const getTimeSlotsForDate = () => {
+        // Backend returns slots for the selected date only
+        return timeSlots;
     };
 
     const handleContinue = () => {
@@ -136,13 +141,17 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
             return;
         }
 
-        updateBookingData({ selectedTimeSlot: selectedSlot });
+        updateBookingData({
+            selectedTimeSlot: selectedSlot,
+            selectedDate: selectedDate,
+            contractorId: selectedSlot.contractorId,
+            contractorName: selectedSlot.contractorName
+        });
         navigate('/payment');
     };
 
     const calculateTotalDuration = () => {
-        return bookingData.selectedServicesData?.reduce((total, service) =>
-            total + service.duration, 0) || 60;
+        return bookingData.totalDuration || 60;
     };
 
     const isToday = (date) => {
@@ -228,7 +237,7 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                         <div className="bg-gray-50 p-4 rounded-xl">
                             <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Services</p>
                             <p className="font-bold text-gray-800 text-sm leading-tight">
-                                {bookingData.selectedServicesData?.map(s => s.name).join(', ') || 'No services'}
+                                {bookingData.basket?.items?.map(item => item.serviceName).join(', ') || 'No services'}
                             </p>
                         </div>
                         <div className="bg-gray-50 p-4 rounded-xl">
@@ -318,6 +327,7 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                                                 setSelectedDate(date);
                                                 setSelectedSlot(null);
                                                 setError('');
+                                                fetchTimeSlots(date);
                                             }
                                         }}
                                         className={`
@@ -377,7 +387,17 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                             Available Times for {formatDateFull(selectedDate)}
                         </h2>
 
-                        {slotsForSelectedDate.length === 0 ? (
+                        {loadingSlots ? (
+                            <div className="flex justify-center items-center py-12">
+                                <div className="text-center">
+                                    <div
+                                        className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent mx-auto"
+                                        style={{ borderColor: '#46C6CE', borderTopColor: 'transparent' }}
+                                    ></div>
+                                    <p className="mt-4 text-gray-600 font-medium">Loading available slots...</p>
+                                </div>
+                            </div>
+                        ) : slotsForSelectedDate.length === 0 ? (
                             <div className="text-center py-12 bg-yellow-50 rounded-xl border-2 border-yellow-200">
                                 <svg className="w-16 h-16 text-yellow-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -388,16 +408,16 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                         ) : (
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                                 {slotsForSelectedDate.map(slot => {
-                                    const isSelected = selectedSlot?.id === slot.id;
+                                    const isSelected = selectedSlot?.slotId === slot.slotId;
 
                                     return (
                                         <button
-                                            key={slot.id}
-                                            onClick={() => slot.available && setSelectedSlot(slot)}
-                                            disabled={!slot.available}
+                                            key={slot.slotId}
+                                            onClick={() => slot.isAvailable && setSelectedSlot(slot)}
+                                            disabled={!slot.isAvailable}
                                             className={`
                                                 p-4 rounded-xl font-bold transition-all duration-300 relative
-                                                ${!slot.available
+                                                ${!slot.isAvailable
                                                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-2 border-gray-200'
                                                 : isSelected
                                                     ? 'bg-[#194376] text-white shadow-xl transform scale-105'
@@ -408,10 +428,15 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                                             <div className="text-sm mb-1">
                                                 {formatTime(slot.startTime)}
                                             </div>
-                                            <div className="text-xs opacity-75">
+                                            <div className="text-xs opacity-75 mb-1">
                                                 {formatTime(slot.endTime)}
                                             </div>
-                                            {!slot.available && (
+                                            {slot.contractorName && (
+                                                <div className="text-[10px] opacity-70 mt-1 truncate">
+                                                    {slot.contractorName}
+                                                </div>
+                                            )}
+                                            {!slot.isAvailable && (
                                                 <div className="absolute top-1 right-1">
                                                     <svg className="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fillRule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clipRule="evenodd" />
@@ -453,6 +478,11 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                                     <p className="text-xl font-bold text-[#194376]">
                                         {formatDateFull(selectedDate)} • {formatTime(selectedSlot.startTime)} - {formatTime(selectedSlot.endTime)}
                                     </p>
+                                    {selectedSlot.contractorName && (
+                                        <p className="text-sm text-gray-600 mt-1">
+                                            Contractor: <span className="font-semibold">{selectedSlot.contractorName}</span>
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                             <button

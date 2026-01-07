@@ -1,4 +1,4 @@
-@using mvmclean.backend.Application.Features.Contractor
+@using mvmclean.backend.Application.Features.Contractor.Queries
 
 @model GetContractorByIdResponse
 
@@ -7,6 +7,22 @@
 }
 
 <div class="container-fluid mt-4">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <div class="row mb-4">
         <div class="col-md-12">
             <h2 class="mb-4">
@@ -109,7 +125,7 @@
 
                 @if (Model.CoverageAreas != null && Model.CoverageAreas.Count > 0)
                 {
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm mb-4">
                         <div class="card-header bg-primary text-white">
                             <h5 class="mb-0">Coverage Areas</h5>
                         </div>
@@ -129,6 +145,48 @@
                                     </li>
                                 }
                             </ul>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.Reviews != null && Model.Reviews.Count > 0)
+                {
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">
+                                <i class="bi bi-star-fill"></i> Customer Reviews
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt).Take(5))
+                            {
+                                <div class="mb-3 pb-3 border-bottom">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= review.Rating)
+                                                {
+                                                    <i class="bi bi-star-fill text-warning"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-star text-muted"></i>
+                                                }
+                                            }
+                                            <span class="ms-2 badge bg-primary">@review.Rating/5</span>
+                                        </div>
+                                        <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                    </div>
+                                    <p class="mb-0">@review.Comment</p>
+                                </div>
+                            }
+                            @if (Model.Reviews.Count > 5)
+                            {
+                                <p class="text-muted text-center mb-0">
+                                    <em>Showing 5 of @Model.Reviews.Count reviews</em>
+                                </p>
+                            }
                         </div>
                     </div>
                 }
@@ -171,9 +229,22 @@
                             </p>
                         </div>
                         <hr />
-                        <button class="btn btn-danger w-100" disabled>
-                            <i class="bi bi-exclamation-triangle"></i> Deactivate
-                        </button>
+                        @if (Model.IsActive)
+                        {
+                            <form asp-area="Admin" asp-controller="Contractor" asp-action="Deactivate" asp-route-contractorId="@ViewContext.RouteData.Values["contractorId"]" method="post" onsubmit="return confirm('Are you sure you want to deactivate this contractor?');">
+                                <button type="submit" class="btn btn-danger w-100">
+                                    <i class="bi bi-exclamation-triangle"></i> Deactivate
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-area="Admin" asp-controller="Contractor" asp-action="Activate" asp-route-contractorId="@ViewContext.RouteData.Values["contractorId"]" method="post">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="bi bi-check-circle"></i> Activate
+                                </button>
+                            </form>
+                        }
                     </div>
                 </div>
 

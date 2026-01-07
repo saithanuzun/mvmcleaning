@@ -1,56 +1,167 @@
-@using mvmclean.backend.Application.Features.Services
+@using mvmclean.backend.Application.Features.Services.Queries
 
 @model List<GetAllServicesResponse>
 
 @{
     ViewData["Title"] = "Services";
+    var contractorServices = ViewBag.ContractorServices as List<Guid> ?? new List<Guid>();
+    var myServices = Model?.Where(s => contractorServices.Contains(s.ServiceId)).ToList() ?? new List<GetAllServicesResponse>();
+    var availableServices = Model?.Where(s => !contractorServices.Contains(s.ServiceId)).ToList() ?? new List<GetAllServicesResponse>();
 }
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
     <div class="row mb-4">
         <div class="col-md-12">
-            <h2 class="mb-4">
-                <i class="bi bi-box"></i> Available Services
+            <h2 class="mb-2">
+                <i class="bi bi-box"></i> My Services
             </h2>
+            <p class="text-muted">Manage the services you offer to customers</p>
         </div>
     </div>
 
-    @if (Model == null || Model.Count == 0)
+    @if (TempData["Success"] != null)
     {
-        <div class="alert alert-info" role="alert">
-            <i class="bi bi-info-circle"></i> No services available at the moment.
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
-    else
+
+    @if (TempData["Error"] != null)
     {
-        <div class="row">
-            @foreach (var service in Model)
-            {
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">@service.Name</h5>
-                            <p class="card-text text-muted">@service.Description</p>
-                            
-                            @if (!string.IsNullOrEmpty(service.CategoryName))
-                            {
-                                <p>
-                                    <span class="badge bg-primary">@service.CategoryName</span>
-                                </p>
-                            }
-                            
-                            <p class="text-primary">
-                                <strong>Base Price: @service.BasePrice.ToString("C")</strong>
-                            </p>
-                        </div>
-                        <div class="card-footer bg-light">
-                            <a href="@Url.Action("Details", "Services", new { serviceId = service.ServiceId })" class="btn btn-sm btn-primary w-100">
-                                <i class="bi bi-eye"></i> View Details
-                            </a>
-                        </div>
-                    </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- My Services Section -->
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-check-circle"></i> My Services (@myServices.Count)
+                    </h5>
                 </div>
-            }
+                <div class="card-body">
+                    @if (myServices.Any())
+                    {
+                        <div class="row">
+                            @foreach (var service in myServices)
+                            {
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="card shadow-sm h-100 border-success" style="border-width: 2px;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@service.Name</h5>
+                                            <p class="card-text text-muted small">@service.Description</p>
+
+                                            <div class="mb-2">
+                                                @if (!string.IsNullOrEmpty(service.CategoryName))
+                                                {
+                                                    <span class="badge bg-primary">@service.CategoryName</span>
+                                                }
+                                                <span class="badge bg-secondary">@service.Duration mins</span>
+                                            </div>
+
+                                            <p class="text-success fw-bold mb-0">
+                                                £@service.BasePrice.ToString("0.00")
+                                            </p>
+                                        </div>
+                                        <div class="card-footer bg-light">
+                                            <div class="d-flex gap-2">
+                                                <a href="@Url.Action("Details", "Services", new { area = "Contractor", serviceId = service.ServiceId })" class="btn btn-sm btn-outline-primary flex-grow-1">
+                                                    <i class="bi bi-eye"></i> Details
+                                                </a>
+                                                <form method="post" action="@Url.Action("RemoveService", "Services", new { area = "Contractor", serviceId = service.ServiceId })" style="display:inline;" onsubmit="return confirm('Remove this service from your profile?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="bi bi-dash-circle"></i> Remove
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+                            <p class="text-muted mt-3 mb-0">You haven't added any services yet.</p>
+                            <p class="text-muted">Browse available services below to add them to your profile.</p>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-    }
+    </div>
+
+    <!-- Services to Add Section -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-plus-circle"></i> Services to Add (@availableServices.Count)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (availableServices.Any())
+                    {
+                        <div class="alert alert-info mb-4">
+                            <i class="bi bi-info-circle"></i> Click "Add" to include these services in your profile
+                        </div>
+                        <div class="row">
+                            @foreach (var service in availableServices)
+                            {
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="card shadow-sm h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@service.Name</h5>
+                                            <p class="card-text text-muted small">@service.Description</p>
+
+                                            <div class="mb-2">
+                                                @if (!string.IsNullOrEmpty(service.CategoryName))
+                                                {
+                                                    <span class="badge bg-primary">@service.CategoryName</span>
+                                                }
+                                                <span class="badge bg-secondary">@service.Duration mins</span>
+                                            </div>
+
+                                            <p class="text-success fw-bold mb-0">
+                                                £@service.BasePrice.ToString("0.00")
+                                            </p>
+                                        </div>
+                                        <div class="card-footer bg-light">
+                                            <div class="d-flex gap-2">
+                                                <a href="@Url.Action("Details", "Services", new { area = "Contractor", serviceId = service.ServiceId })" class="btn btn-sm btn-outline-primary flex-grow-1">
+                                                    <i class="bi bi-eye"></i> Details
+                                                </a>
+                                                <form method="post" action="@Url.Action("AddService", "Services", new { area = "Contractor", serviceId = service.ServiceId })" style="display:inline;">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-sm btn-success">
+                                                        <i class="bi bi-plus-circle"></i> Add
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+                            <p class="text-muted mt-3 mb-0">You've added all available services!</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

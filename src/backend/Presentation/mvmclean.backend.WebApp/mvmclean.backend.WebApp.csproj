@@ -7,9 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Areas\Admin\Models\" />
       <Folder Include="Areas\Admin\wwwroot\" />
-      <Folder Include="Areas\Api\Models\" />
       <Folder Include="Areas\Contractor\wwwroot\" />
       <Folder Include="ClientApp\" />
       <Folder Include="Views\Services\" />
@@ -22,6 +20,7 @@
 
     <ItemGroup>
       <PackageReference Include="MediatR" Version="14.0.0" />
+      <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

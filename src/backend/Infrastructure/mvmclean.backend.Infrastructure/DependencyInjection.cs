@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using mvmclean.backend.Application.Services;
 using mvmclean.backend.Domain.Aggregates.Booking;
 using mvmclean.backend.Domain.Aggregates.Contractor;
 using mvmclean.backend.Domain.Aggregates.Invoice;
@@ -9,6 +10,7 @@ using mvmclean.backend.Domain.Aggregates.Service;
 using mvmclean.backend.Domain.Aggregates.SupportTicket;
 using mvmclean.backend.Infrastructure.Persistence;
 using mvmclean.backend.Infrastructure.Persistence.Repositories;
+using mvmclean.backend.Infrastructure.Services;
 
 namespace mvmclean.backend.Infrastructure;
 
@@ -32,6 +34,9 @@ public static class DependencyInjection
         serviceCollection.AddScoped<IServiceRepository, ServiceRepository>();
         serviceCollection.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
 
+        // Register infrastructure services
+        serviceCollection.AddScoped<IStripeService, StripeService>();
+        serviceCollection.AddScoped<IMailingService, MailingService>();
 
         return serviceCollection;
     }

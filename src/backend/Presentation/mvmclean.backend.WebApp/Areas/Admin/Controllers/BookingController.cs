@@ -2,7 +2,13 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mvmclean.backend.Application.Features.Booking;
+using mvmclean.backend.Application.Features.Booking.Commands;
+using mvmclean.backend.Application.Features.Booking.Queries;
+using mvmclean.backend.Application.Features.Booking.Commands;
+using mvmclean.backend.Application.Features.Booking.Queries;
 using mvmclean.backend.Application.Features.Services;
+using mvmclean.backend.Application.Features.Services.Commands;
+using mvmclean.backend.Application.Features.Services.Queries;
 
 namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
 
@@ -32,9 +38,9 @@ public class BookingController : BaseAdminController
             return View(response);
         }
         catch (Exception ex)
-        {
+        {   
             TempData["Error"] = $"Error loading bookings: {ex.Message}";
-            return View(new GetAllBookingsRequest());
+            return View();
         }
     }
 
@@ -57,5 +63,65 @@ public class BookingController : BaseAdminController
             TempData["Error"] = $"Error loading booking: {ex.Message}";
             return RedirectToAction(nameof(AllBookings));
         }
+    }
+
+    [Route("update-status/{bookingId}")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateStatus(string bookingId, [FromForm] string status)
+    {
+        try
+        {
+            var response = await _mediator.Send(new UpdateBookingStatusRequest
+            {
+                BookingId = bookingId,
+                Status = status
+            });
+
+            if (response.Success)
+            {
+                TempData["Success"] = response.Message;
+            }
+            else
+            {
+                TempData["Error"] = response.Message;
+            }
+
+            return RedirectToAction(nameof(Details), new { bookingId });
+        }
+        catch (KeyNotFoundException)
+        {
+            TempData["Error"] = "Booking not found";
+            return RedirectToAction(nameof(AllBookings));
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = $"Error updating booking status: {ex.Message}";
+            return RedirectToAction(nameof(Details), new { bookingId });
+        }
+    }
+
+    [Route("confirm/{bookingId}")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Confirm(string bookingId)
+    {
+        return await UpdateStatus(bookingId, "confirmed");
+    }
+
+    [Route("complete/{bookingId}")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Complete(string bookingId)
+    {
+        return await UpdateStatus(bookingId, "completed");
+    }
+
+    [Route("cancel/{bookingId}")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Cancel(string bookingId)
+    {
+        return await UpdateStatus(bookingId, "cancelled");
     }
 }

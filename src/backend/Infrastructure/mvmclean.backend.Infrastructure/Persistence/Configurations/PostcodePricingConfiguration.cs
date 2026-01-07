@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using mvmclean.backend.Domain.Aggregates.Service.Entities;
 
 namespace mvmclean.backend.Infrastructure.Persistence.Configurations;
 
