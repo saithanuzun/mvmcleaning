@@ -1,8 +1,8 @@
 // API Service Configuration
 import axios from 'axios';
 
-// Base API URL - adjust based on environment
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7001';
+// Base API URL - use relative path so it works with .NET server
+const API_BASE_URL = '/api';
 
 // Create axios instance with default config
 const apiClient = axios.create({
@@ -117,4 +117,4 @@ const api = {
 };
 
 export default api;
-export { getSessionId };
+export { getSessionId, apiClient };

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="xunit" Version="2.6.3" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.1">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Moq" Version="4.20.69" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\mvmclean.backend.Application\mvmclean.backend.Application.csproj" />
+        <ProjectReference Include="..\mvmclean.backend.WebApp\mvmclean.backend.WebApp.csproj" />
+    </ItemGroup>
+
+</Project>

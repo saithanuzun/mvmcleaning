@@ -93,7 +93,17 @@ app.Map("/shop", shop =>
 
         if (app.Environment.IsDevelopment())
         {
+            // Dev mode: proxy to Vite dev server (npm run dev)
             spa.UseProxyToSpaDevelopmentServer("http://localhost:5173");
+        }
+        else
+        {
+            // Production mode: serve built files from ClientApp/dist
+            spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions
+            {
+                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+                    Path.Combine(builder.Environment.ContentRootPath, "ClientApp/dist"))
+            };
         }
     });
 });

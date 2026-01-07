@@ -43,8 +43,15 @@ public class ContractorController : BaseApiController
     [HttpGet("availability/day")]
     public async Task<IActionResult> GetContractorsAvailabilityByDay([FromQuery] GetContractorAvailabilityByDayRequest request)
     {
-        var response = await _mediator.Send(request);
-        return Success(response);
+        try
+        {
+            var response = await _mediator.Send(request);
+            return Success(response);
+        }
+        catch (Exception ex)
+        {
+            return Error($"Error retrieving availability: {ex.Message}", 500);
+        }
     }
     
     

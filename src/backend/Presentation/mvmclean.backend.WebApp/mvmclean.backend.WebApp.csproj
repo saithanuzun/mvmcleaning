@@ -6,6 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+        <Exec Command="npm run build" WorkingDirectory="ClientApp" />
+    </Target>
+
     <ItemGroup>
       <Folder Include="Areas\Admin\wwwroot\" />
       <Folder Include="Areas\Contractor\wwwroot\" />
@@ -16,6 +20,10 @@
 
     <ItemGroup>
       <Content Include="wwwroot\img\.DS_Store" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <DistFiles Include="ClientApp/dist/**" />
     </ItemGroup>
 
     <ItemGroup>
