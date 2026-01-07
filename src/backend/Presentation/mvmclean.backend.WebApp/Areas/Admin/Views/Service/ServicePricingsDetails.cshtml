@@ -16,12 +16,8 @@
         </div>
 
         <div class="col-md-4 text-end">
-            <a asp-area="Admin"
-               asp-controller="Service"
-               asp-action="CreateServicePricing"
-               asp-route-serviceId="@serviceId"
-               class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Add Pricing Rule
+            <a href="/Admin/Service/AllServices" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Services
             </a>
         </div>
     </div>
@@ -116,12 +112,57 @@
         </div>
     </div>
 
+    <!-- Add New Pricing Form -->
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-plus-circle"></i> Add New Pricing Rule
+            </h5>
+        </div>
+        <div class="card-body">
+            <form action="/Admin/Service/CreateServicePricing" method="post">
+                @Html.AntiForgeryToken()
+                
+                <input type="hidden" name="ServiceId" value="@serviceId" />
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="Postcode" class="form-label fw-semibold">
+                                <i class="bi bi-geo-alt"></i> Postcode *
+                            </label>
+                            <input type="text" id="Postcode" name="Postcode" class="form-control" placeholder="e.g., SW1A1AA" maxlength="8" required />
+                            <small class="text-muted">Full UK postcode (5-8 characters)</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="Multiplier" class="form-label fw-semibold">
+                                <i class="bi bi-percent"></i> Multiplier *
+                            </label>
+                            <input type="number" id="Multiplier" name="Multiplier" class="form-control" step="0.01" value="1.0" required />
+                            <small class="text-muted">e.g., 1.2 = +20%</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="FixedAdjustment" class="form-label fw-semibold">
+                                <i class="bi bi-currency-pound"></i> Fixed (£) *
+                            </label>
+                            <input type="number" id="FixedAdjustment" name="FixedAdjustment" class="form-control" step="0.01" value="0" required />
+                            <small class="text-muted">Additional amount</small>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Add Pricing Rule
+                </button>
+            </form>
+        </div>
+    </div>
+
     <div class="mt-4">
-        <a asp-area="Admin"
-           asp-controller="Service"
-           asp-action="ServiceDetails"
-           asp-route-serviceId="@serviceId"
-           class="btn btn-secondary">
+        <a href="/Admin/Service/ServiceDetails/@serviceId" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Back to Service
         </a>
     </div>

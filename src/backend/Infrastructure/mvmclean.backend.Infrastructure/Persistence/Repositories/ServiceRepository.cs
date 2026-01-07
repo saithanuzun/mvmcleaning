@@ -16,6 +16,7 @@ public class ServiceRepository : GenericRepository<Service>, IServiceRepository
     {
         var query = _dbContext.Services
             .Include(s => s.Category)
+            .Include(s => s.PostcodePricings)
             .AsQueryable();
 
         if (noTracking)

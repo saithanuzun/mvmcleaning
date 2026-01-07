@@ -27,18 +27,13 @@
                 <i class="bi bi-briefcase"></i> Service Details
             </h2>
             <div class="btn-group" role="group">
-                <a asp-area="Admin" asp-controller="Service" asp-action="AllServices" class="btn btn-secondary">
+                <a href="/Admin/Service/AllServices" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Back to Services
                 </a>
-                <a asp-area="Admin" asp-controller="Service" asp-action="ServicePricingsDetails"
-                    asp-route-serviceId="@Model.ServiceId" class="btn btn-primary">
-                    <i class="bi bi-tag"></i> View Pricing
-                </a>
-                <a asp-area="Admin" asp-controller="Service" asp-action="Edit"
-                    asp-route-serviceId="@Model.ServiceId" class="btn btn-warning">
+                <a href="/Admin/Service/Edit/@Model.ServiceId" class="btn btn-warning">
                     <i class="bi bi-pencil"></i> Edit
                 </a>
-                <form asp-area="Admin" asp-controller="Service" asp-action="Delete" asp-route-serviceId="@Model.ServiceId" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this service?');">
+                <form action="/Admin/Service/Delete/@Model.ServiceId" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this service?');">
                     <button type="submit" class="btn btn-danger">
                         <i class="bi bi-trash"></i> Delete
                     </button>
@@ -96,6 +91,102 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-geo-alt"></i> Postcode Pricing Rules
+                    </h5>
+                    <a href="/Admin/Service/ServicePricingsDetails/@Model.ServiceId" class="btn btn-light btn-sm">
+                        <i class="bi bi-eye"></i> View All
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Postcode Area</th>
+                                    <th>Multiplier</th>
+                                    <th>Fixed Adj.</th>
+                                    <th>Adjusted Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.PostcodePricings != null && Model.PostcodePricings.Any())
+                                {
+                                    @foreach (var pricing in Model.PostcodePricings.Take(5))
+                                    {
+                                        var adjustedPrice = Model.BasePrice * pricing.Multiplier + pricing.FixedAdjustment;
+                                        var multiplierBadge = pricing.Multiplier > 1 ? "bg-success" : (pricing.Multiplier < 1 ? "bg-info" : "bg-secondary");
+                                        <tr>
+                                            <td>
+                                                <strong>@pricing.PostcodeArea</strong>
+                                            </td>
+                                            <td>
+                                                <span class="badge @multiplierBadge">@pricing.Multiplier.ToString("0.00")x</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-warning">@(pricing.FixedAdjustment >= 0 ? "+" : "")£@pricing.FixedAdjustment.ToString("0.00")</span>
+                                            </td>
+                                            <td>
+                                                <strong class="text-success">£@adjustedPrice.ToString("0.00")</strong>
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (Model.PostcodePricings.Count > 5)
+                                    {
+                                        <tr class="table-light">
+                                            <td colspan="4" class="text-center small text-muted">
+                                                +@(Model.PostcodePricings.Count - 5) more pricing rules
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-3">
+                                            <small>No postcode pricing rules configured</small>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Add Postcode Pricing Form -->
+                    <div class="mt-4 pt-4 border-top">
+                        <h6 class="mb-3 fw-bold">
+                            <i class="bi bi-plus-circle"></i> Add New Postcode Pricing
+                        </h6>
+                        <form action="/Admin/Service/CreateServicePricing" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="ServiceId" value="@Model.ServiceId" />
+
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <input type="text" name="Postcode" class="form-control form-control-sm" placeholder="Postcode" maxlength="8" required />
+                                    <small class="text-muted">e.g., SW1A1AA</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" name="Multiplier" class="form-control form-control-sm" placeholder="Multiplier" step="0.01" value="1.0" required />
+                                    <small class="text-muted">e.g., 1.2</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" name="FixedAdjustment" class="form-control form-control-sm" placeholder="Fixed £" step="0.01" value="0" required />
+                                    <small class="text-muted">e.g., 20</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-success btn-sm w-100">
+                                        <i class="bi bi-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="col-lg-4">
@@ -111,13 +202,14 @@
                         <p class="small font-monospace">@Model.ServiceId</p>
                     </div>
                     <hr />
-                    <a asp-area="Admin" asp-controller="Service" asp-action="CreateServicePricing"
-                        class="btn btn-primary btn-sm w-100">
-                        <i class="bi bi-plus"></i> Add Postcode Pricing
-                    </a>
-                    <button class="btn btn-warning btn-sm w-100 mt-2" disabled>
+                    <a href="/Admin/Service/Edit/@Model.ServiceId" class="btn btn-warning btn-sm w-100">
                         <i class="bi bi-pencil"></i> Edit Service
-                    </button>
+                    </a>
+                    <form action="/Admin/Service/Delete/@Model.ServiceId" method="post" style="margin-top: 10px;" onsubmit="return confirm('Are you sure?');">
+                        <button type="submit" class="btn btn-danger btn-sm w-100">
+                            <i class="bi bi-trash"></i> Delete Service
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

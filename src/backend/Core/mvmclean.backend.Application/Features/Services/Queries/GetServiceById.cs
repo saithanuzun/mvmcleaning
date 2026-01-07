@@ -21,6 +21,14 @@ public class GetServiceByIdResponse
 
     public decimal BasePrice { get; set; }
     
+    public List<PostcodePricingDto> PostcodePricings { get; set; } = new();
+}
+
+public class PostcodePricingDto
+{
+    public string PostcodeArea { get; set; }
+    public decimal Multiplier { get; set; }
+    public decimal FixedAdjustment { get; set; }
 }
 
 public class GetServiceByIdHandler : IRequestHandler<GetServiceByIdRequest, GetServiceByIdResponse>
@@ -37,7 +45,7 @@ public class GetServiceByIdHandler : IRequestHandler<GetServiceByIdRequest, GetS
     {
         var service = await _serviceRepository.GetByIdAsync(request.ServiceId);
 
-        return new GetServiceByIdResponse
+        var response = new GetServiceByIdResponse
         {
             ServiceId = service.Id,
             Name = service.Name,
@@ -46,8 +54,15 @@ public class GetServiceByIdHandler : IRequestHandler<GetServiceByIdRequest, GetS
             Duration = service.EstimatedDuration.TotalMinutes.ToString(),
             CategoryId = service.CategoryId,
             CategoryName = service.Category?.Name ?? "Uncategorized",
-            BasePrice = service.BasePrice.Amount
-
+            BasePrice = service.BasePrice.Amount,
+            PostcodePricings = service.PostcodePricings.Select(pp => new PostcodePricingDto
+            {
+                PostcodeArea = pp.Postcode.Area,
+                Multiplier = pp.Multiplier,
+                FixedAdjustment = pp.FixedAdjustment
+            }).ToList()
         };
+
+        return response;
     }
 }

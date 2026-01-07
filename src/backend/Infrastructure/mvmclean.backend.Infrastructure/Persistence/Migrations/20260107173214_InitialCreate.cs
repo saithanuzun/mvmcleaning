@@ -543,28 +543,23 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 name: "PostcodePricing",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ServiceId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Postcode_Value = table.Column<string>(type: "text", nullable: false),
+                    Postcode = table.Column<string>(type: "text", nullable: false),
                     Postcode_Area = table.Column<string>(type: "text", nullable: false),
                     Postcode_District = table.Column<string>(type: "text", nullable: false),
                     Postcode_Sector = table.Column<string>(type: "text", nullable: false),
                     Multiplier = table.Column<decimal>(type: "numeric", nullable: false),
                     FixedAdjustment = table.Column<decimal>(type: "numeric", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeletedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
+                    ItemId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PostcodePricing", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PostcodePricing_Services_ServiceId",
-                        column: x => x.ServiceId,
+                        name: "FK_PostcodePricing_Services_ItemId",
+                        column: x => x.ItemId,
                         principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -771,9 +766,9 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostcodePricing_ServiceId",
+                name: "IX_PostcodePricing_ItemId",
                 table: "PostcodePricing",
-                column: "ServiceId");
+                column: "ItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_ContractorId",

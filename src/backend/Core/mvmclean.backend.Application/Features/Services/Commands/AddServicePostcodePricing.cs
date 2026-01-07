@@ -30,9 +30,14 @@ public partial class AddServicePostcodePricingHandler : IRequestHandler<AddServi
 
     public async Task<AddServicePostcodePricingResponse> Handle(AddServicePostcodePricingRequest request, CancellationToken cancellationToken)
     {
-        var service = await _serviceRepository.GetByIdAsync(Guid.Parse(request.ServiceId));
+        var service = await _serviceRepository.GetByIdAsync(Guid.Parse(request.ServiceId), noTracking: false);
         
+        if (service == null)
+            throw new KeyNotFoundException("Service not found");
+
         service.AddPostcodePricing(Postcode.Create(request.Postcode), request.Multiplier, request.FixedAdjustment);
+
+        await _serviceRepository.SaveChangesAsync();
 
         return new AddServicePostcodePricingResponse
         {   

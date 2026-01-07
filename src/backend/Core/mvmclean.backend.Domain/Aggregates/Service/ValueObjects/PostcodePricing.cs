@@ -1,11 +1,10 @@
 using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
-namespace mvmclean.backend.Domain.Aggregates.Service.Entities;
+namespace mvmclean.backend.Domain.Aggregates.Service.ValueObjects;
 
-public class PostcodePricing : Entity
+public class PostcodePricing : ValueObject
 {
-    public Service Service { get; private set; }
     public Guid ServiceId { get; private set; }
     public Postcode Postcode { get; private set; }
     public decimal Multiplier { get; private set; } 
@@ -30,13 +29,10 @@ public class PostcodePricing : Entity
 
         return new PostcodePricing
         {
-            Id = Guid.NewGuid(),
             ServiceId = serviceId,
             Postcode = postcode,
             Multiplier = multiplier,
             FixedAdjustment = fixedAdjustment,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
         };
     }
     public Money CalculateAdjustedPrice(Money basePrice)
@@ -61,7 +57,10 @@ public class PostcodePricing : Entity
 
         Multiplier = newMultiplier;
         FixedAdjustment = newFixedAdjustment;
-        UpdatedAt = DateTime.UtcNow;
     }
 
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        throw new NotImplementedException();
+    }
 }

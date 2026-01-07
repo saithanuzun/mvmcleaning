@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <Folder Include="Aggregates\SeoPage\ValueObjects\" />
-      <Folder Include="Aggregates\Service\ValueObjects\" />
       <Folder Include="Core\" />
     </ItemGroup>
 

@@ -58,8 +58,7 @@ public class ServiceController : BaseAdminController
             return View(new List<GetAllServicesResponse>());
         }
     }
-    
-    
+
     [Route("CreateService")]
     [HttpGet]
     public IActionResult CreateService()
@@ -94,53 +93,40 @@ public class ServiceController : BaseAdminController
         }
     }
     
-
-    [Route("ServicePricings")]
-    public async Task<IActionResult> ServicePricingsDetails(Guid serviceId)
+    
+    [Route("CreateServicePricing/{serviceId}")]
+    [HttpGet]
+    public IActionResult CreateServicePricing(Guid serviceId)
     {
-        try
+        var request = new AddServicePostcodePricingRequest
         {
-            var response = await _mediator.Send(new GetServicePostcodePricingsRequest { ServiceId = serviceId.ToString() });
-            return View(response);
-        }
-        catch (KeyNotFoundException)
-        {
-            TempData["Error"] = "Service not found.";
-            return RedirectToAction("AllServices");
-        }
-        catch (Exception ex)
-        {
-            TempData["Error"] = $"Error loading service pricing: {ex.Message}";
-            return RedirectToAction("AllServices");
-        }
+            ServiceId = serviceId.ToString()
+        };
+        return View(request);
     }
     
-    [Route("CreateServicePricings")]
+    [Route("CreateServicePricing")]
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateServicePricing(AddServicePostcodePricingRequest request)
     {
         try
         {
             if (!ModelState.IsValid)
             {
-                return View(request);
+                TempData["Error"] = "Please fill in all required fields correctly.";
+                return RedirectToAction("ServiceDetails", new {serviceId = request.ServiceId});
             }
             
             var response = await _mediator.Send(request);
             TempData["Success"] = "Service pricing rule added successfully!";
-            return RedirectToAction("ServicePricings", new {serviceId = response.ServiceId});
+            return RedirectToAction("ServiceDetails", new {serviceId = response.ServiceId});
         }
         catch (Exception ex)
         {
             TempData["Error"] = $"Error creating service pricing: {ex.Message}";
-            return View(request);
+            return RedirectToAction("ServiceDetails", new {serviceId = request.ServiceId});
         }
-    }
-    
-    [Route("CreateServicePricings")]
-    public IActionResult CreateServicePricing()
-    {
-        return View(new AddServicePostcodePricingRequest());
     }
 
     [Route("edit/{serviceId}")]

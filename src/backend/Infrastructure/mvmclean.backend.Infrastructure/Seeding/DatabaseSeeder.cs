@@ -11,6 +11,8 @@ public class DatabaseSeeder
     private readonly ILogger<DatabaseSeeder> _logger;
     private readonly string _seederFilePath;
 
+    private readonly bool _seed = true;
+
     public DatabaseSeeder(IMediator mediator, ILogger<DatabaseSeeder> logger)
     {
         _mediator = mediator;
@@ -20,7 +22,7 @@ public class DatabaseSeeder
 
     public async Task SeedAsync()
     {
-        if (false)
+        if (!_seed)
         {
             _logger.LogInformation("Database has already been seeded. Skipping seeding.");
             return;
@@ -32,6 +34,9 @@ public class DatabaseSeeder
 
             // Seed services and get their IDs
             var serviceIds = await SeedServicesAsync();
+
+            // Seed postcode pricing
+            await SeedPostcodePricingAsync(serviceIds);
 
             // Seed contractors and get their IDs
             var contractorIds = await SeedContractorsAsync();
@@ -129,8 +134,56 @@ public class DatabaseSeeder
                 }
             };
 
+            // Jet Washing Services
+            var jetWashingServices = new List<CreateServiceRequest>
+            {
+                new CreateServiceRequest
+                {
+                    Name = "50m² Jet Wash",
+                    Description = "Professional jet washing for 50 square meters including driveway, patio and paths",
+                    Shortcut = "50M2_JW",
+                    BasePrice = 89.99m,
+                    EstimatedDurationMinutes = 90,
+                    Category = "Jet Washing"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "100m² Jet Wash",
+                    Description = "Professional jet washing for 100 square meters including large driveway, patio and extensive paths",
+                    Shortcut = "100M2_JW",
+                    BasePrice = 149.99m,
+                    EstimatedDurationMinutes = 150,
+                    Category = "Jet Washing"
+                }
+            };
+
+            // End of Tenancy Cleaning Services
+            var eotCleaningServices = new List<CreateServiceRequest>
+            {
+                new CreateServiceRequest
+                {
+                    Name = "2 Bed End of Tenancy Cleaning",
+                    Description = "Complete deep clean for 2 bed properties - full house clean including carpets, windows, and all surfaces",
+                    Shortcut = "2BED_EOT",
+                    BasePrice = 249.99m,
+                    EstimatedDurationMinutes = 240,
+                    Category = "End of Tenancy Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "3 Bed End of Tenancy Cleaning",
+                    Description = "Complete deep clean for 3 bed properties - full house clean including carpets, windows, and all surfaces",
+                    Shortcut = "3BED_EOT",
+                    BasePrice = 349.99m,
+                    EstimatedDurationMinutes = 300,
+                    Category = "End of Tenancy Cleaning"
+                }
+            };
+
             // Combine all services
-            var allServices = carpetCleaningServices.Concat(sofaCleaningServices).ToList();
+            var allServices = carpetCleaningServices.Concat(sofaCleaningServices)
+                .Concat(jetWashingServices)
+                .Concat(eotCleaningServices).ToList();
 
             foreach (var service in allServices)
             {
@@ -173,7 +226,7 @@ public class DatabaseSeeder
                     PhoneNumber = "07700123456",
                     Email = "sait.hanuzun@example.com",
                     Username = "saithanuzun",
-                    Password = "SecurePassword123!",
+                    Password = "123",
                     ImageUrl = null
                 },
                 new CreateContractorRequest
@@ -183,7 +236,7 @@ public class DatabaseSeeder
                     PhoneNumber = "07701234567",
                     Email = "ahmed.hassan@example.com",
                     Username = "ahmedhassan",
-                    Password = "SecurePassword123!",
+                    Password = "123",
                     ImageUrl = null
                 },
                 new CreateContractorRequest
@@ -193,7 +246,7 @@ public class DatabaseSeeder
                     PhoneNumber = "07702345678",
                     Email = "emily.thompson@example.com",
                     Username = "emilythompson",
-                    Password = "SecurePassword123!",
+                    Password = "123",
                     ImageUrl = null
                 }
             };
@@ -371,6 +424,83 @@ public class DatabaseSeeder
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error seeding unavailability slots.");
+            throw;
+        }
+    }
+
+    private async Task SeedPostcodePricingAsync(List<Guid> serviceIds)
+    {
+        try
+        {
+            _logger.LogInformation("Seeding postcode pricing...");
+
+            // London postcodes - more expensive (1.2x multiplier, +£20 fixed)
+            var londonPostcodes = new List<string> 
+            { 
+                "SW1A 0AA", "SW1A 1AA", "N1 1AA", "E1 6AN", "W1A 1AA", "SW2 1AA", "SW3 1AA"
+            };
+
+            // Leicester postcodes - standard pricing (1.0x multiplier, no adjustment)
+            var leicesterPostcodes = new List<string>
+            {
+                "LE1 3RA", "LE1 4TA", "LE2 0AA", "LE3 1AA", "LE4 4AA", "LE5 0AA"
+            };
+
+            // Apply London pricing to all services
+            foreach (var serviceId in serviceIds)
+            {
+                foreach (var postcode in londonPostcodes)
+                {
+                    try
+                    {
+                        var request = new AddServicePostcodePricingRequest
+                        {
+                            ServiceId = serviceId.ToString(),
+                            Postcode = postcode,
+                            Multiplier = 1.2m,
+                            FixedAdjustment = 20m
+                        };
+
+                        await _mediator.Send(request);
+                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (1.2x multiplier, +£20)");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning($"Postcode pricing for {postcode} may already exist: {ex.Message}");
+                    }
+                }
+            }
+
+            // Apply Leicester pricing to all services
+            foreach (var serviceId in serviceIds)
+            {
+                foreach (var postcode in leicesterPostcodes)
+                {
+                    try
+                    {
+                        var request = new AddServicePostcodePricingRequest
+                        {
+                            ServiceId = serviceId.ToString(),
+                            Postcode = postcode,
+                            Multiplier = 0.9m,
+                            FixedAdjustment = -5m
+                        };
+
+                        await _mediator.Send(request);
+                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (0.9x multiplier, -£5)");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning($"Postcode pricing for {postcode} may already exist: {ex.Message}");
+                    }
+                }
+            }
+
+            _logger.LogInformation("Postcode pricing seeding completed.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error seeding postcode pricing.");
             throw;
         }
     }

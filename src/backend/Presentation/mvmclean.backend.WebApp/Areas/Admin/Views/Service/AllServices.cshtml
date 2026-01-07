@@ -14,7 +14,7 @@
         </div>
 
         <div class="col-md-4 text-end">
-            <a asp-area="Admin" asp-controller="Service" asp-action="CreateService" class="btn btn-primary">
+            <a href="/Admin/Service/CreateService" class="btn btn-primary">
                 <i class="bi bi-plus-circle"></i> Create Service
             </a>
         </div>
@@ -80,26 +80,10 @@
                                     </td>
 
                                     <td class="text-center">
-                                        <a asp-area="Admin" asp-controller="Service" asp-action="ServiceDetails"
-                                            asp-route-serviceId="@service.ServiceId" class="btn btn-sm btn-outline-primary"
-                                            title="View Details">
-                                            <i class="bi bi-eye"></i>
+                                        <a href="/Admin/Service/ServiceDetails/@service.ServiceId" class="btn btn-sm btn-primary"
+                                            title="View Details & Pricing">
+                                            <i class="bi bi-eye"></i> View
                                         </a>
-                                        <a asp-area="Admin" asp-controller="Service" asp-action="Edit"
-                                            asp-route-serviceId="@service.ServiceId" class="btn btn-sm btn-outline-warning"
-                                            title="Edit Service">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a asp-area="Admin" asp-controller="Service" asp-action="ServicePricingsDetails"
-                                            asp-route-serviceId="@service.ServiceId" class="btn btn-sm btn-outline-info"
-                                            title="View Pricing">
-                                            <i class="bi bi-tag"></i>
-                                        </a>
-                                        <form asp-area="Admin" asp-controller="Service" asp-action="Delete" asp-route-serviceId="@service.ServiceId" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this service?');">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Service">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
                                     </td>
                                 </tr>
                             }

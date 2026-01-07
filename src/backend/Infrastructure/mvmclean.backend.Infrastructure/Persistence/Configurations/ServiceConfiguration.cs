@@ -9,7 +9,7 @@ public class ServiceConfiguration : EntityConfiguration<Service>
     public override void Configure(EntityTypeBuilder<Service> builder)
     {
         base.Configure(builder);
-        
+
         builder.Property(s => s.Name)
             .HasMaxLength(500)
             .IsRequired();
@@ -19,19 +19,28 @@ public class ServiceConfiguration : EntityConfiguration<Service>
             .HasMaxLength(50);
         builder.Property(s => s.EstimatedDuration)
             .IsRequired();
-        
+
         // BasePrice value object
         builder.OwnsOne(i => i.BasePrice);
-        
+
         // Category relationship
         builder.HasOne(s => s.Category)
             .WithMany(c => c.Services)
             .HasForeignKey(s => s.CategoryId);
-        
-        // PostcodePricings collection
-        builder.HasMany(s => s.PostcodePricings)
-            .WithOne(p => p.Service)
-            .HasForeignKey(p => p.ServiceId);
-        
+
+        builder.OwnsMany(x => x.PostcodePricings, pp =>
+        {
+            pp.WithOwner().HasForeignKey("ItemId");
+
+            pp.HasKey("Id"); 
+
+            pp.OwnsOne(x => x.Postcode, p =>
+            {
+                p.Property(pc => pc.Value)
+                    .HasColumnName("Postcode")
+                    .IsRequired();
+            });
+        });
+
     }
 }

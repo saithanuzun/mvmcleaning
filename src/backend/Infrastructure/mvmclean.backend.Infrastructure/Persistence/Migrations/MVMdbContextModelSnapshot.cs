@@ -829,53 +829,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Entities.PostcodePricing", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<decimal>("FixedAdjustment")
-                        .HasColumnType("numeric");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<decimal>("Multiplier")
-                        .HasColumnType("numeric");
-
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("PostcodePricing");
-                });
-
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Service", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1909,49 +1862,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("SeoPage");
                 });
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Entities.PostcodePricing", b =>
-                {
-                    b.HasOne("mvmclean.backend.Domain.Aggregates.Service.Service", "Service")
-                        .WithMany("PostcodePricings")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Postcode", "Postcode", b1 =>
-                        {
-                            b1.Property<Guid>("PostcodePricingId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Area")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("District")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Sector")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("PostcodePricingId");
-
-                            b1.ToTable("PostcodePricing");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PostcodePricingId");
-                        });
-
-                    b.Navigation("Postcode")
-                        .IsRequired();
-
-                    b.Navigation("Service");
-                });
-
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Service", b =>
                 {
                     b.HasOne("mvmclean.backend.Domain.Aggregates.Service.Entities.Category", "Category")
@@ -1959,6 +1869,69 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsMany("mvmclean.backend.Domain.Aggregates.Service.ValueObjects.PostcodePricing", "PostcodePricings", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<decimal>("FixedAdjustment")
+                                .HasColumnType("numeric");
+
+                            b1.Property<Guid>("ItemId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<decimal>("Multiplier")
+                                .HasColumnType("numeric");
+
+                            b1.Property<Guid>("ServiceId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("ItemId");
+
+                            b1.ToTable("PostcodePricing");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ItemId");
+
+                            b1.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Postcode", "Postcode", b2 =>
+                                {
+                                    b2.Property<int>("PostcodePricingId")
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("Area")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("District")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Sector")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Value")
+                                        .IsRequired()
+                                        .HasColumnType("text")
+                                        .HasColumnName("Postcode");
+
+                                    b2.HasKey("PostcodePricingId");
+
+                                    b2.ToTable("PostcodePricing");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("PostcodePricingId");
+                                });
+
+                            b1.Navigation("Postcode")
+                                .IsRequired();
+                        });
 
                     b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Money", "BasePrice", b1 =>
                         {
@@ -1984,6 +1957,8 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("PostcodePricings");
                 });
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SupportTicket.Entities.TicketMessage", b =>
@@ -2040,11 +2015,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Entities.Category", b =>
                 {
                     b.Navigation("Services");
-                });
-
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Service", b =>
-                {
-                    b.Navigation("PostcodePricings");
                 });
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SupportTicket.SupportTicket", b =>

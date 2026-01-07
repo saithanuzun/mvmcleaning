@@ -1,4 +1,5 @@
 using mvmclean.backend.Domain.Aggregates.Service.Entities;
+using mvmclean.backend.Domain.Aggregates.Service.ValueObjects;
 using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 

@@ -10,8 +10,7 @@
             <h2 class="mb-4">
                 <i class="bi bi-plus-circle"></i> Add Service Pricing Rule
             </h2>
-            <a asp-area="Admin" asp-controller="Service" asp-action="ServicePricingsDetails"
-                asp-route-serviceId="@Model.ServiceId" class="btn btn-secondary">
+            <a href="/Admin/Service/allservices" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Back to Pricing
             </a>
         </div>
@@ -27,20 +26,47 @@
                 </div>
 
                 <div class="card-body">
-                    <form asp-area="Admin" asp-controller="Service" asp-action="CreateServicePricing" method="post">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <h6 class="alert-heading">
+                                <i class="bi bi-exclamation-triangle"></i> Validation Errors
+                            </h6>
+                            <ul class="mb-0 small">
+                                @foreach (var modelState in ViewData.ModelState.Values)
+                                {
+                                    @foreach (var error in modelState.Errors)
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                }
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form action="/Admin/Service/CreateServicePricing" method="post">
                         @Html.AntiForgeryToken()
 
                         <!-- ServiceId (hidden) -->
-                        <input type="hidden" asp-for="ServiceId" />
+                        <input type="hidden" name="ServiceId" value="@Model.ServiceId" />
 
                         <!-- Postcode Area -->
                         <div class="mb-3">
-                            <label asp-for="Postcode" class="form-label fw-semibold">
-                                <i class="bi bi-geo-alt"></i> Postcode Area *
+                            <label for="Postcode" class="form-label fw-semibold">
+                                <i class="bi bi-geo-alt"></i> Postcode *
                             </label>
-                            <input asp-for="Postcode" class="form-control" placeholder="e.g., LE1, LE2, LE3"
-                                maxlength="4" required />
-                            <small class="text-muted">Enter the postcode area (e.g., LE1)</small>
+                            <input type="text" id="Postcode" name="Postcode" value="@Model.Postcode" class="form-control" placeholder="e.g., SW1A 1AA or LE12AB"
+                                maxlength="8" required />
+                            <small class="text-muted">Enter a full UK postcode (5-8 characters, e.g., SW1A 1AA)</small>
                             <span asp-validation-for="Postcode" class="text-danger small"></span>
                         </div>
 
@@ -48,10 +74,10 @@
 
                         <!-- Multiplier -->
                         <div class="mb-3">
-                            <label asp-for="Multiplier" class="form-label fw-semibold">
+                            <label for="Multiplier" class="form-label fw-semibold">
                                 <i class="bi bi-percent"></i> Price Multiplier *
                             </label>
-                            <input asp-for="Multiplier" type="number" step="0.01" min="0" class="form-control"
+                            <input type="number" id="Multiplier" name="Multiplier" value="@Model.Multiplier" step="0.01" min="0" class="form-control"
                                 placeholder="1.00" required />
                             <small class="text-muted">
                                 1.0 = Same price | 1.5 = 50% increase | 0.8 = 20% discount
@@ -61,12 +87,12 @@
 
                         <!-- Fixed Adjustment -->
                         <div class="mb-4">
-                            <label asp-for="FixedAdjustment" class="form-label fw-semibold">
+                            <label for="FixedAdjustment" class="form-label fw-semibold">
                                 <i class="bi bi-currency-pound"></i> Fixed Adjustment
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text">£</span>
-                                <input asp-for="FixedAdjustment" type="number" step="0.01" min="0" class="form-control"
+                                <input type="number" id="FixedAdjustment" name="FixedAdjustment" value="@Model.FixedAdjustment" step="0.01" min="0" class="form-control"
                                     placeholder="0.00" />
                             </div>
                             <small class="text-muted">Additional fixed amount added to the price</small>
@@ -89,8 +115,7 @@
 
                         <!-- Actions -->
                         <div class="d-flex justify-content-end gap-2">
-                            <a asp-area="Admin" asp-controller="Service" asp-action="ServicePricingsDetails"
-                                asp-route-serviceId="@Model.ServiceId" class="btn btn-secondary">
+                            <a href="/Admin/Service/ServicePricingsDetails/@Model.ServiceId" class="btn btn-secondary">
                                 <i class="bi bi-x"></i> Cancel
                             </a>
 
