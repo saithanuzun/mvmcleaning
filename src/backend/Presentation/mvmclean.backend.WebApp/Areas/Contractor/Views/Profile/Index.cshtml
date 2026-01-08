@@ -76,6 +76,44 @@
                     </div>
                 </div>
 
+                @if (!string.IsNullOrEmpty(Model.Street) || !string.IsNullOrEmpty(Model.City))
+                {
+                    <div class="card shadow-sm mt-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="bi bi-geo-alt"></i> Address
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label"><strong>Street Address</strong></label>
+                                    <p class="text-muted">@(string.IsNullOrEmpty(Model.Street) ? "-" : Model.Street)</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label"><strong>City</strong></label>
+                                    <p class="text-muted">@(string.IsNullOrEmpty(Model.City) ? "-" : Model.City)</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><strong>Postcode</strong></label>
+                                    <p class="text-muted">@(string.IsNullOrEmpty(Model.Postcode) ? "-" : Model.Postcode)</p>
+                                </div>
+                            </div>
+                            @if (!string.IsNullOrEmpty(Model.AdditionalInfo))
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label"><strong>Additional Information</strong></label>
+                                        <p class="text-muted">@Model.AdditionalInfo</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
                 @if (Model.Services != null && Model.Services.Count > 0)
                 {
                     <div class="card shadow-sm mt-4">

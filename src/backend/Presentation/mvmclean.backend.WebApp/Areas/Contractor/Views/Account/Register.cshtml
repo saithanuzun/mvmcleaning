@@ -285,6 +285,49 @@
                     @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
                 </div>
 
+                <!-- Address Section -->
+                <div style="border-top: 2px solid #f0f0f0; padding-top: 20px; margin-bottom: 20px;">
+                    <h5 style="color: var(--primary-color); margin-bottom: 15px; font-weight: 600;">
+                        <i class="bi bi-geo-alt"></i> Address
+                    </h5>
+                </div>
+
+                <!-- Street -->
+                <div class="mb-4">
+                    <label class="form-label">
+                        <i class="bi bi-house"></i> Street Address
+                    </label>
+                    @Html.TextBoxFor(m => m.Street, new { @class = "form-control", placeholder = "Enter street address" })
+                    @Html.ValidationMessageFor(m => m.Street, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- City & Postcode Row -->
+                <div class="row-2cols mb-4">
+                    <div>
+                        <label class="form-label">
+                            <i class="bi bi-building"></i> City
+                        </label>
+                        @Html.TextBoxFor(m => m.City, new { @class = "form-control", placeholder = "Enter city" })
+                        @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+                    </div>
+                    <div>
+                        <label class="form-label">
+                            <i class="bi bi-geo-fill"></i> Postcode
+                        </label>
+                        @Html.TextBoxFor(m => m.PostcodeValue, new { @class = "form-control", placeholder = "Enter postcode" })
+                        @Html.ValidationMessageFor(m => m.PostcodeValue, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="mb-4">
+                    <label class="form-label">
+                        <i class="bi bi-info-circle"></i> Additional Information
+                    </label>
+                    @Html.TextAreaFor(m => m.AdditionalInfo, new { @class = "form-control", placeholder = "e.g., Suite number, apartment, building name", rows = 3 })
+                    @Html.ValidationMessageFor(m => m.AdditionalInfo, "", new { @class = "text-danger" })
+                </div>
+
                 <!-- Username -->
                 <div class="mb-4">
                     <label class="form-label">

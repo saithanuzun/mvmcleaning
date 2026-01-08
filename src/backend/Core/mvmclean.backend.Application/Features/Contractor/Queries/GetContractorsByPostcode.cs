@@ -32,22 +32,19 @@ public class GetContractorByPostcodeHandler : IRequestHandler<GetContractorsByPo
     {
         //var booking = await _bookingRepository.GetByIdAsync(Guid.Parse(request.BookingId));
         
-        
         var targetPostcode = Postcode.Create(request.Postcode);
-        
-        var allContractors = await _contractorRepository.GetAll();
+
+        var allContractors = ( _contractorRepository.Get(
+            predicate: null, 
+            false, 
+             i => i.CoverageAreas)).ToList(); // <-- Execute query here
 
         var contractors = allContractors
-            .Where(c => c.CoverageAreas.Any(ca => 
-                ca.IsActive && 
-                (ca.Postcode.Value == targetPostcode.Value || 
-                 ca.Postcode.Area == targetPostcode.Area || 
-                 ca.Postcode.District == targetPostcode.District)))
+            .Where(c => c.CoversPostcode(targetPostcode))
             .OrderBy(c => c.BookedCount)
             .ToList();
-        
-        var contractorIds = contractors.Select(c => c.Id.ToString()).ToList();
 
+        var contractorIds = contractors.Select(c => c.Id.ToString()).ToList();
 
         return new GetContractorsByPostcodeResponse
         {

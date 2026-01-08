@@ -38,6 +38,8 @@ public class AssignPaymentHandler : IRequestHandler<AssignPaymentRequest, Assign
             
         booking.AssignPayment(payment);
 
+        await _bookingRepository.SaveChangesAsync();
+
         return new AssignPaymentResponse
         {
             BookingId = booking.Id.ToString(),

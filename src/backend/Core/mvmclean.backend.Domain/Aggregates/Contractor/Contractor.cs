@@ -148,10 +148,7 @@ public class Contractor : Core.BaseClasses.AggregateRoot
 
     public bool CoversPostcode(Postcode postcode)
     {
-        return _coverageAreas.Any(c => c.IsActive &&
-                                       (c.Postcode.Value == postcode.Value ||
-                                        c.Postcode.Area == postcode.Area ||
-                                        c.Postcode.District == postcode.District));
+        return _coverageAreas.Any(c => c.IsActive && (c.Postcode.Area == postcode.Area));
     }
 
     public void Activate() => IsActive = true;

@@ -4,12 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using mvmclean.backend.Application.Features.Contractor;
 using mvmclean.backend.Application.Features.Contractor.Commands;
 using mvmclean.backend.Application.Features.Contractor.Queries;
-using mvmclean.backend.Application.Features.Contractor.Commands;
-using mvmclean.backend.Application.Features.Contractor.Queries;
 using mvmclean.backend.Application.Features.Services;
 using mvmclean.backend.Application.Features.Services.Commands;
 using mvmclean.backend.Application.Features.Services.Queries;
-using GetAllContractorsResponse = mvmclean.backend.Application.Features.Contractor.GetAllContractorsResponse;
 
 namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
 

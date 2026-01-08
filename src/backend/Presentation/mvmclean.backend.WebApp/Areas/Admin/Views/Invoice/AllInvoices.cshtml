@@ -14,7 +14,7 @@
         </div>
 
         <div class="col-md-4 text-end">
-            <a asp-area="Admin" asp-controller="Invoice" asp-action="Create" class="btn btn-primary">
+            <a href="@Url.Action("Create", "Invoice")" class="btn btn-primary">
                 <i class="bi bi-plus-circle"></i> Create Invoice
             </a>
         </div>
@@ -100,8 +100,7 @@
                                         }
                                     </td>
                                     <td class="text-center">
-                                        <a asp-area="Admin" asp-controller="Invoice" asp-action="Details"
-                                            asp-route-invoiceId="@invoice.Id" class="btn btn-sm btn-outline-primary"
+                                        <a href="@Url.Action("Details", "Invoice", new { invoiceId = invoice.Id })" class="btn btn-sm btn-outline-primary"
                                             title="View Details">
                                             <i class="bi bi-eye"></i> View
                                         </a>

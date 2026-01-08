@@ -27,11 +27,11 @@ const api = {
     // Postcode API
     postcode: {
         validate: async (postcode) => {
-            const response = await apiClient.post('/api/postcode/validate', { postcode });
+            const response = await apiClient.post('/postcode/validate', { postcode });
             return response.data;
         },
         validateAndBook: async (postcode, phone) => {
-            const response = await apiClient.post('/api/postcode/validate-and-book', { postcode, phone });
+            const response = await apiClient.post('/postcode/validate-and-book', { postcode, phone });
             return response.data;
         }
     },
@@ -39,11 +39,11 @@ const api = {
     // Services API
     services: {
         getByPostcode: async (postcode) => {
-            const response = await apiClient.get(`/api/services/bypostcode/${postcode}`);
+            const response = await apiClient.get(`/services/bypostcode/${postcode}`);
             return response.data;
         },
         getById: async (serviceId) => {
-            const response = await apiClient.get(`/api/services/${serviceId}`);
+            const response = await apiClient.get(`/services/${serviceId}`);
             return response.data;
         }
     },
@@ -52,40 +52,38 @@ const api = {
     basket: {
         get: async () => {
             const sessionId = getSessionId();
-            const response = await apiClient.get(`/api/basket/${sessionId}`);
+            const response = await apiClient.get(`/basket/${sessionId}`);
             return response.data;
         },
-        add: async (serviceId, serviceName, price, duration) => {
-            const sessionId = getSessionId();
-            const response = await apiClient.post('/api/basket/add', {
-                sessionId,
-                serviceId,
-                serviceName,
-                price,
-                duration
+        add: async (bookingId, serviceItemId, serviceName, price, durationMinutes) => {
+            const response = await apiClient.post('/basket/add', {
+                bookingId: bookingId,
+                serviceItemId: serviceItemId,
+                serviceName: serviceName,
+                price: parseFloat(price),
+                quantity: 1,
+                durationMinutes: parseInt(durationMinutes)
             });
             return response.data;
         },
-        remove: async (serviceId) => {
-            const sessionId = getSessionId();
-            const response = await apiClient.post('/api/basket/remove', {
-                sessionId,
-                serviceId
+        remove: async (bookingId, serviceItemId) => {
+            const response = await apiClient.post('/basket/remove', {
+                bookingId: bookingId,
+                serviceItemId: serviceItemId
             });
             return response.data;
         },
-        updateQuantity: async (serviceId, quantity) => {
-            const sessionId = getSessionId();
-            const response = await apiClient.post('/api/basket/update-quantity', {
-                sessionId,
-                serviceId,
-                quantity
+        updateQuantity: async (bookingId, serviceItemId, quantity) => {
+            const response = await apiClient.post('/basket/add', {
+                bookingId: bookingId,
+                serviceItemId: serviceItemId,
+                quantity: parseInt(quantity)
             });
             return response.data;
         },
         clear: async () => {
             const sessionId = getSessionId();
-            const response = await apiClient.post(`/api/basket/clear/${sessionId}`);
+            const response = await apiClient.post(`/basket/clear/${sessionId}`);
             return response.data;
         }
     },
@@ -93,7 +91,7 @@ const api = {
     // Availability API
     availability: {
         getSlots: async (postcode, date, durationMinutes, contractorIds = []) => {
-            const response = await apiClient.get('/api/availability/date', {
+            const response = await apiClient.get('/availability/date', {
                 params: { postcode, date, durationMinutes, contractorIds: contractorIds.join(',') }
             });
             return response.data;
@@ -103,15 +101,15 @@ const api = {
     // Booking API
     booking: {
         create: async (bookingData) => {
-            const response = await apiClient.post('/api/booking/create', bookingData);
+            const response = await apiClient.post('/booking/create', bookingData);
             return response.data;
         },
         getById: async (bookingId) => {
-            const response = await apiClient.get(`/api/booking/${bookingId}`);
+            const response = await apiClient.get(`/booking/${bookingId}`);
             return response.data;
         },
         verifyPayment: async (bookingId, sessionId) => {
-            const response = await apiClient.post('/api/booking/verify-payment', {
+            const response = await apiClient.post('/booking/verify-payment', {
                 bookingId,
                 sessionId
             });

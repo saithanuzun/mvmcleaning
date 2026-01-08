@@ -44,7 +44,8 @@ public class AssignCustomerHandler : IRequestHandler<AssignCustomerRequest, Assi
                 request.Street,
                 request.City,
                 request.AdditionalInfo);
-        
+        await _bookingRepository.SaveChangesAsync();
+
         return new AssignCustomerResponse
         {
             BookingId = booking.Id.ToString(),

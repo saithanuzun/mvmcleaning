@@ -28,18 +28,39 @@ public class PostcodeController : BaseApiController
 
         try
         {
+            // Clean up postcode
+            var cleanPostcode = request.Postcode.ToUpper().Replace(" ", "").Trim();
+            
+            if (string.IsNullOrEmpty(cleanPostcode) || cleanPostcode.Length < 6)
+                return Error("Invalid UK postcode format");
+
             // Step 1: Validate postcode with external API
             var client = _httpClientFactory.CreateClient();
-            var validateResponse = await client.GetAsync($"https://api.postcodes.io/postcodes/{request.Postcode}/validate");
+            
+            // Add timeout and headers
+            client.Timeout = TimeSpan.FromSeconds(10);
+            client.DefaultRequestHeaders.Add("User-Agent", "MVMCleaning");
+            
+            var validateResponse = await client.GetAsync($"https://api.postcodes.io/postcodes/{cleanPostcode}/validate");
 
             if (!validateResponse.IsSuccessStatusCode)
-                return Error("Unable to validate postcode");
+            {
+                return Error("Unable to validate postcode. Please check and try again.");
+            }
 
             var content = await validateResponse.Content.ReadAsStringAsync();
+            
+            if (string.IsNullOrEmpty(content))
+                return Error("Invalid response from postcode validation service");
+            
             using (JsonDocument doc = JsonDocument.Parse(content))
             {
                 var root = doc.RootElement;
-                var isValid = root.GetProperty("result").GetBoolean();
+                
+                if (!root.TryGetProperty("result", out var resultElement))
+                    return Error("Invalid postcode validation response");
+                
+                var isValid = resultElement.GetBoolean();
 
                 if (!isValid)
                     return Error("Invalid UK postcode");
@@ -48,7 +69,7 @@ public class PostcodeController : BaseApiController
             // Step 2: Create booking with postcode and phone
             var createBookingRequest = new CreateBookingRequest
             {
-                Postcode = request.Postcode.ToUpper(),
+                Postcode = cleanPostcode,
                 PhoneNumber = request.Phone
             };
 
@@ -60,17 +81,17 @@ public class PostcodeController : BaseApiController
             // Step 3: Get contractors that cover this postcode
             var getContractorsRequest = new GetContractorsByPostcodeRequest
             {
-                Postcode = request.Postcode.ToUpper(),
+                Postcode = cleanPostcode,
                 BookingId = bookingResponse.BookingId.ToString()
             };
 
             var contractorsResponse = await _mediator.Send(getContractorsRequest);
 
-            if (contractorsResponse.ContractorIds == null || contractorsResponse.ContractorIds.Count == 0)
+            if (contractorsResponse == null || contractorsResponse.ContractorIds == null || contractorsResponse.ContractorIds.Count == 0)
                 return Success(new
                 {
                     bookingId = bookingResponse.BookingId,
-                    postcode = request.Postcode.ToUpper(),
+                    postcode = cleanPostcode,
                     phone = request.Phone,
                     contractors = new List<string>(),
                     isCovered = false,
@@ -80,56 +101,31 @@ public class PostcodeController : BaseApiController
             return Success(new
             {
                 bookingId = bookingResponse.BookingId,
-                postcode = request.Postcode.ToUpper(),
+                postcode = cleanPostcode,
                 phone = request.Phone,
                 contractors = contractorsResponse.ContractorIds,
                 isCovered = true
             }, $"Booking created. Found {contractorsResponse.ContractorIds.Count} contractor(s)");
         }
-        catch (Exception ex)
+        catch (HttpRequestException ex)
         {
-            return Error($"Error: {ex.Message}", 500);
+            return Error($"Network error: Unable to validate postcode. Please try again.", 500);
         }
-    }
-
-    /// <summary>
-    /// Validate a UK postcode using postcodes.io API (validation only)
-    /// </summary>
-    [HttpPost("validate")]
-    public async Task<IActionResult> ValidatePostcode([FromBody] ValidatePostcodeRequest request)
-    {
-        if (string.IsNullOrEmpty(request.Postcode))
-            return Error("Postcode is required");
-
-        try
+        catch (TaskCanceledException)
         {
-            var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync($"https://api.postcodes.io/postcodes/{request.Postcode}/validate");
-
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                using (JsonDocument doc = JsonDocument.Parse(content))
-                {
-                    var root = doc.RootElement;
-                    var isValid = root.GetProperty("result").GetBoolean();
-
-                    return Success(new
-                    {
-                        isValid = isValid,
-                        isCovered = true,
-                        postcode = request.Postcode.ToUpper()
-                    }, isValid ? "Valid UK postcode" : "Invalid UK postcode");
-                }
-            }
-
-            return Error("Unable to validate postcode");
+            return Error("Request timed out. Please try again.", 500);
+        }
+        catch (JsonException)
+        {
+            return Error("Invalid response from validation service. Please try again.", 500);
         }
         catch (Exception ex)
         {
-            return Error($"Error validating postcode: {ex.Message}", 500);
+            Console.WriteLine($"PostcodeController error: {ex.Message}\n{ex.StackTrace}");
+            return Error($"An error occurred while validating postcode. Please try again.", 500);
         }
     }
+    
 }
 
 public class ValidatePostcodeRequest

@@ -28,7 +28,7 @@ public class ConfirmBookingHandler : IRequestHandler<ConfirmBookingRequest, Conf
         try
         {
             var booking = await _bookingRepository.GetByIdAsync(request.BookingId, noTracking: false);
-
+            
             if (booking == null)
             {
                 return new ConfirmBookingResponse

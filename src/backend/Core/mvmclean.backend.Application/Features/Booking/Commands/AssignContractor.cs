@@ -50,7 +50,8 @@ public class AssignContractorHandler : IRequestHandler<AssignContractorRequest,A
         
         booking.AssignTimeSlot(TimeSlot.Create(dateTime, dateTime + request.Duration), contractor);
         
-        
+        await _bookingRepository.SaveChangesAsync();
+
         return new AssignContractorResponse
         {
             BookingId = booking.Id.ToString(),

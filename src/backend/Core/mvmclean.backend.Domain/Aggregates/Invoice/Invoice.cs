@@ -9,7 +9,7 @@ public class Invoice : Core.BaseClasses.AggregateRoot
 {
     public string InvoiceNumber { get; private set; }
     public Guid BookingId { get; private set; }
-    public Guid CustomerId { get; private set; }
+    public Guid? CustomerId { get; private set; }
     public DateTime IssueDate { get; private set; }
     public DateTime DueDate { get; private set; }
     public DateTime? PaidDate { get; private set; }

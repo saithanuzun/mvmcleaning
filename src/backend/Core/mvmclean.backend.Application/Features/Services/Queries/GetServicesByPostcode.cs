@@ -33,7 +33,8 @@ public class GetServicesByPostcodeHandler : IRequestHandler<GetServicesByPostcod
         _contractorRepository = contractorRepository;
     }
 
-    public async Task<List<GetServicesByPostcodeResponse>> Handle(GetServicesByPostcodeRequest request, CancellationToken cancellationToken)
+    public async Task<List<GetServicesByPostcodeResponse>> Handle(GetServicesByPostcodeRequest request,
+        CancellationToken cancellationToken)
     {
         // Validate input
         if (string.IsNullOrEmpty(request.Postcode))
@@ -47,25 +48,25 @@ public class GetServicesByPostcodeHandler : IRequestHandler<GetServicesByPostcod
             // Get all services
             var allServices = await _serviceRepository.GetAll(noTracking: true);
 
-            // Get contractors covering this postcode
-            var contractorsInArea = await _contractorRepository.GetAll(noTracking: true);
+            // Get contractors covering this postcode - EXECUTE THE QUERY FIRST
+            var contractorsInArea = (_contractorRepository.Get(
+                    predicate: null,
+                    false,
+                    i => i.CoverageAreas))
+                .ToList(); // Execute query here
+
+            // Now filter in memory
             var activeContractors = contractorsInArea
-                .Where(c => c.IsActive && 
-                           c.CoverageAreas.Any(ca => 
-                               ca.IsActive && 
-                               (ca.Postcode.Area == postcode.Area || 
-                                ca.Postcode.District == postcode.District)))
+                .Where(c => c.CoversPostcode(postcode))
                 .ToList();
 
             if (!activeContractors.Any())
                 return new List<GetServicesByPostcodeResponse>();
 
-            // Get services offered by contractors in this area
             var servicesInArea = new List<GetServicesByPostcodeResponse>();
 
             foreach (var service in allServices)
             {
-                // Check if any active contractor in this area offers this service
                 var contractorOfferingService = activeContractors
                     .FirstOrDefault(c => c.Services.Any(s => s.ServiceId == service.Id));
 

@@ -29,6 +29,8 @@ public class CreateBookingHandler : IRequestHandler<CreateBookingRequest,CreateB
     public async Task<CreateBookingResponse> Handle(CreateBookingRequest request, CancellationToken cancellationToken)
     {
         var booking = Domain.Aggregates.Booking.Booking.Create(Postcode.Create(request.Postcode), PhoneNumber.Create(request.PhoneNumber));
+        
+        await _bookingRepository.AddAsync(booking);
 
         return new CreateBookingResponse
         {

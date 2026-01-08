@@ -113,7 +113,7 @@ public class GetDashboardStatsHandler : IRequestHandler<GetDashboardStatsRequest
                 .Select(b => new RecentBookingDto
                 {
                     Id = b.Id,
-                    CustomerName = b.Customer.FirstName,
+                    CustomerName = b.Customer?.FirstName ?? "No Customer Assigned",
                     Status = b.Status.ToString(),
                     CreatedAt = b.CreatedAt
                 })

@@ -12,7 +12,7 @@ public class DatabaseSeeder
     private readonly ILogger<DatabaseSeeder> _logger;
     private readonly string _seederFilePath;
 
-    private readonly bool _seed = false;
+    private readonly bool _seed = true;
 
     public DatabaseSeeder(IMediator mediator, ILogger<DatabaseSeeder> logger)
     {
@@ -751,7 +751,7 @@ public class DatabaseSeeder
                     CustomerName = "John Smith",
                     CustomerEmail = "john.smith@example.com",
                     CustomerPhone = "07900111111",
-                    Address = "10 Downing Street",
+                    Address = "10 Downing Street, London",
                     Postcode = "SW1A 2AA",
                     ContractorId = contractorIds[0],
                     ScheduledStartTime = DateTime.UtcNow.AddDays(-30).AddHours(10),
@@ -767,7 +767,7 @@ public class DatabaseSeeder
                     CustomerName = "Sarah Johnson",
                     CustomerEmail = "sarah.johnson@example.com",
                     CustomerPhone = "07900222222",
-                    Address = "25 Oxford Street",
+                    Address = "25 Oxford Street, London",
                     Postcode = "W1A 1AA",
                     ContractorId = contractorIds[0],
                     ScheduledStartTime = DateTime.UtcNow.AddDays(-25).AddHours(14),
@@ -783,7 +783,7 @@ public class DatabaseSeeder
                     CustomerName = "Michael Brown",
                     CustomerEmail = "michael.brown@example.com",
                     CustomerPhone = "07900333333",
-                    Address = "15 Park Lane",
+                    Address = "15 Park Lane, London",
                     Postcode = "W1A 2AA",
                     ContractorId = contractorIds[2],
                     ScheduledStartTime = DateTime.UtcNow.AddDays(-20).AddHours(9),
@@ -800,7 +800,7 @@ public class DatabaseSeeder
                     CustomerName = "Emma Wilson",
                     CustomerEmail = "emma.wilson@example.com",
                     CustomerPhone = "07900444444",
-                    Address = "42 High Street",
+                    Address = "42 High Street, Leicester",
                     Postcode = "LE1 3RA",
                     ContractorId = contractorIds[1],
                     ScheduledStartTime = DateTime.UtcNow.AddDays(-18).AddHours(11),
@@ -816,7 +816,7 @@ public class DatabaseSeeder
                     CustomerName = "David Taylor",
                     CustomerEmail = "david.taylor@example.com",
                     CustomerPhone = "07900555555",
-                    Address = "89 Market Street",
+                    Address = "89 Market Street, Leicester",
                     Postcode = "LE1 4TA",
                     ContractorId = contractorIds[1],
                     ScheduledStartTime = DateTime.UtcNow.AddDays(-15).AddHours(13),
@@ -832,7 +832,7 @@ public class DatabaseSeeder
                     CustomerName = "Lisa Anderson",
                     CustomerEmail = "lisa.anderson@example.com",
                     CustomerPhone = "07900666666",
-                    Address = "72 Victoria Road",
+                    Address = "72 Victoria Road, Leicester",
                     Postcode = "LE2 0AA",
                     ContractorId = contractorIds[1],
                     ScheduledStartTime = DateTime.UtcNow.AddDays(-12).AddHours(10),
@@ -849,7 +849,7 @@ public class DatabaseSeeder
                     CustomerName = "Robert Davis",
                     CustomerEmail = "robert.davis@example.com",
                     CustomerPhone = "07900777777",
-                    Address = "33 Bell Street",
+                    Address = "33 Bell Street, London",
                     Postcode = "N1 1AA",
                     ContractorId = contractorIds[0],
                     ScheduledStartTime = DateTime.UtcNow.AddDays(-10).AddHours(15),
@@ -865,7 +865,7 @@ public class DatabaseSeeder
                     CustomerName = "Jennifer Martinez",
                     CustomerEmail = "jennifer.martinez@example.com",
                     CustomerPhone = "07900888888",
-                    Address = "56 Elm Avenue",
+                    Address = "56 Elm Avenue, London",
                     Postcode = "SW3 1AA",
                     ContractorId = contractorIds[2],
                     ScheduledStartTime = DateTime.UtcNow.AddDays(-8).AddHours(11),
@@ -881,7 +881,7 @@ public class DatabaseSeeder
                     CustomerName = "Christopher Lee",
                     CustomerEmail = "christopher.lee@example.com",
                     CustomerPhone = "07900999999",
-                    Address = "99 Oak Gardens",
+                    Address = "99 Oak Gardens, London",
                     Postcode = "E1 6AN",
                     ContractorId = contractorIds[0],
                     ScheduledStartTime = DateTime.UtcNow.AddDays(-5).AddHours(9),
@@ -897,7 +897,7 @@ public class DatabaseSeeder
                     CustomerName = "Rachel White",
                     CustomerEmail = "rachel.white@example.com",
                     CustomerPhone = "07901000000",
-                    Address = "12 Cedar Lane",
+                    Address = "12 Cedar Lane, Leicester",
                     Postcode = "LE3 1AA",
                     ContractorId = contractorIds[1],
                     ScheduledStartTime = DateTime.UtcNow.AddDays(-3).AddHours(14),
@@ -915,9 +915,17 @@ public class DatabaseSeeder
                 try
                 {
                     var response = await _mediator.Send(bookingRequest);
-                    if (response.Success)
+                    if (response != null && response.Success)
                     {
                         _logger.LogInformation($"Past booking created: {bookingRequest.CustomerName} - {bookingRequest.Postcode} (ID: {response.BookingId})");
+                    }
+                    else if (response != null)
+                    {
+                        _logger.LogWarning($"Failed to create booking for '{bookingRequest.CustomerName}': {response.Message}");
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Booking handler returned null for '{bookingRequest.CustomerName}'");
                     }
                 }
                 catch (Exception ex)

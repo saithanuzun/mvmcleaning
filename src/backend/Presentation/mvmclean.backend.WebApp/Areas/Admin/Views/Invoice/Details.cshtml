@@ -11,7 +11,7 @@
                 <i class="bi bi-receipt"></i> Invoice Details
             </h2>
             <div class="btn-group" role="group">
-                <a asp-area="Admin" asp-controller="Invoice" asp-action="AllInvoices" class="btn btn-secondary">
+                <a href="@Url.Action("AllInvoices", "Invoice")" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Back to Invoices
                 </a>
                 <button class="btn btn-info" disabled title="Coming soon">
@@ -22,8 +22,7 @@
                 </button>
                 @if (Model.Status != mvmclean.backend.Domain.Aggregates.Invoice.Enums.InvoiceStatus.Paid)
                 {
-                    <form method="post" asp-area="Admin" asp-controller="Invoice" asp-action="MarkAsPaid" 
-                        asp-route-invoiceId="@Model.Id" style="display: inline;">
+                    <form method="post" action="@Url.Action("MarkAsPaid", "Invoice", new { invoiceId = Model.Id })" style="display: inline;">
                         <button type="submit" class="btn btn-success" onclick="return confirm('Mark this invoice as paid?')">
                             <i class="bi bi-check-circle"></i> Mark as Paid
                         </button>

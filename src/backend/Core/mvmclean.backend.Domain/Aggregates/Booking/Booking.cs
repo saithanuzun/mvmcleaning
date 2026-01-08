@@ -14,23 +14,23 @@ public class Booking : Core.BaseClasses.AggregateRoot
     public Postcode Postcode { get; set; }
 
     //second step assign contractor
-    public Guid ContractorId { get; private set; }
+    public Guid? ContractorId { get; private set; }
 
     //third step add booking items
     private readonly List<BookingItem> _serviceItems = new();
     public List<BookingItem> ServiceItems => new List<BookingItem>(_serviceItems);
 
     // total price is here
-    public Money TotalPrice { get; private set; }
+    public Money? TotalPrice { get; private set; }
 
     //time slot
-    public TimeSlot ScheduledSlot { get; private set; }
+    public TimeSlot? ScheduledSlot { get; private set; }
 
 
     // customer details and address
-    public Guid CustomerId { get; private set; }
-    public Customer Customer { get; private set; }
-    public Address ServiceAddress { get; private set; }
+    public Guid? CustomerId { get; private set; }
+    public Customer? Customer { get; private set; }
+    public Address? ServiceAddress { get; private set; }
 
     // payment
     public Guid? PaymentId { get; private set; }
@@ -44,8 +44,8 @@ public class Booking : Core.BaseClasses.AggregateRoot
 
     private Booking(PhoneNumber number, Postcode postcode)
     {
-        PhoneNumber = number ?? throw new ArgumentNullException(nameof(number));
-        Postcode = postcode ?? throw new ArgumentNullException(nameof(postcode));
+        PhoneNumber = number;
+        Postcode = postcode ;
         CreationStatus = BookingCreationStatus.BasicInfo;
 
         AddDomainEvent(new BookingCreatedEvent(Id, number, postcode));

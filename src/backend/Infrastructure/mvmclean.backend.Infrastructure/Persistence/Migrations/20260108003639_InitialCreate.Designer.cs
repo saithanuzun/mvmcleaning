@@ -12,7 +12,7 @@ using mvmclean.backend.Infrastructure.Persistence;
 namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MVMdbContext))]
-    [Migration("20260107191307_InitialCreate")]
+    [Migration("20260108003639_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -30,7 +30,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ContractorId")
+                    b.Property<Guid?>("ContractorId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -44,7 +44,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid?>("CustomerId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -462,7 +462,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid?>("CustomerId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -1011,14 +1011,12 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.HasOne("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", null)
                         .WithMany()
                         .HasForeignKey("ContractorId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("mvmclean.backend.Domain.Aggregates.Booking.Entities.Customer", "Customer")
                         .WithMany("Bookings")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.PhoneNumber", "PhoneNumber", b1 =>
                         {
@@ -1259,16 +1257,13 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("Postcode")
                         .IsRequired();
 
-                    b.Navigation("ScheduledSlot")
-                        .IsRequired();
+                    b.Navigation("ScheduledSlot");
 
-                    b.Navigation("ServiceAddress")
-                        .IsRequired();
+                    b.Navigation("ServiceAddress");
 
                     b.Navigation("ServiceItems");
 
-                    b.Navigation("TotalPrice")
-                        .IsRequired();
+                    b.Navigation("TotalPrice");
                 });
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Booking.Entities.Customer", b =>

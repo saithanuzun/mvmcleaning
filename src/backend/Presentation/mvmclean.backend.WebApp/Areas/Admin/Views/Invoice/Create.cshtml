@@ -30,10 +30,10 @@
                     <h5 class="mb-0">Invoice Details</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" asp-area="Admin" asp-controller="Invoice" asp-action="Create">
+                    <form method="post" action="@Url.Action("Create", "Invoice")">
                         <div class="mb-3">
                             <label for="BookingId" class="form-label">Booking <span class="text-danger">*</span></label>
-                            <input type="hidden" asp-for="BookingId" />
+                            <input type="hidden" id="BookingId" name="BookingId" />
                             <div class="input-group">
                                 <input type="text" class="form-control" id="BookingIdDisplay" placeholder="Select a booking..."
                                     readonly data-bs-toggle="modal" data-bs-target="#bookingModal" style="cursor: pointer;" />
@@ -57,7 +57,7 @@
 
                         <div class="mb-3">
                             <label for="PaymentTermsDays" class="form-label">Payment Terms (Days) <span class="text-danger">*</span></label>
-                            <select class="form-select" asp-for="PaymentTermsDays">
+                            <select class="form-select" id="PaymentTermsDays" name="PaymentTermsDays">
                                 <option value="0">Due on Receipt</option>
                                 <option value="7">Net 7</option>
                                 <option value="15">Net 15</option>
@@ -70,7 +70,7 @@
                         <hr />
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="@Url.Action("AllInvoices", "Invoice", new { Area = "Admin" })" class="btn btn-secondary">
+                            <a href="@Url.Action("AllInvoices", "Invoice")" class="btn btn-secondary">
                                 <i class="bi bi-x-circle"></i> Cancel
                             </a>
                             <button type="submit" class="btn btn-primary">

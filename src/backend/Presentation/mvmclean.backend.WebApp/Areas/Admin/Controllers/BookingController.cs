@@ -7,6 +7,7 @@ using mvmclean.backend.Application.Features.Booking.Queries;
 using mvmclean.backend.Application.Features.Services.Queries;
 using mvmclean.backend.Application.Features.Contractor.Queries;
 using mvmclean.backend.Application.Features.Contractor.Commands;
+using mvmclean.backend.WebApp.Areas.Admin.Models;
 
 namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
 
@@ -117,7 +118,6 @@ public class BookingController : BaseAdminController
 
     [Route("cancel/{bookingId}")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Cancel(string bookingId)
     {
         return await UpdateStatus(bookingId, "cancelled");
@@ -146,7 +146,6 @@ public class BookingController : BaseAdminController
 
     [Route("create")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([FromForm] CreateBookingFormModel model)
     {
         try
@@ -217,7 +216,7 @@ public class BookingController : BaseAdminController
             if (response.Success)
             {
                 TempData["Success"] = "Booking created successfully";
-                return RedirectToAction(nameof(Details), new { bookingId = response.BookingId });
+                return RedirectToAction("AllBookings");
             }
             else
             {
@@ -234,7 +233,7 @@ public class BookingController : BaseAdminController
         catch (Exception ex)
         {
             TempData["Error"] = $"Error creating booking: {ex.Message}";
-            return RedirectToAction(nameof(AllBookings));
+            return RedirectToAction("AllBookings");
         }
     }
 
@@ -270,22 +269,3 @@ public class BookingController : BaseAdminController
     }
 }
 
-public class CreateBookingFormModel
-{
-    public string CustomerName { get; set; }
-    public string CustomerEmail { get; set; }
-    public string CustomerPhone { get; set; }
-    public string Address { get; set; }
-    public string Postcode { get; set; }
-    public string ContractorId { get; set; }
-    public string ScheduledDate { get; set; }
-    public string ScheduledTime { get; set; }
-    public int DurationMinutes { get; set; } = 60;
-    public decimal TotalAmount { get; set; }
-    
-    // Service selection
-    public List<string> ServiceIds { get; set; } = new();
-    public List<string> ServiceNames { get; set; } = new();
-    public List<string> ServicePrices { get; set; } = new();
-    public List<int> ServiceQuantities { get; set; } = new();
-}

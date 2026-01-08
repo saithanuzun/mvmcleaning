@@ -98,12 +98,12 @@ public class CreateBookingCompleteHandler : IRequestHandler<CreateBookingComplet
             var timeSlot = TimeSlot.Create(request.ScheduledStartTime, request.ScheduledEndTime);
             booking.AssignTimeSlot(timeSlot, contractor);
 
-            // Parse customer name (assuming format: "FirstName LastName")
+            // Parse customer name 
             var nameParts = request.CustomerName.Split(' ', 2);
             var firstName = nameParts.Length > 0 ? nameParts[0] : request.CustomerName;
             var lastName = nameParts.Length > 1 ? nameParts[1] : "";
 
-            // Parse address (assuming format: "street, city")
+            // Parse address 
             var addressParts = request.Address.Split(',', 2);
             var street = addressParts.Length > 0 ? addressParts[0].Trim() : request.Address;
             var city = addressParts.Length > 1 ? addressParts[1].Trim() : "";
@@ -117,7 +117,6 @@ public class CreateBookingCompleteHandler : IRequestHandler<CreateBookingComplet
                 city,
                 null);
 
-            // Create and assign payment
             var payment = Payment.Create(booking.Id, Money.Create(request.TotalAmount), PaymentType.Card, null);
             booking.AssignPayment(payment);
 

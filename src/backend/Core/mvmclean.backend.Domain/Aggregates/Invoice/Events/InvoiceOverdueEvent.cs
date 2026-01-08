@@ -4,7 +4,7 @@ namespace mvmclean.backend.Domain.Aggregates.Invoice.Events;
 
 public class InvoiceOverdueEvent : DomainEvent
 {
-    public InvoiceOverdueEvent(Guid id, Guid customerId, decimal totalAmountAmount)
+    public InvoiceOverdueEvent(Guid id, Guid? customerId, decimal totalAmountAmount)
     {
         throw new NotImplementedException();
     }
