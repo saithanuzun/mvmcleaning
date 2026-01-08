@@ -15,6 +15,7 @@ public class BookingConfiguration: EntityConfiguration<Booking>
         
         builder.OwnsOne(i => i.ServiceAddress, address =>
         {
+            
             address.OwnsOne(a => a.Postcode);
         });
 

@@ -76,7 +76,6 @@ public class BookingController : BaseApiController
                 } : null,
                 serviceItems = response.ServiceItems?.Select(item => new
                 {
-                    id = item.Id,
                     serviceName = item.ServiceName,
                     serviceId = item.ServiceId,
                     unitPrice = item.UnitAdjustedPrice?.Amount ?? 0,

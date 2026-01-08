@@ -1,9 +1,9 @@
 using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
-namespace mvmclean.backend.Domain.Aggregates.Booking.Entities;
+namespace mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
 
-public class BookingItem : Entity
+public class BookingItem : ValueObject
 {
     public string ServiceName { get; set; }
     public Guid ServiceId { get; set; }
@@ -19,4 +19,8 @@ public class BookingItem : Entity
         Quantity =  quantity;
     }
 
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        throw new NotImplementedException();
+    }
 }

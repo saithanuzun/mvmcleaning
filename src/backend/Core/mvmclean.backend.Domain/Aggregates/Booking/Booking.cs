@@ -4,6 +4,7 @@ using mvmclean.backend.Domain.Aggregates.Booking.Events;
 using mvmclean.backend.Domain.Aggregates.Service; // Add reference to Service aggregate
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 using System.Collections.ObjectModel;
+using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
 
 namespace mvmclean.backend.Domain.Aggregates.Booking;
 
@@ -114,11 +115,16 @@ public class Booking : Core.BaseClasses.AggregateRoot
         var item = _serviceItems.FirstOrDefault(s => s.ServiceId == serviceItemId);
         if (item != null)
         {
-            _serviceItems.Remove(item);
+            if (item.Quantity > 1)
+            {
+                item.UpdateQuantity(item.Quantity -= 1);
+            }
+            else
+            {
+                _serviceItems.Remove(item);
+            }
             UpdateTotalPrice();
             UpdatedAt = DateTime.UtcNow;
-
-            //AddDomainEvent(new ServiceRemovedFromCartEvent(Id, serviceItemId));
         }
     }
 

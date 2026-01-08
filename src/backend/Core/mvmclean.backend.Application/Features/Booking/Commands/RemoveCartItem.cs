@@ -69,7 +69,7 @@ public class RemoveCartItemHandler : IRequestHandler<RemoveCartItemRequest, Remo
                     Message = "Booking not found"
                 };
 
-            // Use domain method to remove service from cart
+            // Use domain method to decrement service quantity from cart (removes if quantity 0)
             booking.RemoveServiceFromCart(serviceItemId);
 
             // Save changes

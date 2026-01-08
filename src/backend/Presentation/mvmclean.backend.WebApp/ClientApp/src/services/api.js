@@ -28,11 +28,19 @@ const api = {
     postcode: {
         validate: async (postcode) => {
             const response = await apiClient.post('/postcode/validate', { postcode });
-            return response.data;
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         },
         validateAndBook: async (postcode, phone) => {
             const response = await apiClient.post('/postcode/validate-and-book', { postcode, phone });
-            return response.data;
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         }
     },
 
@@ -40,11 +48,19 @@ const api = {
     services: {
         getByPostcode: async (postcode) => {
             const response = await apiClient.get(`/services/bypostcode/${postcode}`);
-            return response.data;
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         },
         getById: async (serviceId) => {
             const response = await apiClient.get(`/services/${serviceId}`);
-            return response.data;
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         }
     },
 
@@ -56,22 +72,50 @@ const api = {
             return response.data;
         },
         add: async (bookingId, serviceItemId, serviceName, price, durationMinutes) => {
-            const response = await apiClient.post('/basket/add', {
-                bookingId: bookingId,
-                serviceItemId: serviceItemId,
-                serviceName: serviceName,
-                price: parseFloat(price),
-                quantity: 1,
-                durationMinutes: parseInt(durationMinutes)
-            });
-            return response.data;
+            try {
+                const response = await apiClient.post('/basket/add', {
+                    bookingId: bookingId,
+                    serviceItemId: serviceItemId,
+                    serviceName: serviceName,
+                    price: parseFloat(price),
+                    quantity: 1,
+                    durationMinutes: parseInt(durationMinutes)
+                });
+                // Unwrap ApiResponse and return with normalized success field
+                return {
+                    success: response.data?.success || false,
+                    message: response.data?.message,
+                    data: response.data?.data
+                };
+            } catch (error) {
+                console.error('Add to cart API error:', error.response?.data || error.message);
+                return {
+                    success: false,
+                    message: error.response?.data?.message || error.message || 'Failed to add to cart',
+                    data: null
+                };
+            }
         },
         remove: async (bookingId, serviceItemId) => {
-            const response = await apiClient.post('/basket/remove', {
-                bookingId: bookingId,
-                serviceItemId: serviceItemId
-            });
-            return response.data;
+            try {
+                const response = await apiClient.post('/basket/remove', {
+                    bookingId: bookingId,
+                    serviceItemId: serviceItemId
+                });
+                // Unwrap ApiResponse and return with normalized success field
+                return {
+                    success: response.data?.success || false,
+                    message: response.data?.message,
+                    data: response.data?.data
+                };
+            } catch (error) {
+                console.error('Remove from cart API error:', error.response?.data || error.message);
+                return {
+                    success: false,
+                    message: error.response?.data?.message || error.message || 'Failed to remove from cart',
+                    data: null
+                };
+            }
         },
         updateQuantity: async (bookingId, serviceItemId, quantity) => {
             const response = await apiClient.post('/basket/add', {
@@ -79,12 +123,20 @@ const api = {
                 serviceItemId: serviceItemId,
                 quantity: parseInt(quantity)
             });
-            return response.data;
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         },
         clear: async () => {
             const sessionId = getSessionId();
             const response = await apiClient.post(`/basket/clear/${sessionId}`);
-            return response.data;
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         }
     },
 
@@ -94,7 +146,11 @@ const api = {
             const response = await apiClient.get('/availability/date', {
                 params: { postcode, date, durationMinutes, contractorIds: contractorIds.join(',') }
             });
-            return response.data;
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         }
     },
 
@@ -102,18 +158,30 @@ const api = {
     booking: {
         create: async (bookingData) => {
             const response = await apiClient.post('/booking/create', bookingData);
-            return response.data;
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         },
         getById: async (bookingId) => {
             const response = await apiClient.get(`/booking/${bookingId}`);
-            return response.data;
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         },
         verifyPayment: async (bookingId, sessionId) => {
             const response = await apiClient.post('/booking/verify-payment', {
                 bookingId,
                 sessionId
             });
-            return response.data;
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         }
     }
 };

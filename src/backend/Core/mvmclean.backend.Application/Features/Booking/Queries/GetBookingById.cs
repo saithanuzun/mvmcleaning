@@ -2,6 +2,7 @@ using MediatR;
 using mvmclean.backend.Domain.Aggregates.Booking;
 using mvmclean.backend.Domain.Aggregates.Booking.Entities;
 using mvmclean.backend.Domain.Aggregates.Booking.Enums;
+using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
 namespace mvmclean.backend.Application.Features.Booking.Queries;

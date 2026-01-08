@@ -12,7 +12,7 @@ using mvmclean.backend.Infrastructure.Persistence;
 namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MVMdbContext))]
-    [Migration("20260108003639_InitialCreate")]
+    [Migration("20260108011048_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -1175,29 +1175,16 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("BookingId");
                         });
 
-                    b.OwnsMany("mvmclean.backend.Domain.Aggregates.Booking.Entities.BookingItem", "ServiceItems", b1 =>
+                    b.OwnsMany("mvmclean.backend.Domain.Aggregates.Booking.ValueObjects.BookingItem", "ServiceItems", b1 =>
                         {
                             b1.Property<Guid>("BookingId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<Guid>("Id")
+                            b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
-                                .HasColumnType("uuid");
+                                .HasColumnType("integer");
 
-                            b1.Property<DateTime>("CreatedAt")
-                                .HasColumnType("timestamp with time zone");
-
-                            b1.Property<string>("CreatedBy")
-                                .HasColumnType("text");
-
-                            b1.Property<DateTime?>("DeletedAt")
-                                .HasColumnType("timestamp with time zone");
-
-                            b1.Property<string>("DeletedBy")
-                                .HasColumnType("text");
-
-                            b1.Property<bool>("IsDeleted")
-                                .HasColumnType("boolean");
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
                             b1.Property<int>("Quantity")
                                 .HasColumnType("integer");
@@ -1207,12 +1194,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                             b1.Property<string>("ServiceName")
                                 .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<DateTime?>("UpdatedAt")
-                                .HasColumnType("timestamp with time zone");
-
-                            b1.Property<string>("UpdatedBy")
                                 .HasColumnType("text");
 
                             b1.HasKey("BookingId", "Id");
@@ -1227,8 +1208,8 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                     b2.Property<Guid>("BookingItemBookingId")
                                         .HasColumnType("uuid");
 
-                                    b2.Property<Guid>("BookingItemId")
-                                        .HasColumnType("uuid");
+                                    b2.Property<int>("BookingItemId")
+                                        .HasColumnType("integer");
 
                                     b2.Property<decimal>("Amount")
                                         .HasColumnType("numeric");

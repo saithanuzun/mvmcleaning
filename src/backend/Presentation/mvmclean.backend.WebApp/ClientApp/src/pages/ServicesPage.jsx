@@ -83,6 +83,7 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
                 if (!service) return;
 
                 const response = await api.basket.remove(bookingData.bookingId, serviceId);
+                console.log('Remove response:', response);
                 
                 if (response && response.success) {
                     setSelectedServices(prev => {
@@ -97,6 +98,14 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
                 const service = services.find(s => s.id === serviceId);
                 if (!service) return;
 
+                console.log('Adding service:', { 
+                    bookingId: bookingData.bookingId,
+                    serviceId,
+                    name: service.name,
+                    price: service.price,
+                    duration: service.duration
+                });
+
                 const response = await api.basket.add(
                     bookingData.bookingId,
                     serviceId,
@@ -104,6 +113,8 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
                     service.price,
                     service.duration
                 );
+                
+                console.log('Add response:', response);
 
                 if (response && response.success) {
                     setSelectedServices(prev => ({
@@ -115,8 +126,9 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
                 }
             }
         } catch (err) {
-            console.error('Error updating cart:', err);
-            setError('Failed to update cart. Please try again.');
+            console.error('Error updating cart - Full error:', err);
+            console.error('Error response:', err.response?.data);
+            setError(err.response?.data?.message || 'Failed to update cart. Please try again.');
         }
     };
 
@@ -126,14 +138,15 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
 
     const calculateTotal = () => {
         return Object.entries(selectedServices).reduce((total, [serviceId, quantity]) => {
-            const service = services.find(s => s.id === parseInt(serviceId));
+            const service = services.find(s => s.id === serviceId);
+            console.log('Calculating total:', { serviceId, service, quantity, price: service?.price });
             return total + (service?.price || 0) * quantity;
         }, 0);
     };
 
     const calculateTotalDuration = () => {
         return Object.entries(selectedServices).reduce((total, [serviceId, quantity]) => {
-            const service = services.find(s => s.id === parseInt(serviceId));
+            const service = services.find(s => s.id === serviceId);
             return total + (service?.duration || 0) * quantity;
         }, 0);
     };
