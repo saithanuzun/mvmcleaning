@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+      <UserSecretsId>8b4d5b6b-36cb-48d5-83b3-9602bc2bbabd</UserSecretsId>
+  </PropertyGroup>
 
     <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
         <Exec Command="npm run build" WorkingDirectory="ClientApp" />

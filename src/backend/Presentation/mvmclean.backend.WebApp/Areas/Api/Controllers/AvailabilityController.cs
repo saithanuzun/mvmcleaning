@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using mvmclean.backend.Application.Features.Contractor.Queries;
+using mvmclean.backend.Application.Features.Booking.Queries;
 
 namespace mvmclean.backend.WebApp.Areas.Api.Controllers;
 
@@ -12,16 +12,17 @@ public class AvailabilityController : BaseApiController
     }
 
     /// <summary>
-    /// Get available time slots for contractors on a specific date
+    /// Get available time slots with contractor details
     /// </summary>
     [HttpGet("date")]
     public async Task<IActionResult> GetAvailableSlots(
-        [FromQuery] string contractorIds,
+        [FromQuery] string postcode,
         [FromQuery] DateTime date,
-        [FromQuery] int durationMinutes)
+        [FromQuery] int durationMinutes,
+        [FromQuery] string contractorIds = "")
     {
-        if (string.IsNullOrEmpty(contractorIds))
-            return Error("Contractor IDs are required");
+        if (string.IsNullOrEmpty(postcode) && string.IsNullOrEmpty(contractorIds))
+            return Error("Either postcode or contractor IDs are required");
 
         if (date < DateTime.Today)
             return Error("Date cannot be in the past");
@@ -31,46 +32,21 @@ public class AvailabilityController : BaseApiController
 
         try
         {
-            // Parse comma-separated contractor IDs
-            var contractorIdList = contractorIds
-                .Split(',')
-                .Select(id => id.Trim())
-                .Where(id => !string.IsNullOrEmpty(id))
-                .ToList();
-
-            if (!contractorIdList.Any())
-                return Error("No valid contractor IDs provided");
-
-            var request = new GetContractorAvailabilityByDayRequest
+            var request = new GetAvailableSlotsRequest
             {
-                ContractorIds = contractorIdList,
+                Postcode = postcode,
                 Date = date,
-                Duration = TimeSpan.FromMinutes(durationMinutes)
+                DurationMinutes = durationMinutes,
+                ContractorIds = contractorIds
             };
 
             var response = await _mediator.Send(request);
+            
+            var message = response.AvailableSlots.Any()
+                ? $"Found {response.AvailableSlots.Count} available slots"
+                : "No available slots found for the selected date and duration";
 
-            if (response == null || response.Count == 0)
-                return Success(new List<object>(), "No available slots found for the selected date and duration");
-
-            // Group by contractor and format response
-            var groupedByContractor = response
-                .GroupBy(r => r.ContractorId)
-                .Select(g => new
-                {
-                    contractorId = g.Key,
-                    availableSlots = g
-                        .Where(slot => slot.Available)
-                        .Select(slot => new
-                        {
-                            startTime = slot.StartTime,
-                            endTime = slot.EndTime
-                        })
-                        .ToList()
-                })
-                .ToList();
-
-            return Success(groupedByContractor, $"Found {response.Count(r => r.Available)} available slots");
+            return Success(response, message);
         }
         catch (Exception ex)
         {
@@ -78,3 +54,4 @@ public class AvailabilityController : BaseApiController
         }
     }
 }
+

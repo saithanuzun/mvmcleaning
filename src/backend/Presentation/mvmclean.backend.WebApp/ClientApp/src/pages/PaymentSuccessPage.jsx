@@ -1,91 +1,35 @@
 // src/pages/PaymentSuccessPage.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const PaymentSuccessPage = () => {
-    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const [verifying, setVerifying] = useState(true);
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState('');
     const [bookingDetails, setBookingDetails] = useState(null);
 
     useEffect(() => {
-        const verifyPayment = async () => {
-            try {
-                // Get session ID from URL params (Stripe returns this)
-                const sessionId = searchParams.get('session_id');
-                const bookingId = localStorage.getItem('pending_booking_id');
+        // Get booking details from localStorage
+        const bookingId = localStorage.getItem('pending_booking_id');
+        const bookingData = localStorage.getItem('booking_data');
+        
+        if (bookingId && bookingData) {
+            setBookingDetails(JSON.parse(bookingData));
+            
+            // Clear booking session after 5 seconds
+            const timer = setTimeout(() => {
+                localStorage.removeItem('pending_booking_id');
+                localStorage.removeItem('booking_session_id');
+                localStorage.removeItem('booking_data');
+            }, 5000);
+            
+            return () => clearTimeout(timer);
+        }
+    }, []);
 
-                if (!sessionId || !bookingId) {
-                    setError('Payment verification failed. Missing required information.');
-                    setVerifying(false);
-                    return;
-                }
+    const handleBookAnother = () => {
+        localStorage.clear();
+        navigate('/');
+    };
 
-                // Verify payment with backend
-                const response = await api.booking.verifyPayment(bookingId, sessionId);
-
-                if (response.success) {
-                    setSuccess(true);
-                    setBookingDetails(response.data);
-
-                    // Clear booking session
-                    localStorage.removeItem('pending_booking_id');
-                    localStorage.removeItem('booking_session_id');
-                } else {
-                    setError(response.message || 'Payment verification failed');
-                }
-            } catch (err) {
-                console.error('Payment verification error:', err);
-                setError('Failed to verify payment. Please contact support with your booking reference.');
-            } finally {
-                setVerifying(false);
-            }
-        };
-
-        verifyPayment();
-    }, [searchParams]);
-
-    if (verifying) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 flex items-center justify-center px-4">
-                <div className="text-center">
-                    <div
-                        className="animate-spin rounded-full h-16 w-16 border-4 border-t-transparent mx-auto mb-6"
-                        style={{ borderColor: '#46C6CE', borderTopColor: 'transparent' }}
-                    ></div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Verifying Payment...</h2>
-                    <p className="text-gray-600">Please wait while we confirm your booking</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 flex items-center justify-center px-4">
-                <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-                    <div className="text-center mb-6">
-                        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </div>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-2">Payment Verification Failed</h2>
-                        <p className="text-gray-600 mb-6">{error}</p>
-                        <button
-                            onClick={() => navigate('/')}
-                            className="px-8 py-3 bg-[#194376] text-white font-bold rounded-xl hover:shadow-lg transition-all"
-                        >
-                            Return to Home
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 py-12 px-4">
@@ -101,7 +45,7 @@ const PaymentSuccessPage = () => {
                         Booking Confirmed!
                     </h1>
                     <p className="text-gray-600 text-lg">
-                        Your payment was successful and your booking is confirmed
+                        Your booking has been confirmed successfully
                     </p>
                 </div>
 

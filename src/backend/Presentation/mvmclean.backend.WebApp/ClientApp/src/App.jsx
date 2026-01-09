@@ -4,14 +4,16 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import PostcodePage from './pages/PostcodePage';
 import ServicesPage from './pages/ServicesPage';
 import TimeSlotsPage from './pages/TimeSlotsPage';
-import PaymentPage from './pages/BookingPage';
+import BookingPage from './pages/BookingPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
+import PaymentFailedPage from './pages/PaymentFailedPage';
 import ProgressBar from './components/ProgressBar';
 
 function App() {
     const [bookingData, setBookingData] = useState({
         postcode: '',
         phone: '',
+        bookingId: null,
         selectedServices: [],
         selectedTimeSlot: null,
         customerDetails: {},
@@ -43,11 +45,15 @@ function App() {
                         />
                         <Route
                             path="/payment"
-                            element={<PaymentPage bookingData={bookingData} updateBookingData={updateBookingData} />}
+                            element={<BookingPage bookingData={bookingData} updateBookingData={updateBookingData} />}
                         />
                         <Route
                             path="/payment-success"
                             element={<PaymentSuccessPage />}
+                        />
+                        <Route
+                            path="/payment-failed"
+                            element={<PaymentFailedPage />}
                         />
                     </Routes>
                 </div>

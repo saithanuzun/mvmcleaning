@@ -138,8 +138,8 @@
                                         <tr>
                                             <td class="fw-semibold">@item.ServiceName</td>
                                             <td class="text-end">@item.Quantity</td>
-                                            <td class="text-end">£@item.UnitAdjustedPrice.Amount.ToString("0.00")</td>
-                                            <td class="text-end fw-bold">£@(item.UnitAdjustedPrice.Amount * item.Quantity).ToString("0.00")</td>
+                                            <td class="text-end">£@item.UnitPrice</td>
+                                            <td class="text-end fw-bold">£@(item.UnitPrice * item.Quantity).ToString("0.00")</td>
                                         </tr>
                                     }
                                 </tbody>

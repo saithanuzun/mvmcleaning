@@ -1,9 +1,9 @@
-// src/pages/PaymentPage.jsx
+// src/pages/BookingPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
-const PaymentPage = ({ bookingData, updateBookingData }) => {
+const BookingPage = ({ bookingData, updateBookingData }) => {
     const navigate = useNavigate();
 
     const [customerDetails, setCustomerDetails] = useState({
@@ -14,12 +14,13 @@ const PaymentPage = ({ bookingData, updateBookingData }) => {
         postcode: bookingData.postcode || '',
         notes: ''
     });
+    const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash' or 'card'
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     // Redirect if incomplete booking data
     useEffect(() => {
-        if (!bookingData.postcode || !bookingData.basket || !bookingData.selectedTimeSlot) {
+        if (!bookingData.postcode || (!bookingData.selectedServicesData && !bookingData.basket) || !bookingData.selectedTimeSlot) {
             navigate('/');
         }
     }, [bookingData, navigate]);
@@ -64,7 +65,9 @@ const PaymentPage = ({ bookingData, updateBookingData }) => {
 
         try {
             // Prepare booking data for API
+            const servicesArray = bookingData.selectedServicesData || bookingData.basket?.items || [];
             const bookingRequest = {
+                bookingId: bookingData.bookingId,
                 customerName: customerDetails.name,
                 customerEmail: customerDetails.email,
                 customerPhone: bookingData.phone,
@@ -75,13 +78,14 @@ const PaymentPage = ({ bookingData, updateBookingData }) => {
                     startTime: createDateTime(bookingData.selectedDate, bookingData.selectedTimeSlot.startTime),
                     endTime: createDateTime(bookingData.selectedDate, bookingData.selectedTimeSlot.endTime)
                 },
-                services: bookingData.basket.items.map(item => ({
-                    serviceId: item.serviceId,
-                    serviceName: item.serviceName,
+                services: servicesArray.map(item => ({
+                    serviceId: item.id || item.serviceId,
+                    serviceName: item.name || item.serviceName,
                     quantity: item.quantity,
                     price: item.price
                 })),
-                totalAmount: bookingData.totalAmount
+                totalAmount: bookingData.totalAmount,
+                paymentMethod: paymentMethod
             };
 
             // Add notes to address if provided
@@ -89,21 +93,34 @@ const PaymentPage = ({ bookingData, updateBookingData }) => {
                 bookingRequest.address += ` (Notes: ${customerDetails.notes})`;
             }
 
-            // Create booking and get payment URL
-            const response = await api.booking.create(bookingRequest);
+            // Complete booking with payment method handling
+            const response = await api.booking.complete(bookingRequest);
 
             if (response.success && response.data) {
-                // Store booking ID for payment verification
+                // Store booking ID and details for success page
                 localStorage.setItem('pending_booking_id', response.data.bookingId);
+                localStorage.setItem('booking_data', JSON.stringify({
+                    bookingId: response.data.bookingId,
+                    status: response.data.status,
+                    customerName: customerDetails.name,
+                    customerEmail: customerDetails.email,
+                    paymentMethod: paymentMethod
+                }));
 
                 // Update booking data
                 updateBookingData({
                     customerDetails,
-                    bookingId: response.data.bookingId
+                    bookingId: response.data.bookingId,
+                    paymentMethod: paymentMethod
                 });
 
-                // Redirect to payment URL (Stripe Payment Link)
-                window.location.href = response.data.paymentUrl;
+                // If cash payment, redirect to success page
+                if (paymentMethod === 'cash') {
+                    navigate('/payment-success');
+                } else {
+                    // If card payment, redirect to Stripe payment URL
+                    window.location.href = response.data.paymentUrl;
+                }
             } else {
                 setError(response.message || 'Failed to create booking. Please try again.');
             }
@@ -172,11 +189,23 @@ const PaymentPage = ({ bookingData, updateBookingData }) => {
                         <h3 className="text-xl font-bold text-gray-800">Booking Summary</h3>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-gray-50 p-4 rounded-xl">
-                            <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Services</p>
-                            <p className="font-bold text-gray-800 text-sm leading-tight">
-                                {bookingData.basket?.items?.map(item => item.serviceName).join(', ') || 'No services'}
-                            </p>
+                        <div className="bg-gray-50 p-4 rounded-xl md:col-span-2">
+                            <p className="text-xs text-gray-500 mb-3 font-semibold uppercase tracking-wide">Services Selected</p>
+                            <div className="space-y-2">
+                                {(bookingData.selectedServicesData || bookingData.basket?.items) && (bookingData.selectedServicesData || bookingData.basket?.items).length > 0 ? (
+                                    (bookingData.selectedServicesData || bookingData.basket.items).map((item, index) => (
+                                        <div key={index} className="flex justify-between items-center p-2 bg-white rounded">
+                                            <div>
+                                                <p className="font-semibold text-gray-800 text-sm">{item.name || item.serviceName}</p>
+                                                <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                                            </div>
+                                            <p className="font-bold text-gray-800">£{((item.price || item.serviceName) * item.quantity).toFixed(2)}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-sm text-gray-600">No services selected</p>
+                                )}
+                            </div>
                         </div>
                         <div className="bg-gray-50 p-4 rounded-xl">
                             <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Date & Time</p>
@@ -195,14 +224,18 @@ const PaymentPage = ({ bookingData, updateBookingData }) => {
                             <p className="font-bold text-gray-800">{bookingData.postcode}</p>
                             <p className="text-xs text-gray-600 mt-1">Phone: {bookingData.phone}</p>
                         </div>
-                        <div className="bg-gray-50 p-4 rounded-xl">
-                            <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Contractor</p>
-                            <p className="font-bold text-gray-800">{bookingData.contractorName || 'Assigned'}</p>
-                            <div className="mt-2">
-                                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Total</p>
-                                <p className="font-bold text-2xl" style={{ color: '#194376' }}>
-                                    £{bookingData.totalAmount?.toFixed(2) || '0.00'}
-                                </p>
+                        <div className="bg-gray-50 p-4 rounded-xl md:col-span-2">
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Contractor</p>
+                                    <p className="font-bold text-gray-800">{bookingData.contractorName || 'Assigned'}</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Total</p>
+                                    <p className="font-bold text-2xl" style={{ color: '#194376' }}>
+                                        £{bookingData.totalAmount?.toFixed(2) || '0.00'}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -312,7 +345,93 @@ const PaymentPage = ({ bookingData, updateBookingData }) => {
                         </div>
                     </div>
 
-                    {/* Terms and Conditions */}
+                {/* Payment Method Selection */}
+                <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <svg className="w-6 h-6 mr-2" style={{ color: '#194376' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M3 14h18m-9-4v8m-7 0a2 2 0 01-2-2V8a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2H5z" />
+                        </svg>
+                        Payment Method
+                    </h3>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Cash Option */}
+                        <div
+                            onClick={() => setPaymentMethod('cash')}
+                            className={`
+                                p-4 rounded-xl border-2 cursor-pointer transition-all
+                                ${paymentMethod === 'cash'
+                                    ? 'border-[#194376] bg-blue-50'
+                                    : 'border-gray-300 bg-gray-50 hover:border-gray-400'
+                                }
+                            `}
+                        >
+                            <div className="flex items-start">
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value="cash"
+                                    checked={paymentMethod === 'cash'}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    className="mt-1 h-5 w-5 cursor-pointer"
+                                    style={{ accentColor: '#194376' }}
+                                />
+                                <div className="ml-4 flex-1">
+                                    <h4 className="font-bold text-gray-800 text-lg">Pay on Completion</h4>
+                                    <p className="text-sm text-gray-600 mt-1">
+                                        Pay in cash after the service is completed
+                                    </p>
+                                    <p className="text-xs text-gray-500 mt-2 font-semibold">
+                                        Total: £{bookingData.totalAmount?.toFixed(2) || '0.00'}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Card Option */}
+                        <div
+                            onClick={() => setPaymentMethod('card')}
+                            className={`
+                                p-4 rounded-xl border-2 cursor-pointer transition-all
+                                ${paymentMethod === 'card'
+                                    ? 'border-[#46C6CE] bg-cyan-50'
+                                    : 'border-gray-300 bg-gray-50 hover:border-gray-400'
+                                }
+                            `}
+                        >
+                            <div className="flex items-start">
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value="card"
+                                    checked={paymentMethod === 'card'}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    className="mt-1 h-5 w-5 cursor-pointer"
+                                    style={{ accentColor: '#46C6CE' }}
+                                />
+                                <div className="ml-4 flex-1">
+                                    <h4 className="font-bold text-gray-800 text-lg">Pay by Card Now</h4>
+                                    <p className="text-sm text-gray-600 mt-1">
+                                        Secure payment via Stripe (card, Apple Pay, Google Pay)
+                                    </p>
+                                    <p className="text-xs text-gray-500 mt-2 font-semibold">
+                                        Total: £{bookingData.totalAmount?.toFixed(2) || '0.00'}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {paymentMethod === 'cash' && (
+                        <div className="mt-4 p-4 rounded-lg bg-blue-50 border-l-4 border-blue-400">
+                            <p className="text-sm text-blue-800">
+                                <span className="font-semibold">Note:</span> You will pay the contractor in cash when they arrive to complete the service.
+                            </p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Terms and Conditions */}
                     <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border-2" style={{ borderColor: '#46C6CE40' }}>
                         <div className="flex items-start">
                             <input
@@ -324,7 +443,8 @@ const PaymentPage = ({ bookingData, updateBookingData }) => {
                             />
                             <label htmlFor="terms" className="text-sm text-gray-700 leading-relaxed">
                                 I agree to the Terms of Service and understand that this booking is subject to availability confirmation.
-                                I authorize the charge for the selected services and understand that payment will be processed securely via Stripe.
+                                {paymentMethod === 'card' && ' I authorize the charge for the selected services and understand that payment will be processed securely via Stripe.'}
+                                {paymentMethod === 'cash' && ' I agree to pay the contractor in cash upon completion of the service.'}
                             </label>
                         </div>
                     </div>
@@ -363,7 +483,7 @@ const PaymentPage = ({ bookingData, updateBookingData }) => {
                                 </>
                             ) : (
                                 <>
-                                    Proceed to Payment
+                                    {paymentMethod === 'cash' ? 'Confirm Booking' : 'Proceed to Payment'}
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                     </svg>
@@ -387,4 +507,4 @@ const PaymentPage = ({ bookingData, updateBookingData }) => {
     );
 };
 
-export default PaymentPage;
+export default BookingPage;

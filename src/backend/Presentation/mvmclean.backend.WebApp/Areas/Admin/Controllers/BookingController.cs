@@ -39,7 +39,7 @@ public class BookingController : BaseAdminController
         catch (Exception ex)
         {   
             TempData["Error"] = $"Error loading bookings: {ex.Message}";
-            return View();
+            return View(new List<GetAllBookingsResponse>());
         }
     }
 

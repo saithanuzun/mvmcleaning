@@ -39,11 +39,49 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
                     
                     setServices(mappedServices);
 
-                    // Extract unique categories from services
+                    // Extract unique categories from services and sort in desired order
                     const uniqueCategories = [...new Set(mappedServices.map(s => s.category))];
+                    
+                    // Define priority order for categories (start with these)
+                    const startPriority = [
+                        'carpet-cleaning',
+                        'upholstery-cleaning'
+                    ];
+                    
+                    // Define categories that should be at the end
+                    const endPriority = [
+                        'additional-services',
+                        'cleaning packages'
+                    ];
+                    
+                    // Sort categories: priority first, then middle categories, then end categories
+                    const sortedCategories = uniqueCategories.sort((a, b) => {
+                        const startIndexA = startPriority.indexOf(a);
+                        const startIndexB = startPriority.indexOf(b);
+                        const endIndexA = endPriority.indexOf(a);
+                        const endIndexB = endPriority.indexOf(b);
+                        
+                        // Both in start priority
+                        if (startIndexA !== -1 && startIndexB !== -1) return startIndexA - startIndexB;
+                        // Only a is in start priority
+                        if (startIndexA !== -1) return -1;
+                        // Only b is in start priority
+                        if (startIndexB !== -1) return 1;
+                        
+                        // Both in end priority
+                        if (endIndexA !== -1 && endIndexB !== -1) return endIndexA - endIndexB;
+                        // Only a is in end priority
+                        if (endIndexA !== -1) return 1;
+                        // Only b is in end priority
+                        if (endIndexB !== -1) return -1;
+                        
+                        // Both are middle categories - sort alphabetically
+                        return a.localeCompare(b);
+                    });
+                    
                     const categoryList = [
                         { id: 'all', name: 'All Services', color: '#46C6CE' },
-                        ...uniqueCategories.map(cat => ({
+                        ...sortedCategories.map(cat => ({
                             id: cat,
                             name: cat.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
                             color: '#46C6CE'
@@ -156,8 +194,55 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
     };
 
     const getFilteredServices = () => {
-        if (activeCategory === 'all') return services;
-        return services.filter(service => service.category === activeCategory);
+        const filtered = activeCategory === 'all' ? services : services.filter(service => service.category === activeCategory);
+        
+        // Define priority order for categories (start with these)
+        const startPriority = [
+            'carpet-cleaning',
+            'upholstery-cleaning'
+        ];
+        
+        // Define categories that should be at the end
+        const endPriority = [
+            'additional-services',
+            'cleaning packages'
+        ];
+        
+        // Sort services by category order (if 'all'), then by price within category
+        return filtered.sort((a, b) => {
+            if (activeCategory === 'all') {
+                // Get category priorities
+                const startIndexA = startPriority.indexOf(a.category);
+                const startIndexB = startPriority.indexOf(b.category);
+                const endIndexA = endPriority.indexOf(a.category);
+                const endIndexB = endPriority.indexOf(b.category);
+                
+                // Compare categories first
+                // Both in start priority
+                if (startIndexA !== -1 && startIndexB !== -1) {
+                    if (startIndexA !== startIndexB) return startIndexA - startIndexB;
+                }
+                // Only a is in start priority
+                else if (startIndexA !== -1) return -1;
+                // Only b is in start priority
+                else if (startIndexB !== -1) return 1;
+                
+                // Both in end priority
+                if (endIndexA !== -1 && endIndexB !== -1) {
+                    if (endIndexA !== endIndexB) return endIndexA - endIndexB;
+                }
+                // Only a is in end priority
+                else if (endIndexA !== -1) return 1;
+                // Only b is in end priority
+                else if (endIndexB !== -1) return -1;
+                
+                // Middle categories - sort alphabetically
+                if (a.category !== b.category) return a.category.localeCompare(b.category);
+            }
+            
+            // Within same category, sort by price (low to high)
+            return a.price - b.price;
+        });
     };
 
     const handleContinue = () => {
@@ -176,7 +261,8 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
         updateBookingData({
             selectedServices,
             selectedServicesData: servicesWithQuantities,
-            totalAmount: calculateTotal()
+            totalAmount: calculateTotal(),
+            totalDuration: calculateTotalDuration()
         });
         navigate('/time-slots');
     };

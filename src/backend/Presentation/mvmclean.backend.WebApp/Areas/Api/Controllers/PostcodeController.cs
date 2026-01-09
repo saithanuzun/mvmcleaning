@@ -28,45 +28,14 @@ public class PostcodeController : BaseApiController
 
         try
         {
-            // Clean up postcode
+            // Clean up postcode - keep it simple
             var cleanPostcode = request.Postcode.ToUpper().Replace(" ", "").Trim();
             
-            if (string.IsNullOrEmpty(cleanPostcode) || cleanPostcode.Length < 6)
-                return Error("Invalid UK postcode format");
+            // Basic validation: just check it's not empty
+            if (string.IsNullOrEmpty(cleanPostcode))
+                return Error("Postcode is required");
 
-            // Step 1: Validate postcode with external API
-            var client = _httpClientFactory.CreateClient();
-            
-            // Add timeout and headers
-            client.Timeout = TimeSpan.FromSeconds(10);
-            client.DefaultRequestHeaders.Add("User-Agent", "MVMCleaning");
-            
-            var validateResponse = await client.GetAsync($"https://api.postcodes.io/postcodes/{cleanPostcode}/validate");
-
-            if (!validateResponse.IsSuccessStatusCode)
-            {
-                return Error("Unable to validate postcode. Please check and try again.");
-            }
-
-            var content = await validateResponse.Content.ReadAsStringAsync();
-            
-            if (string.IsNullOrEmpty(content))
-                return Error("Invalid response from postcode validation service");
-            
-            using (JsonDocument doc = JsonDocument.Parse(content))
-            {
-                var root = doc.RootElement;
-                
-                if (!root.TryGetProperty("result", out var resultElement))
-                    return Error("Invalid postcode validation response");
-                
-                var isValid = resultElement.GetBoolean();
-
-                if (!isValid)
-                    return Error("Invalid UK postcode");
-            }
-
-            // Step 2: Create booking with postcode and phone
+            // Step 1: Create booking with postcode and phone
             var createBookingRequest = new CreateBookingRequest
             {
                 Postcode = cleanPostcode,
@@ -78,7 +47,7 @@ public class PostcodeController : BaseApiController
             if (bookingResponse == null)
                 return Error("Failed to create booking", 500);
 
-            // Step 3: Get contractors that cover this postcode
+            // Step 2: Get contractors that cover this postcode
             var getContractorsRequest = new GetContractorsByPostcodeRequest
             {
                 Postcode = cleanPostcode,

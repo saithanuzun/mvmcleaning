@@ -67,12 +67,12 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
 
     const [availableDates] = useState(generateDates());
 
-    // Redirect if no postcode or basket
+    // Redirect if no postcode or services selected
     useEffect(() => {
-        if (!bookingData.postcode || !bookingData.basket) {
+        if (!bookingData.postcode || !bookingData.selectedServices) {
             navigate('/services');
         }
-    }, [bookingData.postcode, bookingData.basket, navigate]);
+    }, [bookingData.postcode, bookingData.selectedServices, navigate]);
 
     // Fetch available time slots when date is selected
     const fetchTimeSlots = async (date) => {

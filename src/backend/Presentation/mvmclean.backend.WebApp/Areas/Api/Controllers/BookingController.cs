@@ -78,9 +78,9 @@ public class BookingController : BaseApiController
                 {
                     serviceName = item.ServiceName,
                     serviceId = item.ServiceId,
-                    unitPrice = item.UnitAdjustedPrice?.Amount ?? 0,
+                    unitPrice = item.UnitPrice,
                     quantity = item.Quantity,
-                    totalPrice = (item.UnitAdjustedPrice?.Amount ?? 0) * item.Quantity
+                    totalPrice = item.TotalPrice
                 }).ToList(),
                 serviceAddress = response.ServiceAddress != null ? new
                 {
@@ -114,22 +114,38 @@ public class BookingController : BaseApiController
     }
 
     /// <summary>
-    /// Verify payment and confirm booking
+    /// Complete booking with customer details, payment method, and time slot
     /// </summary>
-    [HttpPost("verify-payment")]
-    public async Task<IActionResult> VerifyPayment([FromBody] VerifyPaymentAndConfirmBookingRequest request)
+    [HttpPost("complete")]
+    public async Task<IActionResult> CompleteBooking([FromBody] CompleteBookingRequest request)
     {
         if (!ModelState.IsValid)
             return Error("Invalid request data");
 
         try
         {
+            // Check if payment is card - verify via Stripe first
+            if (request.PaymentMethod.ToLower() == "card")
+            {
+                // Payment verification will happen before redirecting to payment page
+                // This endpoint creates the payment link and booking
+            }
+
             var response = await _mediator.Send(request);
-            return Success(response, "Payment verified successfully");
+
+            return Success(response, response.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return Error(ex.Message, 400);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Error(ex.Message, 409);
         }
         catch (Exception ex)
         {
-            return Error($"Error verifying payment: {ex.Message}", 500);
+            return Error($"Error completing booking: {ex.Message}", 500);
         }
     }
 }

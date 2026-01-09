@@ -151,6 +151,16 @@ const api = {
                 message: response.data?.message,
                 data: response.data?.data
             };
+        },
+        getContractorAvailabilityByDay: async (contractorIds = [], date, durationMinutes) => {
+            const response = await apiClient.get('/contractor/availability/day', {
+                params: { contractorIds: contractorIds.join(','), date, durationMinutes }
+            });
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         }
     },
 
@@ -172,15 +182,18 @@ const api = {
                 data: response.data?.data
             };
         },
-        verifyPayment: async (bookingId, sessionId) => {
-            const response = await apiClient.post('/booking/verify-payment', {
-                bookingId,
-                sessionId
-            });
+        complete: async (bookingData) => {
+            const response = await apiClient.post('/booking/complete', bookingData);
+            const responseData = response.data.data || response.data;
             return {
-                success: response.data?.success || false,
-                message: response.data?.message,
-                data: response.data?.data
+                success: response.data.success !== false,
+                data: {
+                    bookingId: responseData.bookingId,
+                    status: responseData.status,
+                    paymentUrl: responseData.paymentUrl || ''
+                },
+                message: response.data.message || '',
+                paymentUrl: responseData.paymentUrl || response.data.paymentUrl
             };
         }
     }

@@ -51,11 +51,12 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
             } else if (response.success && !response.data.isCovered) {
                 setError('Sorry, we don\'t currently service this postcode area. Please check back soon!');
             } else {
-                setError('Please enter a valid UK postcode');
+                setError(response.message || 'Please enter a valid UK postcode');
             }
         } catch (err) {
-            setError('Error checking postcode. Please try again.');
             console.error('Postcode validation error:', err);
+            const errorMessage = err.response?.data?.message || err.message || 'Error checking postcode. Please try again.';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }

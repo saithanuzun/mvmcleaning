@@ -1,4 +1,4 @@
-@model mvmclean.backend.Application.Features.Booking.Queries.GetAllBookingsResponse
+@model List<mvmclean.backend.Application.Features.Booking.Queries.GetAllBookingsResponse>
 
 @{
     ViewData["Title"] = "All Bookings";
@@ -40,11 +40,11 @@
         <div class="card-header bg-primary text-white">
             <h5 class="mb-0">
                 <i class="bi bi-list-check"></i> All Bookings
-                <span class="badge bg-light text-dark float-end">@Model?.Bookings?.Count ?? 0</span>
+                <span class="badge bg-light text-dark float-end">@Model?.Count ?? 0</span>
             </h5>
         </div>
         <div class="card-body p-0">
-            @if (Model?.Bookings?.Any() == true)
+            @if (Model?.Any() == true)
             {
                 <div class="table-responsive">
                     <table class="table table-hover mb-0 align-middle">
@@ -62,7 +62,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var booking in Model.Bookings)
+                            @foreach (var booking in Model)
                             {
                                 <tr>
                                     <td class="fw-semibold">@booking.PhoneNumber</td>
@@ -107,16 +107,14 @@
                                         <span class="badge bg-@booking.StatusBadgeClass">@booking.Status</span>
                                     </td>
                                     <td class="text-center">
-                                        <a asp-area="Admin" asp-controller="Booking" asp-action="Details"
-                                            asp-route-bookingId="@booking.Id" class="btn btn-sm btn-outline-primary"
-                                            title="View Details">
+                                        <a href="/Admin/Booking/details/@booking.Id" class="btn btn-sm btn-outline-primary" title="View Details">
                                             <i class="bi bi-eye"></i>
                                         </a>
                                         @if (booking.Status.ToString() != "Completed" && booking.Status.ToString() != "Cancelled")
                                         {
                                             @if (booking.Status.ToString() != "Confirmed")
                                             {
-                                                <form asp-area="Admin" asp-controller="Booking" asp-action="Confirm" asp-route-bookingId="@booking.Id" method="post" style="display:inline;">
+                                                <form action="/Admin/Booking/confirm/@booking.Id" method="post" style="display:inline;">
                                                     <button type="submit" class="btn btn-sm btn-outline-success" title="Confirm Booking">
                                                         <i class="bi bi-check-circle"></i>
                                                     </button>
