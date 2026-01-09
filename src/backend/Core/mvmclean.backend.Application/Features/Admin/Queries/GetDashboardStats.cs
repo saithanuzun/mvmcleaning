@@ -1,5 +1,6 @@
 using MediatR;
 using mvmclean.backend.Domain.Aggregates.Booking;
+using mvmclean.backend.Domain.Aggregates.Contact;
 using mvmclean.backend.Domain.Aggregates.Contractor;
 using mvmclean.backend.Domain.Aggregates.Service;
 
@@ -18,9 +19,13 @@ public class GetDashboardStatsResponse
     public int PendingBookings { get; set; }
     public int ConfirmedBookings { get; set; }
     public int CompletedBookings { get; set; }
+    public int TotalContacts { get; set; }
+    public int NewContacts { get; set; }
+    public int RespondedContacts { get; set; }
     public List<RecentContractorDto> RecentContractors { get; set; } = new();
     public List<RecentServiceDto> RecentServices { get; set; } = new();
     public List<RecentBookingDto> RecentBookings { get; set; } = new();
+    public List<RecentContactDto> RecentContacts { get; set; } = new();
 }
 
 public class RecentContractorDto
@@ -49,20 +54,34 @@ public class RecentBookingDto
     public DateTime CreatedAt { get; set; }
 }
 
+public class RecentContactDto
+{
+    public Guid Id { get; set; }
+    public string FullName { get; set; }
+    public string Email { get; set; }
+    public string Subject { get; set; }
+    public string Status { get; set; }
+    public int MessageCount { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
 public class GetDashboardStatsHandler : IRequestHandler<GetDashboardStatsRequest, GetDashboardStatsResponse>
 {
     private readonly IContractorRepository _contractorRepository;
     private readonly IServiceRepository _serviceRepository;
     private readonly IBookingRepository _bookingRepository;
+    private readonly IContactRepository _contactRepository;
 
     public GetDashboardStatsHandler(
         IContractorRepository contractorRepository,
         IServiceRepository serviceRepository,
-        IBookingRepository bookingRepository)
+        IBookingRepository bookingRepository,
+        IContactRepository contactRepository)
     {
         _contractorRepository = contractorRepository;
         _serviceRepository = serviceRepository;
         _bookingRepository = bookingRepository;
+        _contactRepository = contactRepository;
     }
 
     public async Task<GetDashboardStatsResponse> Handle(GetDashboardStatsRequest request, CancellationToken cancellationToken)
@@ -70,6 +89,7 @@ public class GetDashboardStatsHandler : IRequestHandler<GetDashboardStatsRequest
         var contractors = await _contractorRepository.GetAll();
         var services = await _serviceRepository.GetAll();
         var bookings = await _bookingRepository.GetAll();
+        var contacts = await _contactRepository.GetAll();
 
         var response = new GetDashboardStatsResponse
         {
@@ -80,6 +100,9 @@ public class GetDashboardStatsHandler : IRequestHandler<GetDashboardStatsRequest
             PendingBookings = bookings.Count(b => b.Status.ToString() == "Pending"),
             ConfirmedBookings = bookings.Count(b => b.Status.ToString() == "Confirmed"),
             CompletedBookings = bookings.Count(b => b.Status.ToString() == "Completed"),
+            TotalContacts = contacts.Count,
+            NewContacts = contacts.Count(c => c.Status.ToString() == "New"),
+            RespondedContacts = contacts.Count(c => c.Status.ToString() == "Responded"),
 
             RecentContractors = contractors
                 .OrderByDescending(c => c.CreatedAt)
@@ -116,6 +139,21 @@ public class GetDashboardStatsHandler : IRequestHandler<GetDashboardStatsRequest
                     CustomerName = b.Customer?.FirstName ?? "No Customer Assigned",
                     Status = b.Status.ToString(),
                     CreatedAt = b.CreatedAt
+                })
+                .ToList(),
+
+            RecentContacts = contacts
+                .OrderByDescending(c => c.CreatedAt)
+                .Take(5)
+                .Select(c => new RecentContactDto
+                {
+                    Id = c.Id,
+                    FullName = c.FullName,
+                    Email = c.Email,
+                    Subject = c.Subject,
+                    Status = c.Status.ToString(),
+                    MessageCount = c.Messages.Count,
+                    CreatedAt = c.CreatedAt
                 })
                 .ToList()
         };

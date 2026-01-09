@@ -95,6 +95,26 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm border-0 bg-danger text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-1 opacity-75">Contact Requests</h6>
+                            <h2 class="mb-0">@Model.TotalContacts</h2>
+                            <small class="opacity-75">@Model.NewContacts New</small>
+                        </div>
+                        <div>
+                            <i class="bi bi-chat-dots" style="font-size: 3rem; opacity: 0.3;"></i>
+                        </div>
+                    </div>
+                    <a href="@Url.Action("Index", "Contact")" class="btn btn-light btn-sm w-100 mt-3">
+                        <i class="bi bi-eye"></i> View All
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Booking Status Overview -->
@@ -294,6 +314,53 @@
                     else
                     {
                         <p class="text-muted text-center mb-0">No bookings yet</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Contacts -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-danger text-white">
+                    <h6 class="mb-0">
+                        <i class="bi bi-chat-dots"></i> Recent Contact Requests
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentContacts.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var contact in Model.RecentContacts)
+                            {
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-0">@contact.FullName</h6>
+                                            <small class="text-muted">@contact.Subject</small><br>
+                                            <small class="text-muted">@contact.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                        </div>
+                                        <span class="badge @(contact.Status switch {
+                                            "New" => "bg-danger",
+                                            "Read" => "bg-warning",
+                                            "Responded" => "bg-info",
+                                            "Resolved" => "bg-success",
+                                            "Closed" => "bg-secondary",
+                                            _ => "bg-secondary"
+                                        })">
+                                            @contact.Status
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <a href="@Url.Action("Index", "Contact")" class="btn btn-sm btn-danger w-100 mt-3">
+                            View All Contacts
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">No contact requests yet</p>
                     }
                 </div>
             </div>

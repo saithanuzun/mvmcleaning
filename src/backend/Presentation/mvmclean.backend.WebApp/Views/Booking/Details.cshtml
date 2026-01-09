@@ -2,263 +2,368 @@
 @model GetBookingByIdResponse
 
 @{
-    ViewData["Title"] = "Booking Details";
+ViewData["Title"] = "Booking Details";
 }
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-12">
-            <a href="@Url.Action("Find", "Booking")" class="btn btn-back mb-4">
-                <i class="fas fa-arrow-left me-2"></i> Back to Search
-            </a>
+<!-- Page Header Start -->
+<div class="page-header container-fluid bg-secondary pt-1 pt-lg-2 pb-1 mb-2">
+    <div class="container py-5">
+        <div class="row align-items-center py-4">
+            <div class="col-md-6 text-center text-md-left">
+                <h1 class="mb-4 mb-md-0 text-white">Booking Details - MvM Cleaning Services</h1>
+            </div>
+            <div class="col-md-6 text-center text-md-right">
+                <div class="d-inline-flex align-items-center">
+                    <a class="btn text-white" href="/">Home</a>
+                    <i class="fas fa-angle-right text-white"></i>
+                    <a class="btn text-white" href="/Booking/Find">Find Booking</a>
+                    <i class="fas fa-angle-right text-white"></i>
+                    <a class="btn text-white disabled" href="">Booking Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
 
-            <div class="card mb-4">
-                <div class="card-header details-header text-white">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h4 class="mb-0">Booking Details</h4>
+<!-- Booking Details Start -->
+<div class="container-fluid py-5">
+    <div class="container" style="max-width: 900px;">
+        <div class="row">
+            <div class="col-12">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="d-flex flex-column align-items-center justify-content-center text-center mb-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-white border border-light shadow rounded-circle mb-3"
+                                 style="width: 80px; height: 80px; border-width: 10px !important;">
+                                <i class="fas fa-calendar-check text-secondary"></i>
+                            </div>
+                            <h5 class="font-weight-medium m-0 mt-2">Booking Confirmed</h5>
+                            <p class="text-muted mb-0 text-center">Your cleaning is scheduled</p>
                         </div>
-                        <div class="col-auto">
-                            <span class="badge bg-success fs-6">@Model.Status</span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex flex-column align-items-center justify-content-center text-center mb-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-white border border-light shadow rounded-circle mb-3"
+                                 style="width: 80px; height: 80px; border-width: 10px !important;">
+                                <i class="fas fa-clock text-secondary"></i>
+                            </div>
+                            <h5 class="font-weight-medium m-0 mt-2">Service Time</h5>
+                            <p class="text-muted mb-0 text-center">Check scheduled slot</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex flex-column align-items-center justify-content-center text-center mb-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-white border border-light shadow rounded-circle mb-3"
+                                 style="width: 80px; height: 80px; border-width: 10px !important;">
+                                <i class="fas fa-file-invoice text-secondary"></i>
+                            </div>
+                            <h5 class="font-weight-medium m-0 mt-2">Payment Summary</h5>
+                            <p class="text-muted mb-0 text-center">View total amount</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h6 class="text-muted">Booking ID</h6>
-                            <p class="fs-6"><code>@Model.Id</code></p>
+            <div class="col-12">
+                <div class="contact-form">
+                    <div class="text-center mb-4">
+                        <h3 class="text-primary mb-2">Booking Details</h3>
+                        <p class="text-muted">Reference: <code class="bg-light px-2 py-1">@Model.Id</code></p>
+                    </div>
+
+                    <div class="mb-4">
+                        <a href="/Booking/Find" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left mr-2"></i> Back to Search
+                        </a>
+                    </div>
+
+                    <div class="row">
+                        <!-- Booking Status Card -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-primary text-white py-3">
+                                    <h5 class="mb-0 text-white"><i class="fas fa-info-circle mr-2"></i>Booking Status</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center py-4">
+                                        <div class="badge bg-light text-primary fs-5 px-4 py-2 mb-3" style="border: 2px solid #194376;">
+                                            @Model.Status
+                                        </div>
+                                        <p class="text-muted mb-0">
+                                            Created on @Model.CreatedAt.ToString("dd MMM yyyy")
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <h6 class="text-muted">Created Date</h6>
-                            <p class="fs-6">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</p>
+
+                        <!-- Contact Info Card -->
+                        <div class="col-lg-8 mb-4">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-primary text-white py-3">
+                                    <h5 class="mb-0 text-white"><i class="fas fa-user mr-2"></i>Contact Information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="text-muted small mb-1">Phone Number</label>
+                                            <p class="fs-5 mb-0">@Model.PhoneNumber</p>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="text-muted small mb-1">Postcode</label>
+                                            <p class="fs-5 mb-0">@Model.Postcode</p>
+                                        </div>
+                                        @if (Model.Customer != null && !string.IsNullOrEmpty(Model.Customer.FullName))
+                                        {
+                                        <div class="col-md-6 mb-3">
+                                            <label class="text-muted small mb-1">Customer Name</label>
+                                            <p class="fs-5 mb-0">@Model.Customer.FullName</p>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="text-muted small mb-1">Email Address</label>
+                                            <p class="fs-5 mb-0">
+                                                @if (string.IsNullOrEmpty(Model.Customer.Email))
+                                                {
+                                                <span class="text-muted">Not provided</span>
+                                                }
+                                                else
+                                                {
+                                                @Model.Customer.Email
+                                                }
+                                            </p>
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Contact Information -->
-                    <h5 class="border-bottom pb-3 mb-3">Contact Information</h5>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h6 class="text-muted">Phone Number</h6>
-                            <p class="fs-6">@Model.PhoneNumber</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="text-muted">Postcode</h6>
-                            <p class="fs-6">@Model.Postcode</p>
-                        </div>
-                    </div>
-
-                    @if (!string.IsNullOrEmpty(Model.Customer?.FullName))
-                    {
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <h6 class="text-muted">Customer Name</h6>
-                                <p class="fs-6">@Model.Customer.FullName</p>
-                            </div>
-                            <div class="col-md-6">
-                                <h6 class="text-muted">Email</h6>
-                                <p class="fs-6">@(string.IsNullOrEmpty(Model.Customer.Email) ? "Not provided" : Model.Customer.Email)</p>
-                            </div>
-                        </div>
-                    }
-
-                    <!-- Service Address -->
-                    @if (Model.ServiceAddress != null)
-                    {
-                        <h5 class="border-bottom pb-3 mb-3">Service Address</h5>
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <h6 class="text-muted">Street</h6>
-                                <p class="fs-6">@Model.ServiceAddress.Street</p>
-                            </div>
-                            <div class="col-md-6">
-                                <h6 class="text-muted">City</h6>
-                                <p class="fs-6">@Model.ServiceAddress.City</p>
-                            </div>
-                        </div>
-                        @if (!string.IsNullOrEmpty(Model.ServiceAddress.AdditionalInfo))
+                    <!-- Service Details Row -->
+                    <div class="row">
+                        @if (Model.ServiceAddress != null)
                         {
-                            <div class="row mb-4">
-                                <div class="col-md-12">
-                                    <h6 class="text-muted">Additional Information</h6>
-                                    <p class="fs-6">@Model.ServiceAddress.AdditionalInfo</p>
+                        <div class="col-lg-6 mb-4">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-primary text-white py-3">
+                                    <h5 class="mb-0 text-white"><i class="fas fa-map-marker-alt mr-2"></i>Service Address</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start">
+                                        <i class="fas fa-home fa-2x text-secondary mr-3 mt-1"></i>
+                                        <div>
+                                            <p class="fs-5 mb-1">@Model.ServiceAddress.Street</p>
+                                            <p class="fs-5 mb-0">@Model.ServiceAddress.City</p>
+                                            <p class="text-muted mt-2">
+                                                <i class="fas fa-map-pin mr-1"></i> Service location for cleaning
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
                         }
-                    }
 
-                    <!-- Scheduled Slot -->
-                    @if (Model.ScheduledSlot != null)
-                    {
-                        <h5 class="border-bottom pb-3 mb-3">Scheduled Service</h5>
-                        <div class="row mb-4">
-                            <div class="col-md-4">
-                                <h6 class="text-muted">Date</h6>
-                                <p class="fs-6">@Model.ScheduledSlot.StartTime.ToString("dd MMM yyyy")</p>
-                            </div>
-                            <div class="col-md-4">
-                                <h6 class="text-muted">Time</h6>
-                                <p class="fs-6">@Model.ScheduledSlot.StartTime.ToString("HH:mm") - @Model.ScheduledSlot.EndTime.ToString("HH:mm")</p>
-                            </div>
-                            <div class="col-md-4">
-                                <h6 class="text-muted">Duration</h6>
-                                <p class="fs-6">@Model.ScheduledSlot.Duration minutes</p>
+                        @if (Model.ScheduledSlot != null)
+                        {
+                        <div class="col-lg-6 mb-4">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-primary text-white py-3">
+                                    <h5 class="mb-0 text-white"><i class="fas fa-calendar-alt mr-2"></i>Scheduled Service</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12 mb-3">
+                                            <label class="text-muted small mb-1">Start Time</label>
+                                            <p class="fs-5 mb-2">
+                                                <i class="fas fa-play-circle text-secondary mr-2"></i>
+                                                @Model.ScheduledSlot.StartTime.ToString("dd MMM yyyy HH:mm")
+                                            </p>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="text-muted small mb-1">End Time</label>
+                                            <p class="fs-5 mb-0">
+                                                <i class="fas fa-stop-circle text-secondary mr-2"></i>
+                                                @Model.ScheduledSlot.EndTime.ToString("dd MMM yyyy HH:mm")
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    }
+                        }
+                    </div>
 
-                    <!-- Services -->
-                    @if (Model.ServiceItems != null && Model.ServiceItems.Count > 0)
-                    {
-                        <h5 class="border-bottom pb-3 mb-3">Services</h5>
-                        <div class="table-responsive mb-4">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Service Name</th>
-                                        <th class="text-end">Unit Price</th>
-                                        <th class="text-center">Quantity</th>
-                                        <th class="text-end">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.ServiceItems)
-                                    {
-                                        <tr>
-                                            <td>@item.ServiceName</td>
-                                            <td class="text-end">£@item.UnitPrice.ToString("0.00")</td>
-                                            <td class="text-center">@item.Quantity</td>
-                                            <td class="text-end"><strong>£@item.TotalPrice.ToString("0.00")</strong></td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-
-                    <!-- Total Price -->
-                    <h5 class="border-bottom pb-3 mb-3">Payment Summary</h5>
+                    <!-- Payment Summary Card -->
                     <div class="row">
-                        <div class="col-md-6 ms-auto">
-                            <div class="row mb-2">
-                                <div class="col">Total Amount:</div>
-                                <div class="col-auto">
-                                    <h5><strong>£@Model.TotalPrice.ToString("0.00")</strong></h5>
+                        <div class="col-12 mb-4">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-primary text-white py-3">
+                                    <h5 class="mb-0 text-white"><i class="fas fa-receipt mr-2"></i>Payment Summary</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-8">
+                                            <p class="mb-2">Total amount for your cleaning service</p>
+                                            <p class="text-muted small mb-0">
+                                                <i class="fas fa-info-circle mr-1"></i>
+                                                Includes all cleaning services and any additional requests
+                                            </p>
+                                        </div>
+                                        <div class="col-md-4 text-right">
+                                            <div class="bg-light p-3 rounded">
+                                                <p class="text-muted small mb-1">Total Amount</p>
+                                                <h3 class="text-primary mb-0">£@Model.TotalPrice.ToString("0.00")</h3>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            @if (Model.PaymentId != null)
-                            {
-                                <div class="row text-muted">
-                                    <div class="col">Payment ID:</div>
-                                    <div class="col-auto"><code>@Model.PaymentId</code></div>
-                                </div>
-                            }
                         </div>
                     </div>
-                </div>
 
-                <div class="card-footer bg-light">
-                    <div class="row">
-                        <div class="col">
-                            <a href="@Url.Action("Find", "Booking")" class="btn btn-find-another">
-                                <i class="fas fa-search me-2"></i> Find Another Booking
+                    <!-- Action Buttons -->
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <a href="/Booking/Find" class="btn btn-secondary btn-lg w-100">
+                                <i class="fas fa-search mr-2"></i> Find Another Booking
                             </a>
                         </div>
+                        <div class="col-md-6">
+                            <a href="tel:07405392635" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-phone-alt mr-2"></i> Call Support: 07405 392 635
+                            </a>
+                        </div>
+                    </div>
 
+                    <!-- Help Section -->
+                    <div class="mt-5 pt-4 border-top">
+                        <div class="alert alert-info border-0">
+                            <h6 class="alert-heading mb-3">Need to make changes?</h6>
+                            <p class="mb-2">If you need to make any changes to your booking or have any questions, please contact our customer support team:</p>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><i class="fas fa-phone-alt mr-2 text-primary"></i> <strong>Phone:</strong> 07405 392 635</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1"><i class="fas fa-envelope mr-2 text-primary"></i> <strong>Email:</strong> info@mvmcleaning.com</p>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <p class="mb-0 small text-muted">
+                                    <i class="fas fa-shield-alt mr-1"></i>
+                                    Your booking details are secure and protected. Reference ID: <code>@Model.Id</code>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- Booking Details End -->
 
 <style>
-    .details-header {
-        background: linear-gradient(135deg, #194376 0%, #2d5fa3 100%);
-    }
-    
     .card {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border: 2px solid #f0f0f0;
-        border-radius: 12px;
-        overflow: hidden;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
     }
 
-    .btn-back {
-        background-color: #46C6CE;
-        border-color: #46C6CE;
-        color: white;
+    .card:hover {
+        transform: translateY(-2px);
+    }
+
+    .card-header {
+        border-radius: 8px 8px 0 0 !important;
+        border-bottom: none;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .btn {
+        padding: 12px 25px;
         font-weight: 600;
+        border-radius: 4px;
         transition: all 0.3s ease;
     }
-    
-    .btn-back:hover {
-        background-color: #3bb3bb;
-        border-color: #3bb3bb;
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(70, 198, 206, 0.3);
+
+    .btn-primary {
+        background-color: #194376;
+        border-color: #194376;
     }
-    
-    .btn-find-another {
+
+    .btn-primary:hover {
+        background-color: #2d5fa3;
+        border-color: #2d5fa3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(25, 67, 118, 0.2);
+    }
+
+    .btn-secondary {
         background-color: #46C6CE;
         border-color: #46C6CE;
-        color: white;
-        font-weight: 600;
-        transition: all 0.3s ease;
     }
-    
-    .btn-find-another:hover {
-        background-color: #3bb3bb;
-        border-color: #3bb3bb;
-        color: white;
+
+    .btn-secondary:hover {
+        background-color: #46C6CE;
+        border-color: #46C6CE;
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(70, 198, 206, 0.3);
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
+    }
+
+    .btn-outline-secondary {
+        background-color: transparent;
+        border-color: #46C6CE;
+        color: #46C6CE;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #46C6CE;
+        color: white;
+    }
+
+    .badge {
+        border-radius: 4px;
+        font-weight: 500;
     }
 
     code {
-        background-color: #f5f5f5;
+        background-color: rgba(25, 67, 118, 0.1);
         padding: 2px 6px;
         border-radius: 3px;
-        font-size: 0.85rem;
-        color: #194376;
-    }
-
-    h5 {
-        color: #194376;
-        font-weight: 600;
-    }
-
-    .text-muted {
-        color: #6c757d !important;
-        font-weight: 500;
         font-size: 0.9rem;
+        color: #194376;
+        font-weight: 500;
     }
-    
-    .badge {
-        font-weight: 600;
-        padding: 0.5rem 0.75rem;
-        border-radius: 6px;
+
+    .text-primary {
+        color: #194376 !important;
     }
-    
-    .table tbody tr:hover {
-        background-color: #f8f9fa;
+
+    .text-secondary {
+        color: #46C6CE !important;
     }
-    
-    .table-light {
-        background-color: #f8f9fa !important;
-        border-color: #dee2e6;
+
+    .alert {
+        border-radius: 8px;
+        border-left: 4px solid #46C6CE;
+        background-color: #f8fdff;
     }
-    
-    .table th {
+
+    .alert-heading {
         color: #194376;
         font-weight: 600;
-        border-bottom: 2px solid #46C6CE;
     }
-    
-    .card-footer {
-        background-color: #f8f9fa !important;
-        border-top: 2px solid #e9ecef;
+
+    .bg-primary {
+        background-color: #194376 !important;
+    }
+
+    .border-light {
+        border-color: #e9ecef !important;
     }
 </style>

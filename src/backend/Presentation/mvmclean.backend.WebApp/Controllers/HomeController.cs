@@ -1,14 +1,25 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using mvmclean.backend.Application.Features.SeoPage.Queries;
 
 namespace mvmclean.backend.WebApp.Controllers;
 
 public class HomeController : BaseController
 {
+    private readonly IMediator _mediator;
+
+    public HomeController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
     [Route("/")]
     public IActionResult Index() => View();
     
-    [Route("/contact")]
-    public IActionResult Contact() => View();
+    
+    [Route("/home")]
+    public IActionResult Home() => RedirectPermanent("/");
+
     
     [Route("/book-now")]
     public IActionResult BookNow() => RedirectPermanent("/shop");
@@ -27,4 +38,11 @@ public class HomeController : BaseController
     
     [Route("/terms-and-conditions")]
     public IActionResult TermsAndConditions() => View();
+
+    [Route("/areas-we-serve")]
+    public async Task<IActionResult> AreasWeServe()
+    {
+        var response = await _mediator.Send(new GetAllSeoPagesRequest());
+        return View(response);
+    }
 }

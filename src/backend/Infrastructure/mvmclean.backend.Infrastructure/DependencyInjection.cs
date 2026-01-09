@@ -4,14 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using mvmclean.backend.Application.Services;
 using mvmclean.backend.Domain.Aggregates.Booking;
+using mvmclean.backend.Domain.Aggregates.Contact;
 using mvmclean.backend.Domain.Aggregates.Contractor;
 using mvmclean.backend.Domain.Aggregates.Invoice;
 using mvmclean.backend.Domain.Aggregates.Promotion;
 using mvmclean.backend.Domain.Aggregates.SeoPage;
 using mvmclean.backend.Domain.Aggregates.Service;
-using mvmclean.backend.Domain.Aggregates.SupportTicket;
 using mvmclean.backend.Infrastructure.Persistence;
 using mvmclean.backend.Infrastructure.Persistence.Repositories;
+using mvmclean.backend.Infrastructure.Repositories;
 using mvmclean.backend.Infrastructure.Services;
 using mvmclean.backend.Infrastructure.Seeding;
 using Resend;
@@ -36,7 +37,7 @@ public static class DependencyInjection
         serviceCollection.AddScoped<IPromotionRepository, PromotionRepository>();
         serviceCollection.AddScoped<ISeoPageRepository, SeoPageRepository>();
         serviceCollection.AddScoped<IServiceRepository, ServiceRepository>();
-        serviceCollection.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
+        serviceCollection.AddScoped<IContactRepository, ContactRepository>();
 
 
         // Register infrastructure services

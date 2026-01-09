@@ -1,5 +1,6 @@
 using MediatR;
 using mvmclean.backend.Domain.Aggregates.Booking;
+using mvmclean.backend.Domain.Aggregates.Booking.Enums;
 
 namespace mvmclean.backend.Application.Features.Booking.Queries;
 
@@ -19,9 +20,9 @@ public class GetBookingByPhoneAndPostcodeResponse
     public decimal TotalPrice { get; set; }
     public string Status { get; set; }
     public DateTime CreatedAt { get; set; }
-    public List<ServiceItemResponse> ServiceItems { get; set; } = new();
-    public AddressResponse? ServiceAddress { get; set; }
-    public ScheduledSlotResponse? ScheduledSlot { get; set; }
+    public string? ScheduledSlotStartTime { get; set; }
+    public string? ScheduledSlotEndTime { get; set; }
+    public string? ServiceAddress { get; set; }
 }
 
 public class ServiceItemResponse
@@ -63,8 +64,12 @@ public class GetBookingByPhoneAndPostcodeHandler : IRequestHandler<GetBookingByP
         if (string.IsNullOrWhiteSpace(request.Postcode))
             throw new ArgumentException("Postcode is required");
 
-        // Get all bookings and filter by phone and postcode
-        var allBookings = await _bookingRepository.GetAll(false);
+        var allBookings = _bookingRepository.Get(
+            predicate: null,
+            noTracking: true,
+            b => b.ServiceItems,
+            b => b.Customer
+        ).Where(i=>i.Status == BookingStatus.Confirmed).ToList();        
         
         var booking = allBookings.FirstOrDefault(b =>
             b.PhoneNumber.Value == request.PhoneNumber &&
@@ -73,35 +78,23 @@ public class GetBookingByPhoneAndPostcodeHandler : IRequestHandler<GetBookingByP
         if (booking == null)
             throw new KeyNotFoundException($"No booking found for phone {request.PhoneNumber} and postcode {request.Postcode}");
 
-        return new GetBookingByPhoneAndPostcodeResponse
+        var response = new GetBookingByPhoneAndPostcodeResponse
         {
             Id = booking.Id.ToString(),
             PhoneNumber = booking.PhoneNumber.Value,
             Postcode = booking.Postcode.Value,
             CustomerName = booking.Customer?.FullName,
             CustomerEmail = booking.Customer?.Email,
-            TotalPrice = booking.TotalPrice.Amount,
+            TotalPrice = booking.TotalPrice?.Amount ?? 0m,
             Status = booking.Status.ToString(),
             CreatedAt = booking.CreatedAt,
-            ServiceItems = booking.ServiceItems?.Select(item => new ServiceItemResponse
-            {
-                ServiceName = item.ServiceName,
-                UnitPrice = item.UnitAdjustedPrice.Amount,
-                Quantity = item.Quantity,
-                TotalPrice = item.UnitAdjustedPrice.Amount * item.Quantity
-            }).ToList() ?? new(),
-            ServiceAddress = booking.ServiceAddress != null ? new AddressResponse
-            {
-                Street = booking.ServiceAddress.Street,
-                City = booking.ServiceAddress.City,
-                AdditionalInfo = booking.ServiceAddress.AdditionalInfo
-            } : null,
-            ScheduledSlot = booking.ScheduledSlot != null ? new ScheduledSlotResponse
-            {
-                StartTime = booking.ScheduledSlot.StartTime,
-                EndTime = booking.ScheduledSlot.EndTime,
-                DurationMinutes = (int)(booking.ScheduledSlot.EndTime - booking.ScheduledSlot.StartTime).TotalMinutes
-            } : null
+            ScheduledSlotStartTime = booking.ScheduledSlot?.StartTime.ToString("yyyy-MM-dd HH:mm:ss"),
+            ScheduledSlotEndTime = booking.ScheduledSlot?.EndTime.ToString("yyyy-MM-dd HH:mm:ss"),
+            ServiceAddress = booking.ServiceAddress != null 
+                ? $"{booking.ServiceAddress.Street}, {booking.ServiceAddress.City}" 
+                : null
         };
+
+        return response;
     }
 }

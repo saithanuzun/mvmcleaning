@@ -4,7 +4,7 @@ using mvmclean.backend.Application.Features.Contractor.Commands;
 using mvmclean.backend.Application.Features.Booking.Commands;
 using mvmclean.backend.Application.Features.Promotion.Commands;
 using mvmclean.backend.Application.Features.SeoPage.Commands;
-using mvmclean.backend.Domain.Aggregates.SeoPage;
+using mvmclean.backend.Application.Features.Contact.Commands;
 using Microsoft.Extensions.Logging;
 
 namespace mvmclean.backend.Infrastructure.Seeding;
@@ -60,6 +60,9 @@ public class DatabaseSeeder
 
             // Seed past bookings
             await SeedBookingsAsync(serviceIds, contractorIds);
+
+            // Seed sample contacts
+            await SeedContactsAsync();
 
 
             _logger.LogInformation("Database seeding completed successfully.");
@@ -1143,6 +1146,87 @@ public class DatabaseSeeder
         catch (Exception ex)
         {
             _logger.LogError(ex, "❌ Error seeding SEO pages.");
+            throw;
+        }
+    }
+
+    private async Task SeedContactsAsync()
+    {
+        try
+        {
+            _logger.LogInformation("Seeding sample contacts...");
+
+            var contacts = new List<CreateContactCommand>
+            {
+                new CreateContactCommand
+                {
+                    FullName = "John Smith",
+                    Email = "john.smith@example.com",
+                    PhoneNumber = "07700 900123",
+                    Subject = "Carpet Cleaning Service Inquiry",
+                    Message = "I'm interested in your carpet cleaning services for my lounge. Could you provide a quote for a 4m x 5m area?"
+                },
+                new CreateContactCommand
+                {
+                    FullName = "Sarah Johnson",
+                    Email = "sarah.johnson@example.com",
+                    PhoneNumber = "07700 900456",
+                    Subject = "Sofa Cleaning Quote",
+                    Message = "I have a large 3-seater sofa that needs professional cleaning. It has some stains and odours. What would be your typical pricing?"
+                },
+                new CreateContactCommand
+                {
+                    FullName = "Michael Brown",
+                    Email = "michael.brown@example.com",
+                    PhoneNumber = null,
+                    Subject = "Regular Cleaning Service",
+                    Message = "We run a small office and are looking for a reliable cleaning service on a weekly basis. Can you handle commercial properties?"
+                },
+                new CreateContactCommand
+                {
+                    FullName = "Emma Davis",
+                    Email = "emma.davis@example.com",
+                    PhoneNumber = "07700 900789",
+                    Subject = "Pet Stain Removal",
+                    Message = "Our dog has had an accident on the carpet. We need urgent professional cleaning. Are you available this weekend?"
+                },
+                new CreateContactCommand
+                {
+                    FullName = "Robert Wilson",
+                    Email = "robert.wilson@example.com",
+                    PhoneNumber = "07700 900012",
+                    Subject = "Rug Cleaning Service",
+                    Message = "I have a Persian rug that needs gentle professional cleaning. Do you have experience with delicate fabrics?"
+                }
+            };
+
+            int createdCount = 0;
+            foreach (var contact in contacts)
+            {
+                try
+                {
+                    var response = await _mediator.Send(contact);
+                    if (response.Success)
+                    {
+                        _logger.LogInformation($"✅ Contact created: {contact.FullName} ({contact.Email}) - ID: {response.ContactId}");
+                        createdCount++;
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"⚠️ Contact '{contact.FullName}' error: {response.Message}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning($"❌ Contact '{contact.FullName}' exception: {ex.Message}");
+                }
+            }
+
+            _logger.LogInformation($"✅ Contacts seeding completed. Created: {createdCount}/{contacts.Count}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "❌ Error seeding contacts.");
             throw;
         }
     }

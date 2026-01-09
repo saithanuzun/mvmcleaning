@@ -1,0 +1,251 @@
+@using mvmclean.backend.Application.Features.Contact.Queries
+@model ContactDetailsDto
+
+@{
+    ViewData["Title"] = "Contact Details";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h2>Contact Details</h2>
+                <p class="text-muted">Contact ID: @Model.Id</p>
+            </div>
+            <div>
+                <a href="@Url.Action("Index")" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Contacts
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Contact Information Card -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Contact Information</h5>
+                    @if (Model.Status == "New")
+                    {
+                        <form method="post" action="@Url.Action("MarkAsRead", new { id = Model.Id })" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-warning">
+                                <i class="fas fa-check"></i> Mark as Read
+                            </button>
+                        </form>
+                    }
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Name:</strong>
+                            <p>@Model.FullName</p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Status:</strong>
+                            <p>
+                                @switch (Model.Status)
+                                {
+                                    case "New":
+                                        <span class="badge bg-danger">New</span>
+                                        break;
+                                    case "Read":
+                                        <span class="badge bg-warning">Read</span>
+                                        break;
+                                    case "Responded":
+                                        <span class="badge bg-info">Responded</span>
+                                        break;
+                                    case "Resolved":
+                                        <span class="badge bg-success">Resolved</span>
+                                        break;
+                                    case "Closed":
+                                        <span class="badge bg-secondary">Closed</span>
+                                        break;
+                                }
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Email:</strong>
+                            <p><a href="mailto:@Model.Email">@Model.Email</a></p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Phone:</strong>
+                            <p>
+                                @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                                {
+                                    <a href="tel:@Model.PhoneNumber">@Model.PhoneNumber</a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Not provided</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <strong>Subject:</strong>
+                            <p>@Model.Subject</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <strong>Submitted:</strong>
+                            <p>@Model.CreatedAt.ToString("dd MMMM yyyy HH:mm:ss")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Timeline -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Messages & Conversation</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Messages.Any())
+                    {
+                        <div class="timeline">
+                            @foreach (var message in Model.Messages.OrderBy(m => m.CreatedAt))
+                            {
+                                <div class="timeline-item mb-4">
+                                    <div class="timeline-marker @(message.IsAdminResponse ? "bg-info" : "bg-primary")"></div>
+                                    <div class="timeline-content">
+                                        <h6 class="mb-1">
+                                            @if (message.IsAdminResponse)
+                                            {
+                                                <span class="badge bg-info">Admin Response</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-primary">Customer Message</span>
+                                            }
+                                        </h6>
+                                        <small class="text-muted">@message.CreatedAt.ToString("dd MMM yyyy HH:mm") @(message.SenderEmail != null ? $"- From: {message.SenderEmail}" : "")</small>
+                                        <p class="mt-2">@message.Message</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No messages yet.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Response Form -->
+            @if (Model.Status != "Closed")
+            {
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Send Response</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="@Url.Action("AddMessage", new { id = Model.Id })">
+                            @Html.AntiForgeryToken()
+                            <div class="mb-3">
+                                <label for="adminEmail" class="form-label">Your Email</label>
+                                <input type="email" class="form-control" id="adminEmail" name="adminEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Response Message</label>
+                                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-send"></i> Send Response
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Actions Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body d-grid gap-2">
+                    @if (Model.Status != "Resolved")
+                    {
+                        <form method="post" action="@Url.Action("UpdateStatus", new { id = Model.Id })" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="status" value="Resolved" />
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-check-circle"></i> Mark as Resolved
+                            </button>
+                        </form>
+                    }
+
+                    @if (Model.Status != "Closed")
+                    {
+                        <form method="post" action="@Url.Action("UpdateStatus", new { id = Model.Id })" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="status" value="Closed" />
+                            <button type="submit" class="btn btn-secondary w-100" onclick="return confirm('Are you sure you want to close this contact?');">
+                                <i class="fas fa-times-circle"></i> Close Contact
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+
+            <!-- Summary Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Summary</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Total Messages:</strong> @Model.Messages.Count()</p>
+                    <p><strong>Admin Responses:</strong> @Model.Messages.Count(m => m.IsAdminResponse)</p>
+                    <p><strong>Days Open:</strong> @Math.Round((DateTime.UtcNow - Model.CreatedAt).TotalDays)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline {
+        position: relative;
+        padding: 0;
+    }
+
+    .timeline-item {
+        display: flex;
+        position: relative;
+        padding-left: 30px;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        margin-top: 3px;
+    }
+
+    .timeline-content {
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        width: 100%;
+    }
+
+    .timeline-item:not(:last-child) .timeline-content {
+        margin-bottom: 15px;
+    }
+</style>

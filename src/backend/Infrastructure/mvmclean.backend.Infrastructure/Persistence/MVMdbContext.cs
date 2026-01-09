@@ -2,12 +2,12 @@ using System.Linq.Expressions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using mvmclean.backend.Domain.Aggregates.Booking;
+using mvmclean.backend.Domain.Aggregates.Contact;
 using mvmclean.backend.Domain.Aggregates.Contractor;
 using mvmclean.backend.Domain.Aggregates.Invoice;
 using mvmclean.backend.Domain.Aggregates.Promotion;
 using mvmclean.backend.Domain.Aggregates.SeoPage;
 using mvmclean.backend.Domain.Aggregates.Service;
-using mvmclean.backend.Domain.Aggregates.SupportTicket;
 using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.Core.Interfaces;
 
@@ -32,8 +32,7 @@ public class MVMdbContext : DbContext
     public DbSet<SeoPage> SeoPages { get; set; } = null!;
     public DbSet<Service> Services { get; set; } = null!;
     public DbSet<Promotion> Promotions { get; set; } = null!;
-    
-    public DbSet<SupportTicket> SupportTickets { get; set; } = null!;
+    public DbSet<Contact> Contacts { get; set; } = null!;
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

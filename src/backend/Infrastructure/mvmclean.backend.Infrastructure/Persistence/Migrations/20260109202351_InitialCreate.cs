@@ -13,6 +13,30 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Contacts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FullName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Subject = table.Column<string>(type: "text", nullable: false),
+                    Message = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletedBy = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contacts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Contractors",
                 columns: table => new
                 {
@@ -161,6 +185,28 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ContactMessage",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ContactId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Message = table.Column<string>(type: "text", nullable: false),
+                    SenderEmail = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsAdminResponse = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContactMessage", x => new { x.ContactId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_ContactMessage_Contacts_ContactId",
+                        column: x => x.ContactId,
+                        principalTable: "Contacts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ContractorCoverage",
                 columns: table => new
                 {
@@ -266,36 +312,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         principalTable: "Contractors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SupportTickets",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    BookingId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Subject = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    Description = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false),
-                    AssignedToId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeletedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SupportTickets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SupportTickets_Contractors_AssignedToId",
-                        column: x => x.AssignedToId,
-                        principalTable: "Contractors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -520,35 +536,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TicketMessage",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    SenderId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Message = table.Column<string>(type: "text", nullable: false),
-                    SentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsInternalNote = table.Column<bool>(type: "boolean", nullable: false),
-                    SupportTicketId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeletedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TicketMessage", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TicketMessage_SupportTickets_SupportTicketId",
-                        column: x => x.SupportTicketId,
-                        principalTable: "SupportTickets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BookingItem",
                 columns: table => new
                 {
@@ -750,16 +737,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 column: "SeoPageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SupportTickets_AssignedToId",
-                table: "SupportTickets",
-                column: "AssignedToId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TicketMessage_SupportTicketId",
-                table: "TicketMessage",
-                column: "SupportTicketId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_WorkingHours_ContractorId",
                 table: "WorkingHours",
                 column: "ContractorId");
@@ -770,6 +747,9 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "BookingItem");
+
+            migrationBuilder.DropTable(
+                name: "ContactMessage");
 
             migrationBuilder.DropTable(
                 name: "ContractorCoverage");
@@ -808,10 +788,10 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 name: "ServiceItem");
 
             migrationBuilder.DropTable(
-                name: "TicketMessage");
+                name: "WorkingHours");
 
             migrationBuilder.DropTable(
-                name: "WorkingHours");
+                name: "Contacts");
 
             migrationBuilder.DropTable(
                 name: "Invoices");
@@ -824,9 +804,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "SeoPages");
-
-            migrationBuilder.DropTable(
-                name: "SupportTickets");
 
             migrationBuilder.DropTable(
                 name: "Bookings");

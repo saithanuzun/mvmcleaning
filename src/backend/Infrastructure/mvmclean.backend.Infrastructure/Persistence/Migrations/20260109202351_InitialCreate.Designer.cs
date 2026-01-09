@@ -12,7 +12,7 @@ using mvmclean.backend.Infrastructure.Persistence;
 namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MVMdbContext))]
-    [Migration("20260109161938_InitialCreate")]
+    [Migration("20260109202351_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -235,6 +235,61 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Payment");
+                });
+
+            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contact.Contact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", b =>
@@ -700,121 +755,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.ToTable("Services");
                 });
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SupportTicket.Entities.TicketMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<bool>("IsInternalNote")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("SenderId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("SentAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("SupportTicketId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SupportTicketId");
-
-                    b.ToTable("TicketMessage");
-                });
-
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SupportTicket.SupportTicket", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("AssignedToId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("BookingId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssignedToId");
-
-                    b.ToTable("SupportTickets");
-                });
-
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Booking.Booking", b =>
                 {
                     b.HasOne("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", null)
@@ -1211,6 +1151,41 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Amount")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contact.Contact", b =>
+                {
+                    b.OwnsMany("mvmclean.backend.Domain.Aggregates.Contact.ValueObjects.ContactMessage", "Messages", b1 =>
+                        {
+                            b1.Property<Guid>("ContactId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uuid");
+
+                            b1.Property<DateTime>("CreatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<bool>("IsAdminResponse")
+                                .HasColumnType("boolean");
+
+                            b1.Property<string>("Message")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("SenderEmail")
+                                .HasColumnType("text");
+
+                            b1.HasKey("ContactId", "Id");
+
+                            b1.ToTable("ContactMessage");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ContactId");
+                        });
+
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", b =>
@@ -1930,27 +1905,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("PostcodePricings");
                 });
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SupportTicket.Entities.TicketMessage", b =>
-                {
-                    b.HasOne("mvmclean.backend.Domain.Aggregates.SupportTicket.SupportTicket", "SupportTicket")
-                        .WithMany("Messages")
-                        .HasForeignKey("SupportTicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SupportTicket");
-                });
-
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SupportTicket.SupportTicket", b =>
-                {
-                    b.HasOne("mvmclean.backend.Domain.Aggregates.Contractor.Contractor", "AssignedTo")
-                        .WithMany()
-                        .HasForeignKey("AssignedToId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("AssignedTo");
-                });
-
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Booking.Booking", b =>
                 {
                     b.Navigation("Payment");
@@ -1970,11 +1924,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("WorkingHours");
-                });
-
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SupportTicket.SupportTicket", b =>
-                {
-                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

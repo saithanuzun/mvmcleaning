@@ -99,8 +99,8 @@
                         </li>
                         
                         <li class="nav-item">
-                            <a class="nav-link text-white rounded mx-2 @(ViewContext.RouteData.Values["Controller"].ToString() == "SupportTicket" ? "active bg-secondary" : "text-opacity-75")" href="@Url.Action("Index", "SupportTicket")">
-                                <i class="bi bi-life-preserver me-2"></i> Support Ticket
+                            <a class="nav-link text-white rounded mx-2 @(ViewContext.RouteData.Values["Controller"].ToString() == "Contact" ? "active bg-secondary" : "text-opacity-75")" href="@Url.Action("Index", "Contact")">
+                                <i class="bi bi-chat-dots me-2"></i> Contacts
                             </a>
                         </li>
                         
@@ -173,8 +173,8 @@
                                         <li><a class="dropdown-item" asp-area="Admin" asp-controller="Invoice" asp-action="Index">
                                             <i class="bi bi-receipt"></i> All Invoices
                                         </a></li>
-                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="SupportTicket" asp-action="Index">
-                                            <i class="bi bi-life-preserver"></i> Support Tickets
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Contact" asp-action="Index">
+                                            <i class="bi bi-chat-dots"></i> All Contacts
                                         </a></li>
                                     </ul>
                                 </li>

@@ -1,0 +1,252 @@
+@model mvmclean.backend.Application.Features.SeoPage.Queries.GetAllSeoPagesResponse
+
+@{
+ViewData["Title"] = "Areas We Serve - Professional Carpet & Sofa Cleaning Services Nationwide";
+}
+
+<style>
+    .areas-header {
+        background-color: #194376;
+        color: white;
+        padding: 60px 0;
+        margin-bottom: 40px;
+    }
+
+    .areas-header h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .areas-header p {
+        font-size: 1.25rem;
+        opacity: 0.95;
+    }
+
+    .city-section {
+        margin-bottom: 50px;
+    }
+
+    .city-title {
+        background: #f8f9fa;
+        padding: 20px;
+        border-left: 5px solid #194376;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+
+    .city-title h2 {
+        color: #194376;
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .areas-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .area-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .area-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(25, 67, 118, 0.2);
+        border-color: #194376;
+    }
+
+    .area-name {
+        color: #194376;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+
+    .service-links {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .service-link {
+        color: #0066cc;
+        text-decoration: none;
+        font-size: 0.95rem;
+        padding: 6px 0;
+        border-bottom: 1px solid #f0f0f0;
+        transition: color 0.2s;
+    }
+
+    .service-link:hover {
+        color: #003d99;
+        text-decoration: underline;
+    }
+
+    .service-link:last-child {
+        border-bottom: none;
+    }
+
+    .no-services-message {
+        color: #666;
+        font-size: 0.9rem;
+        font-style: italic;
+    }
+
+    .stats-section {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        margin-bottom: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        text-align: center;
+    }
+
+    .stat-item h3 {
+        color: #194376;
+        font-size: 2.5rem;
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .stat-item p {
+        color: #666;
+        margin-top: 5px;
+        font-weight: 500;
+    }
+</style>
+
+<!-- Page Header Start -->
+<div class="page-header container-fluid bg-primary pt-1 pt-lg-2 pb-1 mb-2">
+    <div class="container py-5">
+        <div class="row align-items-center py-4">
+            <div class="col-md-6 text-center text-md-left">
+                <h1 class="mb-4 mb-md-0 text-white">Areas We Serve</h1>
+            </div>
+            <div class="col-md-6 text-center text-md-right">
+                <div class="d-inline-flex align-items-center">
+                    <a class="btn text-white" href="/">Home</a>
+                    <i class="fas fa-angle-right text-white"></i>
+                    <a class="btn text-white disabled" href="">Areas We Serve</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics -->
+@if (Model?.Pages != null && Model.Pages.Any())
+{
+<div class="container">
+    <div class="stats-section">
+        <div class="stat-item">
+            <h3>@Model.Pages.Select(p => p.City).Distinct().Count()</h3>
+            <p>Cities Covered</p>
+        </div>
+        <div class="stat-item">
+            <h3>@Model.Pages.Where(p => !string.IsNullOrEmpty(p.Area)).Select(p => p.Area).Distinct().Count()</h3>
+            <p>Areas Served</p>
+        </div>
+        <div class="stat-item">
+            <h3>@Model.Pages.Where(p => !string.IsNullOrEmpty(p.ServiceType)).Select(p => p.ServiceType).Distinct().Count()</h3>
+            <p>Service Types</p>
+        </div>
+        <div class="stat-item">
+            <h3>@Model.Pages.Count()</h3>
+            <p>Service Combinations</p>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Areas by City -->
+<div class="container">
+    @if (Model?.Pages != null && Model.Pages.Any())
+    {
+    @foreach (var city in Model.Pages.Select(p => p.City).Distinct().OrderBy(c => c))
+    {
+    var cityPages = Model.Pages.Where(p => p.City == city).ToList();
+    var areas = cityPages.Where(p => !string.IsNullOrEmpty(p.Area)).Select(p => p.Area).Distinct().OrderBy(a => a).ToList();
+
+    <div class="city-section">
+        <div class="city-title">
+            <h2>@city</h2>
+        </div>
+
+        @if (areas.Any())
+        {
+        <div class="areas-grid">
+            @foreach (var area in areas)
+            {
+            var areaPages = cityPages.Where(p => p.Area == area).ToList();
+            var services = areaPages.Select(p => p.ServiceType).Where(s => !string.IsNullOrEmpty(s)).Distinct().OrderBy(s => s).ToList();
+
+            <div class="area-card">
+                <div class="area-name">
+                    <i class="bi bi-pin-fill"></i> @area
+                </div>
+
+                @if (services.Any())
+                {
+                <div class="service-links">
+                    @foreach (var service in services)
+                    {
+                    var servicePage = areaPages.FirstOrDefault(p => p.ServiceType == service);
+                    if (servicePage != null)
+                    {
+                    <a href="/@servicePage.Slug" class="service-link">
+                        <i class="bi bi-check-circle-fill"></i> @service
+                    </a>
+                    }
+                    }
+                </div>
+                }
+                else
+                {
+                <div class="no-services-message">
+                    General cleaning services available
+                </div>
+                }
+            </div>
+            }
+        </div>
+        }
+        else
+        {
+        <p class="text-muted">
+            <i class="bi bi-info-circle"></i> Citywide service coverage available
+        </p>
+        }
+    </div>
+    }
+    }
+    else
+    {
+    <div class="alert alert-info" role="alert">
+        <i class="bi bi-info-circle"></i> Service areas are being loaded. Please refresh the page.
+    </div>
+    }
+</div>
+
+<!-- Call to Action -->
+<div style="background: #f8f9fa; padding: 60px 0; margin-top: 60px;">
+    <div class="container text-center">
+        <h2 style="color: #194376; margin-bottom: 20px;">Don't See Your Area?</h2>
+        <p style="color: #666; font-size: 1.1rem; margin-bottom: 25px;">
+            We're constantly expanding our service coverage. Contact us to see if we can serve your location.
+        </p>
+        <a href="/contact" class="btn btn-primary btn-lg" style="background-color: #194376; border-color: #194376;">
+            <i class="bi bi-envelope"></i> Get In Touch
+        </a>
+    </div>
+</div>

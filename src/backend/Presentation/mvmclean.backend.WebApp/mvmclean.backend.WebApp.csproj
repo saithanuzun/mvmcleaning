@@ -19,7 +19,6 @@
       <Folder Include="Areas\Admin\wwwroot\" />
       <Folder Include="Areas\Contractor\wwwroot\" />
       <Folder Include="ClientApp\" />
-      <Folder Include="Views\Services\" />
       <Folder Include="Views\Shared\Components\" />
     </ItemGroup>
 
@@ -43,6 +42,12 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Core\mvmclean.backend.Application\mvmclean.backend.Application.csproj" />
       <ProjectReference Include="..\..\Infrastructure\mvmclean.backend.Infrastructure\mvmclean.backend.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\SupportTicket\AllTickets.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\SupportTicket\Answer.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\SupportTicket\Index.cshtml" />
     </ItemGroup>
 
 </Project>

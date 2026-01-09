@@ -16,32 +16,112 @@ public static class SeoPageSeedData
                 "Leicester", new CityConfig
                 {
                     City = "Leicester",
-                    Areas = new[] { "City Centre", "Wigston", "Oadby", "Glen Parva", "Knighton", "Belgrave" },
-                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning" }
+                    Areas = new[] { "City Centre", "Wigston", "Oadby", "Glen Parva", "Knighton", "Belgrave", "Syston", "Birstall", "Groby", "Kirby Muxloe", "Anstey", "Countesthorpe" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Coventry", new CityConfig
+                {
+                    City = "Coventry",
+                    Areas = new[] { "City Centre", "Canley", "Earlsdon", "Keresley", "Holbrooks", "Whitley" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Loughborough", new CityConfig
+                {
+                    City = "Loughborough",
+                    Areas = new[] { "Town Centre", "Quorn", "Shepshed", "Sileby" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Nuneaton", new CityConfig
+                {
+                    City = "Nuneaton",
+                    Areas = new[] { "Town Centre", "Bedworth", "Arley", "Stockingford" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Rugby", new CityConfig
+                {
+                    City = "Rugby",
+                    Areas = new[] { "Town Centre", "Hillmorton", "Lawford", "Brownsover" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Hinckley", new CityConfig
+                {
+                    City = "Hinckley",
+                    Areas = new[] { "Town Centre", "Earl Shilton", "Barwell", "Desford", "Kirby Muxloe" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Melton Mowbray", new CityConfig
+                {
+                    City = "Melton Mowbray",
+                    Areas = new[] { "Town Centre", "Asfordby", "Bottesford" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Market Harborough", new CityConfig
+                {
+                    City = "Market Harborough",
+                    Areas = new[] { "Town Centre", "Lutterworth", "Broughton Astley" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Coalville", new CityConfig
+                {
+                    City = "Coalville",
+                    Areas = new[] { "Town Centre", "Ibstock", "Heather" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Castle Donington", new CityConfig
+                {
+                    City = "Castle Donington",
+                    Areas = new[] { "Town Centre", "Long Eaton", "Sawley" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Oakham", new CityConfig
+                {
+                    City = "Oakham",
+                    Areas = new[] { "Town Centre", "Rutland Water", "Uppingham" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "West Bridgford", new CityConfig
+                {
+                    City = "West Bridgford",
+                    Areas = new[] { "Town Centre", "Wilford", "Edwalton" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
+                }
+            },
+            {
+                "Swadlincote", new CityConfig
+                {
+                    City = "Swadlincote",
+                    Areas = new[] { "Town Centre", "Gresley", "Church Gresley" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
                 }
             },
             {
                 "London", new CityConfig
                 {
                     City = "London",
-                    Areas = new[] { "Westminster", "Camden", "Islington", "Hackney", "Tower Hamlets" },
-                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning" }
-                }
-            },
-            {
-                "Manchester", new CityConfig
-                {
-                    City = "Manchester",
-                    Areas = new[] { "City Centre", "Fallowfield", "Ancoats", "Stockport" },
-                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal" }
-                }
-            },
-            {
-                "Birmingham", new CityConfig
-                {
-                    City = "Birmingham",
-                    Areas = new[] { "City Centre", "Solihull", "Sutton Coldfield", "Edgbaston" },
-                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal" }
+                    Areas = new[] { "Westminster", "Camden", "Islington", "Hackney", "Tower Hamlets", "Bethnal Green", "Shoreditch", "Whitechapel", "Stepney", "Clerkenwell", "King's Cross", "Bloomsbury", "Soho", "Mayfair", "Kensington", "Chelsea", "Belgravia", "Knightsbridge" },
+                    Services = new[] { "Carpet Cleaning", "Sofa Cleaning", "Mattress Cleaning", "Stain Removal", "Upholstery Cleaning", "Jet Washing", "Pressure Washing" }
                 }
             }
         };

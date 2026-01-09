@@ -11,10 +11,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 
 // Add SPA services for React app
-builder.Services.AddSpaStaticFiles(configuration =>
-{
-    configuration.RootPath = "ClientApp/dist";
-});
+builder.Services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
 builder.Services.AddAuthentication()
     .AddCookie("AdminCookie", options =>
@@ -44,7 +41,7 @@ using (var scope = app.Services.CreateScope())
     {
         // Apply any pending migrations
         await dbContext.Database.MigrateAsync();
-        
+
         // Seed initial data
         var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
         await seeder.SeedAsync();
@@ -63,14 +60,28 @@ if (!app.Environment.IsDevelopment())
 }
 
 
-
-
 app.UseExceptionHandler("/Error");
 app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
 
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Serve React app static files
+var distPath = Path.Combine(builder.Environment.ContentRootPath, "ClientApp/dist");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(distPath),
+    RequestPath = "/shop",
+    OnPrepareResponse = ctx => 
+    {
+        // Cache busting for versioned files
+        if (ctx.File.Name.Contains("assets"))
+        {
+            ctx.Context.Response.Headers.CacheControl = "public, max-age=31536000, immutable";
+        }
+    }
+});
 
 app.UseRouting();
 
@@ -84,21 +95,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapFallbackToController(
-    action: "GetBySlug",
-    controller: "SeoPage");
-
-// Configure SPA to serve React app under /shop route
 app.Map("/shop", appBuilder =>
 {
-    var distPath = Path.Combine(builder.Environment.ContentRootPath, "ClientApp/dist");
-    
-    appBuilder.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(distPath),
-        RequestPath = new Microsoft.AspNetCore.Http.PathString("")
-    });
-
     appBuilder.Run(async context =>
     {
         // Fallback to index.html for SPA routing
@@ -115,5 +113,12 @@ app.Map("/shop", appBuilder =>
         }
     });
 });
+
+app.MapFallbackToController(
+    action: "GetBySlug",
+    controller: "SeoPage");
+
+// Configure SPA to serve React app under /shop route
+
 
 app.Run();
