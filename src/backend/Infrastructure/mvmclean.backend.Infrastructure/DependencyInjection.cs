@@ -23,7 +23,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureRegistration(this IServiceCollection serviceCollection)
     {
-        const string connStr = "USER ID=postgres ; Password=password123;Server=localhost;Port=5432;Database=MVMTest;Pooling=true";
+        var configuration = serviceCollection.BuildServiceProvider().GetRequiredService<IConfiguration>();
+        
+        var resend = configuration["RESEND:RESEND_APITOKEN"];
+        var connStr = configuration["ConnectionStrings:MyDbConnection"];
+
 
         serviceCollection.AddDbContext<MVMdbContext>(conf =>
         {
@@ -47,8 +51,7 @@ public static class DependencyInjection
         // Register Resend email provider
         serviceCollection.Configure<ResendClientOptions>(options =>
         {
-            var configuration = serviceCollection.BuildServiceProvider().GetRequiredService<IConfiguration>();
-            options.ApiToken = configuration["RESEND:RESEND_APITOKEN"];
+            options.ApiToken = resend;
             
             if (string.IsNullOrEmpty(options.ApiToken))
             {
@@ -74,6 +77,8 @@ public static class DependencyInjection
 
         // Register database seeder
         serviceCollection.AddScoped<DatabaseSeeder>();
+        
+
 
 
         return serviceCollection;

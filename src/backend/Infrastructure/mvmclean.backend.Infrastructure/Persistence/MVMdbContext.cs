@@ -47,12 +47,7 @@ public class MVMdbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        if (!optionsBuilder.IsConfigured)
-        {
-            var connStr =
-                "USER ID=postgres ; Password=password123;Server=localhost;Port=5432;Database=MVMTest;Pooling=true";
-            optionsBuilder.UseNpgsql(connStr, opt => { opt.EnableRetryOnFailure(); });
-        }
+
     }
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

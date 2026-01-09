@@ -117,7 +117,6 @@ public class AvailabilityController : BaseContractorController
 
     [Route("working-days/add")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddWorkingDay(string dayOfWeek, string startTime, string endTime)
     {
         if (ContractorId == null)

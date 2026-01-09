@@ -25,6 +25,23 @@ const PaymentSuccessPage = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (!bookingDetails) return;
+
+        if (window.__purchaseTracked) return;
+        window.__purchaseTracked = true;
+
+        if (window.gtag) {
+            window.gtag('event', 'conversion', {
+                send_to: 'AW-17424866501/uEZiCM-QzP0aEMW56fRA',
+                value: bookingDetails.totalAmount, 
+                currency: 'GBP',
+                transaction_id: bookingDetails.bookingId,
+            });
+        }
+    }, [bookingDetails]);
+
+
     const handleBookAnother = () => {
         // Reset localStorage
         localStorage.removeItem('pending_booking_id');

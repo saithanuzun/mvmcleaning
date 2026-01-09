@@ -1,17 +1,16 @@
-using Microsoft.AspNetCore.SpaServices.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using mvmclean.backend.Application;
 using mvmclean.backend.Infrastructure;
 using mvmclean.backend.Infrastructure.Persistence;
 using mvmclean.backend.Infrastructure.Seeding;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
-
-// Add SPA services for React app
-builder.Services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
 builder.Services.AddAuthentication()
     .AddCookie("AdminCookie", options =>
@@ -33,24 +32,14 @@ builder.Services.AddApplicationRegistration();
 
 var app = builder.Build();
 
-// Apply migrations and seed database
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<MVMdbContext>();
-    try
-    {
-        // Apply any pending migrations
-        await dbContext.Database.MigrateAsync();
 
-        // Seed initial data
-        var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-        await seeder.SeedAsync();
-    }
-    catch (Exception ex)
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while migrating or seeding the database");
-    }
+    await dbContext.Database.MigrateAsync();
+
+    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+    await seeder.SeedAsync();
 }
 
 if (!app.Environment.IsDevelopment())
@@ -67,7 +56,6 @@ app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// Serve React app static files
 var distPath = Path.Combine(builder.Environment.ContentRootPath, "ClientApp/dist");
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -75,7 +63,6 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/shop",
     OnPrepareResponse = ctx => 
     {
-        // Cache busting for versioned files
         if (ctx.File.Name.Contains("assets"))
         {
             ctx.Context.Response.Headers.CacheControl = "public, max-age=31536000, immutable";
@@ -99,7 +86,6 @@ app.Map("/shop", appBuilder =>
 {
     appBuilder.Run(async context =>
     {
-        // Fallback to index.html for SPA routing
         var indexPath = Path.Combine(distPath, "index.html");
         if (System.IO.File.Exists(indexPath))
         {
@@ -117,8 +103,6 @@ app.Map("/shop", appBuilder =>
 app.MapFallbackToController(
     action: "GetBySlug",
     controller: "SeoPage");
-
-// Configure SPA to serve React app under /shop route
 
 
 app.Run();

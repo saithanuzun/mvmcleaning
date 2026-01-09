@@ -139,7 +139,7 @@ public class Contractor : Core.BaseClasses.AggregateRoot
         var dayOfWeek = (DayOfWeek)((int)timeSlot.StartTime.DayOfWeek == 0 ? 7 : (int)timeSlot.StartTime.DayOfWeek);
         var workingHours = _workingHours.FirstOrDefault(w => w.DayOfWeek == dayOfWeek);
 
-        if (workingHours == null) return true;
+        if (workingHours == null) return false;
         
         if (!workingHours.IsWorkingDay) return false;
 

@@ -14,7 +14,7 @@ public class DatabaseSeeder
     private readonly IMediator _mediator;
     private readonly ILogger<DatabaseSeeder> _logger;
 
-    private readonly bool _seed = false;
+    private readonly bool _seed = true;
 
     public DatabaseSeeder(IMediator mediator, ILogger<DatabaseSeeder> logger)
     {
@@ -38,19 +38,19 @@ public class DatabaseSeeder
             var serviceIds = await SeedServicesAsync();
 
             // Seed postcode pricing
-            await SeedPostcodePricingAsync(serviceIds);
+            //await SeedPostcodePricingAsync(serviceIds);
 
             // Seed contractors and get their IDs
-            var contractorIds = await SeedContractorsAsync();
+            //var contractorIds = await SeedContractorsAsync();
 
             // Seed contractor coverage areas
-            await SeedCoverageAreasAsync(contractorIds);
+            //await SeedCoverageAreasAsync(contractorIds);
 
             // Seed working hours
-            await SeedWorkingHoursAsync(contractorIds);
+            //await SeedWorkingHoursAsync(contractorIds);
 
             // Seed unavailability slots
-            await SeedUnavailabilitySlotsAsync(contractorIds);
+            //await SeedUnavailabilitySlotsAsync(contractorIds);
 
             // Seed promotions
             await SeedPromotionsAsync();
@@ -59,10 +59,10 @@ public class DatabaseSeeder
             await SeedSeoPagesAsync();
 
             // Seed past bookings
-            await SeedBookingsAsync(serviceIds, contractorIds);
+            //await SeedBookingsAsync(serviceIds, contractorIds);
 
             // Seed sample contacts
-            await SeedContactsAsync();
+            //await SeedContactsAsync();
 
 
             _logger.LogInformation("Database seeding completed successfully.");
@@ -1042,29 +1042,29 @@ public class DatabaseSeeder
                     DiscountType = 0, // 0 = Percentage, 1 = Fixed Amount
                     DiscountValue = 10,
                     ValidFrom = DateTime.UtcNow.AddDays(-30),
-                    ValidTo = DateTime.UtcNow.AddDays(90),
+                    ValidTo = DateTime.UtcNow.AddDays(900),
                     UsageLimit = 100,
                     MinimumOrderAmount = 0
                 },
                 new CreatePromotionRequest
                 {
-                    Code = "SAVE20",
+                    Code = "SAVE20NEW",
                     Description = "Save 20% on your booking",
                     DiscountType = 0, // 0 = Percentage
                     DiscountValue = 20,
                     ValidFrom = DateTime.UtcNow.AddDays(-30),
-                    ValidTo = DateTime.UtcNow.AddDays(90),
+                    ValidTo = DateTime.UtcNow.AddDays(900),
                     UsageLimit = 50,
                     MinimumOrderAmount = 0
                 },
                 new CreatePromotionRequest
                 {
-                    Code = "WELCOME5",
-                    Description = "Welcome discount - Save 5% on your first booking",
-                    DiscountType = 0, // 0 = Percentage
+                    Code = "WELCOME10NEW",
+                    Description = "Welcome discount - Save 10$ discount on your first booking",
+                    DiscountType = 1, // 0 = Percentage
                     DiscountValue = 5,
                     ValidFrom = DateTime.UtcNow.AddDays(-30),
-                    ValidTo = DateTime.UtcNow.AddDays(90),
+                    ValidTo = DateTime.UtcNow.AddDays(900),
                     UsageLimit = 200,
                     MinimumOrderAmount = 0
                 }

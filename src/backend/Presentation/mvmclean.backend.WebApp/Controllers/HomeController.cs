@@ -24,6 +24,12 @@ public class HomeController : BaseController
     [Route("/book-now")]
     public IActionResult BookNow() => RedirectPermanent("/shop");
     
+    [Route("/get-a-quote")]
+    public IActionResult GetAQuote() => RedirectPermanent("/shop");
+    
+    [Route("/packages")]
+    public IActionResult Packages() => RedirectPermanent("/shop");
+    
     [Route("/gallery")]
     public IActionResult Gallery() => View();
     
