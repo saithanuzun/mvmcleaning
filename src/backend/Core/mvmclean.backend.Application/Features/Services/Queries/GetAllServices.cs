@@ -44,8 +44,7 @@ public class GetAllServicesHandler : IRequestHandler<GetAllServicesRequest, List
                 Shortcut = service.Shortcut,
                 Duration = $"{(int)service.EstimatedDuration.TotalMinutes}",
 
-                CategoryId = service.CategoryId,
-                CategoryName = service.Category?.Name,
+                CategoryName = service.Category,
 
                 BasePrice = service.BasePrice.Amount
             })

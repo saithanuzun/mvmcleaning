@@ -12,7 +12,7 @@ using mvmclean.backend.Infrastructure.Persistence;
 namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MVMdbContext))]
-    [Migration("20260108011048_InitialCreate")]
+    [Migration("20260109015905_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -465,6 +465,10 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Property<Guid?>("CustomerId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -789,56 +793,14 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.ToTable("SeoPages");
                 });
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Entities.Category", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Category");
-                });
-
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Service", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -885,8 +847,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Services");
                 });
@@ -1657,6 +1617,68 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<Guid>("InvoiceId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("AdditionalInfo")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<double?>("Latitude")
+                                .HasColumnType("double precision");
+
+                            b1.Property<double?>("Longitude")
+                                .HasColumnType("double precision");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("InvoiceId");
+
+                            b1.ToTable("Invoices");
+
+                            b1.WithOwner()
+                                .HasForeignKey("InvoiceId");
+
+                            b1.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Postcode", "Postcode", b2 =>
+                                {
+                                    b2.Property<Guid>("AddressInvoiceId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<string>("Area")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("District")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Sector")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Value")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.HasKey("AddressInvoiceId");
+
+                                    b2.ToTable("Invoices");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("AddressInvoiceId");
+                                });
+
+                            b1.Navigation("Postcode")
+                                .IsRequired();
+                        });
+
                     b.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Money", "DiscountAmount", b1 =>
                         {
                             b1.Property<Guid>("InvoiceId")
@@ -1719,33 +1741,36 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
                     b.OwnsMany("mvmclean.backend.Domain.Aggregates.Invoice.ValueObjects.InvoiceLineItem", "LineItems", b1 =>
                         {
-                            b1.Property<Guid>("Id")
+                            b1.Property<Guid>("InvoiceId")
                                 .HasColumnType("uuid");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
                             b1.Property<string>("Description")
                                 .IsRequired()
-                                .HasMaxLength(1000)
-                                .HasColumnType("character varying(1000)");
-
-                            b1.Property<Guid>("InvoiceId")
-                                .HasColumnType("uuid");
+                                .HasColumnType("text");
 
                             b1.Property<int>("Quantity")
                                 .HasColumnType("integer");
 
-                            b1.HasKey("Id");
+                            b1.HasKey("InvoiceId", "Id");
 
-                            b1.HasIndex("InvoiceId");
-
-                            b1.ToTable("InvoiceLineItems", (string)null);
+                            b1.ToTable("InvoiceLineItem");
 
                             b1.WithOwner()
                                 .HasForeignKey("InvoiceId");
 
                             b1.OwnsOne("mvmclean.backend.Domain.SharedKernel.ValueObjects.Money", "UnitPrice", b2 =>
                                 {
-                                    b2.Property<Guid>("InvoiceLineItemId")
+                                    b2.Property<Guid>("InvoiceLineItemInvoiceId")
                                         .HasColumnType("uuid");
+
+                                    b2.Property<int>("InvoiceLineItemId")
+                                        .HasColumnType("integer");
 
                                     b2.Property<decimal>("Amount")
                                         .HasColumnType("numeric");
@@ -1754,12 +1779,12 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                                         .IsRequired()
                                         .HasColumnType("text");
 
-                                    b2.HasKey("InvoiceLineItemId");
+                                    b2.HasKey("InvoiceLineItemInvoiceId", "InvoiceLineItemId");
 
-                                    b2.ToTable("InvoiceLineItems");
+                                    b2.ToTable("InvoiceLineItem");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("InvoiceLineItemId");
+                                        .HasForeignKey("InvoiceLineItemInvoiceId", "InvoiceLineItemId");
                                 });
 
                             b1.Navigation("UnitPrice")
@@ -1787,6 +1812,9 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("InvoiceId");
                         });
+
+                    b.Navigation("Address")
+                        .IsRequired();
 
                     b.Navigation("DiscountAmount")
                         .IsRequired();
@@ -1907,12 +1935,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Service", b =>
                 {
-                    b.HasOne("mvmclean.backend.Domain.Aggregates.Service.Entities.Category", "Category")
-                        .WithMany("Services")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.OwnsMany("mvmclean.backend.Domain.Aggregates.Service.ValueObjects.PostcodePricing", "PostcodePricings", b1 =>
                         {
                             b1.Property<int>("Id")
@@ -1999,8 +2021,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("BasePrice")
                         .IsRequired();
 
-                    b.Navigation("Category");
-
                     b.Navigation("PostcodePricings");
                 });
 
@@ -2053,11 +2073,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("FAQs");
 
                     b.Navigation("Keywords");
-                });
-
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Entities.Category", b =>
-                {
-                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SupportTicket.SupportTicket", b =>

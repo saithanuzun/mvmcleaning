@@ -3,6 +3,7 @@ using mvmclean.backend.Domain.Aggregates.Booking;
 using mvmclean.backend.Domain.Aggregates.Booking.Enums;
 using mvmclean.backend.Domain.Aggregates.Contractor;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
+using mvmclean.backend.Application.Features.Contractor.Queries;
 
 namespace mvmclean.backend.Application.Features.Booking.Queries;
 
@@ -11,6 +12,7 @@ public class GetAvailableSlotsRequest : IRequest<GetAvailableSlotsResponse>
     public string Postcode { get; set; }
     public DateTime Date { get; set; }
     public int DurationMinutes { get; set; }
+    public string? ContractorIds { get; set; }
 }
 
 public class GetAvailableSlotsResponse
@@ -21,24 +23,28 @@ public class GetAvailableSlotsResponse
 
 public class AvailableSlotDto
 {
-    public Guid ContractorId { get; set; }
+    public string SlotId { get; set; }
+    public string StartTime { get; set; }
+    public string EndTime { get; set; }
+    public string ContractorId { get; set; }
     public string ContractorName { get; set; }
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
-    public string DisplayTime { get; set; }
+    public bool IsAvailable { get; set; } = true;
 }
 
 public class GetAvailableSlotsHandler : IRequestHandler<GetAvailableSlotsRequest, GetAvailableSlotsResponse>
 {
     private readonly IContractorRepository _contractorRepository;
     private readonly IBookingRepository _bookingRepository;
+    private readonly IMediator _mediator;
 
     public GetAvailableSlotsHandler(
         IContractorRepository contractorRepository,
-        IBookingRepository bookingRepository)
+        IBookingRepository bookingRepository,
+        IMediator mediator)
     {
         _contractorRepository = contractorRepository;
         _bookingRepository = bookingRepository;
+        _mediator = mediator;
     }
 
     public async Task<GetAvailableSlotsResponse> Handle(GetAvailableSlotsRequest request, CancellationToken cancellationToken)
@@ -52,15 +58,34 @@ public class GetAvailableSlotsHandler : IRequestHandler<GetAvailableSlotsRequest
             };
         }
 
-        // Get contractors covering this postcode
-        var allContractors = await _contractorRepository.GetAll(false);
-        var availableContractors = allContractors
-            .Where(c => c.IsActive &&
-                       c.CoverageAreas != null &&
-                       c.CoverageAreas.Any(ca => ca.Postcode.Value.Equals(request.Postcode, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+        // Determine contractor IDs based on postcode or explicit IDs
+        List<string> contractorIdList;
 
-        if (!availableContractors.Any())
+        if (!string.IsNullOrEmpty(request.ContractorIds))
+        {
+            contractorIdList = request.ContractorIds
+                .Split(',')
+                .Select(id => id.Trim())
+                .Where(id => !string.IsNullOrEmpty(id))
+                .ToList();
+        }
+        else if (!string.IsNullOrEmpty(request.Postcode))
+        {
+            var postcodeRequest = new GetContractorsByPostcodeRequest
+            {
+                Postcode = request.Postcode,
+                BookingId = ""
+            };
+
+            var contractorsResponse = await _mediator.Send(postcodeRequest, cancellationToken);
+            contractorIdList = contractorsResponse.ContractorIds;
+        }
+        else
+        {
+            return new GetAvailableSlotsResponse { AvailableSlots = new List<AvailableSlotDto>(), Message = "No postcode or contractors provided" };
+        }
+
+        if (!contractorIdList.Any())
         {
             return new GetAvailableSlotsResponse
             {
@@ -69,71 +94,68 @@ public class GetAvailableSlotsHandler : IRequestHandler<GetAvailableSlotsRequest
             };
         }
 
-        var availableSlots = new List<AvailableSlotDto>();
-
-        foreach (var contractor in availableContractors)
+        // Get availability for the day
+        var availabilityRequest = new GetContractorAvailabilityByDayRequest
         {
-            // Check if contractor works on this day
-            var dayOfWeek = request.Date.DayOfWeek;
-            var workingHours = contractor.WorkingHours?.FirstOrDefault(w => w.DayOfWeek == dayOfWeek && w.IsWorkingDay);
+            ContractorIds = contractorIdList,
+            Date = request.Date,
+            Duration = TimeSpan.FromMinutes(request.DurationMinutes)
+        };
 
-            if (workingHours == null) continue;
+        var availabilityResponse = await _mediator.Send(availabilityRequest, cancellationToken);
 
-            // Get contractor's bookings for this date
-            var allBookings = _bookingRepository.Get(b => b.ContractorId == contractor.Id).ToList();
-            var dayBookings = allBookings
-                .Where(b => b.ScheduledSlot != null &&
-                           b.ScheduledSlot.StartTime.Date == request.Date.Date &&
-                           b.Status != BookingStatus.Cancelled)
-                .ToList();
+        if (availabilityResponse == null || availabilityResponse.Count == 0)
+            return new GetAvailableSlotsResponse { AvailableSlots = new List<AvailableSlotDto>(), Message = "No available slots" };
 
-            // Get unavailable slots
-            var unavailableSlots = contractor.UnavailableSlots?
-                .Where(u => u.StartTime.Date == request.Date.Date)
-                .ToList() ?? new List<TimeSlot>();
-
-            // Generate time slots
-            var startTime = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day,
-                workingHours.StartTime.Hour, workingHours.StartTime.Minute, 0);
-            var endTime = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day,
-                workingHours.EndTime.Hour, workingHours.EndTime.Minute, 0);
-
-            var currentSlot = startTime;
-            while (currentSlot.AddMinutes(request.DurationMinutes) <= endTime)
+        // Get contractor names
+        var contractorMap = new Dictionary<string, string>();
+        foreach (var contractorId in contractorIdList)
+        {
+            if (Guid.TryParse(contractorId, out var parsedId))
             {
-                var slotEnd = currentSlot.AddMinutes(request.DurationMinutes);
-
-                // Check if slot conflicts with existing bookings
-                var hasConflict = dayBookings.Any(b =>
-                    (currentSlot >= b.ScheduledSlot.StartTime && currentSlot < b.ScheduledSlot.EndTime) ||
-                    (slotEnd > b.ScheduledSlot.StartTime && slotEnd <= b.ScheduledSlot.EndTime) ||
-                    (currentSlot <= b.ScheduledSlot.StartTime && slotEnd >= b.ScheduledSlot.EndTime));
-
-                // Check if slot conflicts with unavailable periods
-                var hasUnavailability = unavailableSlots.Any(u =>
-                    (currentSlot >= u.StartTime && currentSlot < u.EndTime) ||
-                    (slotEnd > u.StartTime && slotEnd <= u.EndTime) ||
-                    (currentSlot <= u.StartTime && slotEnd >= u.EndTime));
-
-                if (!hasConflict && !hasUnavailability)
+                var contractor = await _contractorRepository.GetByIdAsync(parsedId, true);
+                if (contractor != null)
                 {
-                    availableSlots.Add(new AvailableSlotDto
-                    {
-                        ContractorId = contractor.Id,
-                        ContractorName = contractor.FullName,
-                        StartTime = currentSlot,
-                        EndTime = slotEnd,
-                        DisplayTime = currentSlot.ToString("HH:mm") + " - " + slotEnd.ToString("HH:mm")
-                    });
+                    contractorMap[contractorId] = contractor.FullName;
                 }
-
-                currentSlot = currentSlot.AddMinutes(30); // 30-minute intervals
             }
         }
 
-        return new GetAvailableSlotsResponse
+        // Format response
+        var slots = new List<AvailableSlotDto>();
+        var slotIndex = 0;
+
+        var groupedByContractor = availabilityResponse
+            .GroupBy(r => r.ContractorId)
+            .ToList();
+
+        foreach (var contractorGroup in groupedByContractor)
         {
-            AvailableSlots = availableSlots.OrderBy(s => s.StartTime).ToList()
+            var contractorName = contractorMap.ContainsKey(contractorGroup.Key) 
+                ? contractorMap[contractorGroup.Key] 
+                : "Unknown";
+
+            var availableSlots = contractorGroup.Where(s => s.Available).ToList();
+
+            foreach (var slot in availableSlots)
+            {
+                slots.Add(new AvailableSlotDto
+                {
+                    SlotId = $"{contractorGroup.Key}_{slotIndex}",
+                    StartTime = slot.StartTime,
+                    EndTime = slot.EndTime,
+                    ContractorId = contractorGroup.Key,
+                    ContractorName = contractorName,
+                    IsAvailable = true
+                });
+                slotIndex++;
+            }
+        }
+
+        return new GetAvailableSlotsResponse 
+        { 
+            AvailableSlots = slots.OrderBy(s => s.StartTime).ToList(),
+            Message = slots.Any() ? "Slots found" : "No available slots"
         };
     }
 }

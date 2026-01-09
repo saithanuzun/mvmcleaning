@@ -1,0 +1,198 @@
+@using mvmclean.backend.Application.Features.Booking.Queries
+@model GetBookingByIdResponse
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <a href="@Url.Action("Find", "Booking")" class="btn btn-secondary mb-4">
+                <i class="fas fa-arrow-left me-2"></i> Back to Search
+            </a>
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="mb-0">Booking Details</h4>
+                        </div>
+                        <div class="col-auto">
+                            <span class="badge bg-success fs-6">@Model.Status</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Booking ID</h6>
+                            <p class="fs-6"><code>@Model.Id</code></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Created Date</h6>
+                            <p class="fs-6">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</p>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <h5 class="border-bottom pb-3 mb-3">Contact Information</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Phone Number</h6>
+                            <p class="fs-6">@Model.PhoneNumber</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Postcode</h6>
+                            <p class="fs-6">@Model.Postcode</p>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Customer?.FullName))
+                    {
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Customer Name</h6>
+                                <p class="fs-6">@Model.Customer.FullName</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Email</h6>
+                                <p class="fs-6">@(string.IsNullOrEmpty(Model.Customer.Email) ? "Not provided" : Model.Customer.Email)</p>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Service Address -->
+                    @if (Model.ServiceAddress != null)
+                    {
+                        <h5 class="border-bottom pb-3 mb-3">Service Address</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Street</h6>
+                                <p class="fs-6">@Model.ServiceAddress.Street</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">City</h6>
+                                <p class="fs-6">@Model.ServiceAddress.City</p>
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.ServiceAddress.AdditionalInfo))
+                        {
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <h6 class="text-muted">Additional Information</h6>
+                                    <p class="fs-6">@Model.ServiceAddress.AdditionalInfo</p>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <!-- Scheduled Slot -->
+                    @if (Model.ScheduledSlot != null)
+                    {
+                        <h5 class="border-bottom pb-3 mb-3">Scheduled Service</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <h6 class="text-muted">Date</h6>
+                                <p class="fs-6">@Model.ScheduledSlot.StartTime.ToString("dd MMM yyyy")</p>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-muted">Time</h6>
+                                <p class="fs-6">@Model.ScheduledSlot.StartTime.ToString("HH:mm") - @Model.ScheduledSlot.EndTime.ToString("HH:mm")</p>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-muted">Duration</h6>
+                                <p class="fs-6">@Model.ScheduledSlot.Duration minutes</p>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Services -->
+                    @if (Model.ServiceItems != null && Model.ServiceItems.Count > 0)
+                    {
+                        <h5 class="border-bottom pb-3 mb-3">Services</h5>
+                        <div class="table-responsive mb-4">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Service Name</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ServiceItems)
+                                    {
+                                        <tr>
+                                            <td>@item.ServiceName</td>
+                                            <td class="text-end">£@item.UnitPrice.ToString("0.00")</td>
+                                            <td class="text-center">@item.Quantity</td>
+                                            <td class="text-end"><strong>£@item.TotalPrice.ToString("0.00")</strong></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+                    <!-- Total Price -->
+                    <h5 class="border-bottom pb-3 mb-3">Payment Summary</h5>
+                    <div class="row">
+                        <div class="col-md-6 ms-auto">
+                            <div class="row mb-2">
+                                <div class="col">Total Amount:</div>
+                                <div class="col-auto">
+                                    <h5><strong>£@Model.TotalPrice.ToString("0.00")</strong></h5>
+                                </div>
+                            </div>
+                            @if (Model.PaymentId != null)
+                            {
+                                <div class="row text-muted">
+                                    <div class="col">Payment ID:</div>
+                                    <div class="col-auto"><code>@Model.PaymentId</code></div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light">
+                    <div class="row">
+                        <div class="col">
+                            <a href="@Url.Action("Find", "Booking")" class="btn btn-secondary">
+                                <i class="fas fa-search me-2"></i> Find Another Booking
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    code {
+        background-color: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 0.85rem;
+    }
+
+    h5 {
+        color: #333;
+        font-weight: 600;
+    }
+
+    .text-muted {
+        color: #6c757d !important;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+</style>

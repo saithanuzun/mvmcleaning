@@ -7,7 +7,6 @@ using mvmclean.backend.Domain.Aggregates.Invoice;
 using mvmclean.backend.Domain.Aggregates.Promotion;
 using mvmclean.backend.Domain.Aggregates.SeoPage;
 using mvmclean.backend.Domain.Aggregates.Service;
-using mvmclean.backend.Domain.Aggregates.Service.Entities;
 using mvmclean.backend.Domain.Aggregates.SupportTicket;
 using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.Core.Interfaces;
@@ -35,9 +34,6 @@ public class MVMdbContext : DbContext
     public DbSet<Promotion> Promotions { get; set; } = null!;
     
     public DbSet<SupportTicket> SupportTickets { get; set; } = null!;
-    
-    
-    public DbSet<Category> Category { get; set; } = null!;
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

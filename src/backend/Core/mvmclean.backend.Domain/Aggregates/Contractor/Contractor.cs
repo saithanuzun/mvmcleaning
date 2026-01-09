@@ -133,12 +133,15 @@ public class Contractor : Core.BaseClasses.AggregateRoot
     public bool IsAvailableAt(TimeSlot timeSlot)
     {
         if (!IsActive) return false;
+        
         if (_unavailableSlots.Any(s => s.OverlapsWith(timeSlot))) return false;
 
         var dayOfWeek = (DayOfWeek)((int)timeSlot.StartTime.DayOfWeek == 0 ? 7 : (int)timeSlot.StartTime.DayOfWeek);
         var workingHours = _workingHours.FirstOrDefault(w => w.DayOfWeek == dayOfWeek);
 
-        if (workingHours == null || !workingHours.IsWorkingDay) return false;
+        if (workingHours == null) return true;
+        
+        if (!workingHours.IsWorkingDay) return false;
 
         var slotStart = TimeOnly.FromDateTime(timeSlot.StartTime);
         var slotEnd = TimeOnly.FromDateTime(timeSlot.EndTime);

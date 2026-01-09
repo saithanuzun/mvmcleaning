@@ -1,4 +1,3 @@
-using mvmclean.backend.Domain.Aggregates.Service.Entities;
 using mvmclean.backend.Domain.Aggregates.Service.ValueObjects;
 using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
@@ -11,18 +10,16 @@ public class Service : AggregateRoot
     public string Description { get; private set; }
     public string Shortcut { get; private set; }
     public TimeSpan EstimatedDuration { get; private set; }
+    public string Category { get; private set; }
+    public Money BasePrice { get; private set; }
 
     private readonly List<PostcodePricing> _postcodePricings = new();
     public IReadOnlyCollection<PostcodePricing> PostcodePricings => _postcodePricings.AsReadOnly();
-    public Category Category { get; private set; }
-    public Guid CategoryId { get; private set; }
-    public Money BasePrice { get; private set; } 
-    
 
     private Service() { }
 
     public static Service Create(string name, string description, string shortcut, 
-        decimal basePrice, TimeSpan estimatedDuration)
+        decimal basePrice, TimeSpan estimatedDuration, string category = "General")
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new Exception("Service name is required");
@@ -33,6 +30,9 @@ public class Service : AggregateRoot
         if (basePrice < 0)
             throw new Exception("Base price cannot be negative");
 
+        if (string.IsNullOrWhiteSpace(category))
+            throw new Exception("Category is required");
+
         return new Service
         {
             Id = Guid.NewGuid(),
@@ -40,17 +40,11 @@ public class Service : AggregateRoot
             Description = description?.Trim(),
             Shortcut = shortcut?.Trim().ToUpper(),
             EstimatedDuration = estimatedDuration,
-            BasePrice = Money.Create(basePrice), 
+            BasePrice = Money.Create(basePrice),
+            Category = category.Trim(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-    }
-    
-    public void AddCategory(Category category)
-    {
-        
-        Category = category;
-        CategoryId = Category.Id;
     }
 
     
@@ -116,13 +110,12 @@ public class Service : AggregateRoot
         UpdatedAt = DateTime.UtcNow;
     }
     
-    public void ChangeCategory(Category newCategory)
+    public void ChangeCategory(string newCategory)
     {
-        if (newCategory == null)
+        if (string.IsNullOrWhiteSpace(newCategory))
             throw new Exception("Category is required");
             
-        Category = newCategory;
-        CategoryId = newCategory.Id;
+        Category = newCategory.Trim();
         UpdatedAt = DateTime.UtcNow;
     }
 }

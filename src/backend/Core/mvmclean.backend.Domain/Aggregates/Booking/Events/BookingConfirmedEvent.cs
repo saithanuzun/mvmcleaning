@@ -1,3 +1,4 @@
+using mvmclean.backend.Domain.Aggregates.Booking.ValueObjects;
 using mvmclean.backend.Domain.Core.BaseClasses;
 using mvmclean.backend.Domain.SharedKernel.ValueObjects;
 
@@ -9,12 +10,18 @@ public class BookingConfirmedEvent : DomainEvent
     public Guid? ContractorId { get; }
     public TimeSlot TimeSlot { get; set; }
     public Money Total { get; set; }
+    public List<BookingItem> Items { get; set; }
+    public Address Address { get; set; }
+    public string CustomerName { get; set; }
     
-    public BookingConfirmedEvent(Guid bookingId, Guid? contractorId, Money total, TimeSlot timeSlot): base()
+    public BookingConfirmedEvent(Guid bookingId, Guid? contractorId, Money total, TimeSlot timeSlot,List<BookingItem> items, string customerName, Address address): base()
     {
         Total = total;
         TimeSlot = timeSlot;
         BookingId = bookingId;
         ContractorId = contractorId;
+        Items =  items;
+        CustomerName = customerName;
+        Address = address;
     }
 }

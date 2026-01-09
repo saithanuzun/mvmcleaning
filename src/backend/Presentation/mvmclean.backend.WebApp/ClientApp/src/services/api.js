@@ -26,14 +26,6 @@ const getSessionId = () => {
 const api = {
     // Postcode API
     postcode: {
-        validate: async (postcode) => {
-            const response = await apiClient.post('/postcode/validate', { postcode });
-            return {
-                success: response.data?.success || false,
-                message: response.data?.message,
-                data: response.data?.data
-            };
-        },
         validateAndBook: async (postcode, phone) => {
             const response = await apiClient.post('/postcode/validate-and-book', { postcode, phone });
             return {
@@ -48,14 +40,6 @@ const api = {
     services: {
         getByPostcode: async (postcode) => {
             const response = await apiClient.get(`/services/bypostcode/${postcode}`);
-            return {
-                success: response.data?.success || false,
-                message: response.data?.message,
-                data: response.data?.data
-            };
-        },
-        getById: async (serviceId) => {
-            const response = await apiClient.get(`/services/${serviceId}`);
             return {
                 success: response.data?.success || false,
                 message: response.data?.message,
@@ -166,14 +150,6 @@ const api = {
 
     // Booking API
     booking: {
-        create: async (bookingData) => {
-            const response = await apiClient.post('/booking/create', bookingData);
-            return {
-                success: response.data?.success || false,
-                message: response.data?.message,
-                data: response.data?.data
-            };
-        },
         getById: async (bookingId) => {
             const response = await apiClient.get(`/booking/${bookingId}`);
             return {

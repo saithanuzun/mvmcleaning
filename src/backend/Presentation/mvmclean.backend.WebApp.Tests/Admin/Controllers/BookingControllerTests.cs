@@ -69,17 +69,15 @@ public class BookingControllerTests_Simplified
     public async Task AllBookings_WithValidRequest_ReturnsViewWithBookings()
     {
         // Arrange
-        var bookingDtos = new List<BookingDto>
+        var bookings = new List<GetAllBookingsResponse>
         {
-            new BookingDto { Id = Guid.NewGuid(), CustomerName = "John Doe", Status = BookingStatus.Pending, PhoneNumber = "07900123456", Postcode = "SW1A 2AA", TotalPrice = 89.99m },
-            new BookingDto { Id = Guid.NewGuid(), CustomerName = "Jane Smith", Status = BookingStatus.Confirmed, PhoneNumber = "07900654321", Postcode = "E1 6AN", TotalPrice = 149.99m }
+            new GetAllBookingsResponse { Id = Guid.NewGuid(), CustomerName = "John Doe", Status = BookingStatus.Pending, PhoneNumber = "07900123456", Postcode = "SW1A 2AA", TotalPrice = 89.99m },
+            new GetAllBookingsResponse { Id = Guid.NewGuid(), CustomerName = "Jane Smith", Status = BookingStatus.Confirmed, PhoneNumber = "07900654321", Postcode = "E1 6AN", TotalPrice = 149.99m }
         };
-
-        var response = new GetAllBookingsResponse { Bookings = bookingDtos };
 
         _mediatorMock
             .Setup(m => m.Send(It.IsAny<GetAllBookingsRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(response);
+            .ReturnsAsync(bookings);
 
         // Act
         var result = await _controller.AllBookings();

@@ -19,9 +19,6 @@ public class BookingController : BaseApiController
         _stripeService = stripeService;
     }
 
-    /// <summary>
-    /// Create a new booking with postcode and telephone number
-    /// </summary>
     [HttpPost("create")]
     public async Task<IActionResult> CreateBooking([FromBody] CreateBookingRequest request)
     {
@@ -113,9 +110,7 @@ public class BookingController : BaseApiController
         }
     }
 
-    /// <summary>
-    /// Complete booking with customer details, payment method, and time slot
-    /// </summary>
+
     [HttpPost("complete")]
     public async Task<IActionResult> CompleteBooking([FromBody] CompleteBookingRequest request)
     {

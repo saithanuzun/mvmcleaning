@@ -8,6 +8,8 @@ namespace mvmclean.backend.Domain.Aggregates.Invoice;
 public class Invoice : Core.BaseClasses.AggregateRoot
 {
     public string InvoiceNumber { get; private set; }
+    public string CustomerName { get; set; }
+    public Address Address { get; set; }
     public Guid BookingId { get; private set; }
     public Guid? CustomerId { get; private set; }
     public DateTime IssueDate { get; private set; }
@@ -28,20 +30,46 @@ public class Invoice : Core.BaseClasses.AggregateRoot
     
     public static Invoice CreateForBooking(Booking.Booking booking, PaymentTerms paymentTerms)
     {
+        if (booking == null)
+            throw new ArgumentNullException(nameof(booking));
+        if (paymentTerms == null)
+            throw new ArgumentNullException(nameof(paymentTerms));
+            
         var invoice = new Invoice
         {
+            Id = Guid.NewGuid(),
             InvoiceNumber = GenerateInvoiceNumber(),
             BookingId = booking.Id,
             CustomerId = booking.CustomerId,
+            CustomerName = booking.Customer?.FullName ?? "Unknown",
+            Address = booking.ServiceAddress,
             IssueDate = DateTime.UtcNow,
             DueDate = DateTime.UtcNow.AddDays(paymentTerms.DaysToPay),
-            Subtotal = booking.TotalPrice,
+            TotalAmount = booking.TotalPrice ?? Money.Create(0),
             DiscountAmount = Money.Create(0),
             Status = InvoiceStatus.Draft,
-            PaymentTerms = paymentTerms
+            PaymentTerms = paymentTerms,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
         
-        invoice.CalculateTotal();
+        // Add line items from booking services
+        foreach (var serviceItem in booking.ServiceItems ?? new List<Booking.ValueObjects.BookingItem>())
+        {
+            var lineItem = InvoiceLineItem.Create(
+                serviceItem.ServiceName,
+                serviceItem.UnitAdjustedPrice.Amount,
+                serviceItem.Quantity
+            );
+            invoice._lineItems.Add(lineItem);
+        }
+        
+        // Recalculate totals
+        invoice.RecalculateTotals();
+        
+        // Add domain event
+        invoice.AddDomainEvent(new InvoiceCreatedEvent(invoice.Id.ToString()));
+        
         return invoice;
     }
     
@@ -54,6 +82,13 @@ public class Invoice : Core.BaseClasses.AggregateRoot
         );
         
         _lineItems.Add(lineItem);
+        RecalculateTotals();
+    }
+    
+    public void AddLineItemBulk(List<InvoiceLineItem> lineItems)
+    {
+        
+        _lineItems.AddRange(lineItems);
         RecalculateTotals();
     }
     

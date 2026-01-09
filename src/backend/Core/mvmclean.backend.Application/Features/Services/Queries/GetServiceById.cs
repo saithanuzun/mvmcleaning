@@ -52,8 +52,7 @@ public class GetServiceByIdHandler : IRequestHandler<GetServiceByIdRequest, GetS
             Description = service.Description,
             Shortcut = service.Shortcut,
             Duration = service.EstimatedDuration.TotalMinutes.ToString(),
-            CategoryId = service.CategoryId,
-            CategoryName = service.Category?.Name ?? "Uncategorized",
+            CategoryName = service.Category ?? "Uncategorized",
             BasePrice = service.BasePrice.Amount,
             PostcodePricings = service.PostcodePricings.Select(pp => new PostcodePricingDto
             {

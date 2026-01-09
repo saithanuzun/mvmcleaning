@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using mvmclean.backend.Application.Services;
 using mvmclean.backend.Domain.Aggregates.Booking;
 using mvmclean.backend.Domain.Aggregates.Contractor;
@@ -12,6 +14,7 @@ using mvmclean.backend.Infrastructure.Persistence;
 using mvmclean.backend.Infrastructure.Persistence.Repositories;
 using mvmclean.backend.Infrastructure.Services;
 using mvmclean.backend.Infrastructure.Seeding;
+using Resend;
 
 namespace mvmclean.backend.Infrastructure;
 
@@ -34,15 +37,43 @@ public static class DependencyInjection
         serviceCollection.AddScoped<ISeoPageRepository, SeoPageRepository>();
         serviceCollection.AddScoped<IServiceRepository, ServiceRepository>();
         serviceCollection.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
-        serviceCollection.AddScoped<ICategoryRepository, CategoryRepository>();
 
 
         // Register infrastructure services
         serviceCollection.AddScoped<IStripeService, StripeService>();
-        serviceCollection.AddScoped<IMailingService, MailingService>();
+        serviceCollection.AddScoped<IInvoiceService, Services.InvoiceService>();
+        
+        // Register Resend email provider
+        serviceCollection.Configure<ResendClientOptions>(options =>
+        {
+            var configuration = serviceCollection.BuildServiceProvider().GetRequiredService<IConfiguration>();
+            options.ApiToken = configuration["RESEND:RESEND_APITOKEN"];
+            
+            if (string.IsNullOrEmpty(options.ApiToken))
+            {
+                throw new InvalidOperationException(
+                    "RESEND:RESEND_APITOKEN is not configured. Please set it in appsettings or environment variables.");
+            }
+        });
+        
+        // Register ResendClient as factory with HttpClient
+        serviceCollection.AddScoped<ResendClient>(provider =>
+        {
+            var options = provider.GetRequiredService<IOptionsSnapshot<ResendClientOptions>>();
+            var httpClient = new HttpClient();
+            return new ResendClient(options, httpClient);
+        });
+        
+        // Register IResend
+        serviceCollection.AddScoped<IResend>(provider => 
+            provider.GetRequiredService<ResendClient>());
+        
+        // Register mailing service (depends on IResend)
+        serviceCollection.AddScoped<IMailingService, Services.MailingService>();
 
         // Register database seeder
         serviceCollection.AddScoped<DatabaseSeeder>();
+
 
         return serviceCollection;
     }

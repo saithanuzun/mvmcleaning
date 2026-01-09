@@ -3,18 +3,30 @@ namespace mvmclean.backend.Application.Services;
 public interface IMailingService
 {
     /// <summary>
-    /// Sends booking confirmation email to customer
+    /// Sends booking created email (before payment)
+    /// Shows: Postcode and Telephone Number
+    /// </summary>
+    Task SendBookingCreatedNotificationAsync(
+        string recipientEmail,
+        Guid bookingId,
+        string postcode,
+        string telephoneNumber);
+
+    /// <summary>
+    /// Sends booking confirmation email (after successful payment)
     /// </summary>
     Task SendBookingConfirmationAsync(
         string recipientEmail,
-        string recipientName,
         Guid bookingId,
-        DateTime bookingDate,
+        string customerName,
+        string address,
         List<string> services,
-        decimal totalAmount);
+        decimal totalAmount,
+        DateTime bookingDate,
+        string? invoiceHtml = null);
 
     /// <summary>
-    /// Sends booking confirmation email to contractor
+    /// Sends booking notification email to contractor
     /// </summary>
     Task SendContractorBookingNotificationAsync(
         string contractorEmail,
@@ -57,11 +69,11 @@ public interface IMailingService
         string address);
 
     /// <summary>
-    /// Sends generic email
+    /// Sends generic email with custom subject and body
     /// </summary>
     Task SendEmailAsync(
         string recipientEmail,
         string subject,
         string htmlBody,
-        string textBody = null);
+        string? textBody = null);
 }

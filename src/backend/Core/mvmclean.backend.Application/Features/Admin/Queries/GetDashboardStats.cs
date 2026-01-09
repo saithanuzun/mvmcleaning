@@ -101,7 +101,7 @@ public class GetDashboardStatsHandler : IRequestHandler<GetDashboardStatsRequest
                 {
                     Id = s.Id,
                     Name = s.Name,
-                    Category = s.Category?.Name ?? "Uncategorized",
+                    Category = s.Category ?? "Uncategorized",
                     BasePrice = s.BasePrice.Amount,
                     CreatedAt = s.CreatedAt
                 })

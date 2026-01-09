@@ -22,12 +22,7 @@ public class ServiceConfiguration : EntityConfiguration<Service>
 
         // BasePrice value object
         builder.OwnsOne(i => i.BasePrice);
-
-        // Category relationship
-        builder.HasOne(s => s.Category)
-            .WithMany(c => c.Services)
-            .HasForeignKey(s => s.CategoryId);
-
+        
         builder.OwnsMany(x => x.PostcodePricings, pp =>
         {
             pp.WithOwner().HasForeignKey("ItemId");

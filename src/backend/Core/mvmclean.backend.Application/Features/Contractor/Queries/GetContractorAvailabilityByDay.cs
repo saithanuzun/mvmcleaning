@@ -69,15 +69,17 @@ public class GetContractorAvailabilityByDayHandler : IRequestHandler<GetContract
 
             foreach (var contractor in contractors)
             {
-                var available = contractor.IsAvailableAt(slot);
-
-                result.Add(new GetContractorAvailabilityByDayResponse
+                // Only add slots where contractor is available
+                if (contractor != null && contractor.IsAvailableAt(slot))
                 {
-                    ContractorId = contractor.Id.ToString(),
-                    StartTime = slot.StartTime.ToString("HH:mm"),
-                    EndTime = slot.EndTime.ToString("HH:mm"),
-                    Available = available
-                });
+                    result.Add(new GetContractorAvailabilityByDayResponse
+                    {
+                        ContractorId = contractor.Id.ToString(),
+                        StartTime = slot.StartTime.ToString("HH:mm"),
+                        EndTime = slot.EndTime.ToString("HH:mm"),
+                        Available = true
+                    });
+                }
             }
         }
 

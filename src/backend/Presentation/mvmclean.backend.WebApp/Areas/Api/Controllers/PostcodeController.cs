@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text.Json;
 using mvmclean.backend.Application.Features.Booking.Commands;
 using mvmclean.backend.Application.Features.Contractor.Queries;
+using mvmclean.backend.WebApp.Areas.Api.Models;
 
 namespace mvmclean.backend.WebApp.Areas.Api.Controllers;
 
@@ -97,13 +98,3 @@ public class PostcodeController : BaseApiController
     
 }
 
-public class ValidatePostcodeRequest
-{
-    public string Postcode { get; set; }
-}
-
-public class ValidateAndBookRequest
-{
-    public string Postcode { get; set; }
-    public string Phone { get; set; }
-}

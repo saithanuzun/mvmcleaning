@@ -14,16 +14,6 @@ public class InvoiceConfiguration : EntityConfiguration<Invoice>
         // LineItems collection
         builder.OwnsMany(o => o.LineItems, li =>
         {
-            li.WithOwner().HasForeignKey("InvoiceId");
-            li.ToTable("InvoiceLineItems");
-            li.Property<Guid>("Id").ValueGeneratedNever();
-            li.HasKey("Id");
-            
-            li.Property(x => x.Description)
-                .HasMaxLength(1000)
-                .IsRequired();
-            li.Property(x => x.Quantity)
-                .IsRequired();
                 
             li.OwnsOne(i => i.UnitPrice);
         });
@@ -39,6 +29,9 @@ public class InvoiceConfiguration : EntityConfiguration<Invoice>
         
         // TotalAmount value object
         builder.OwnsOne(i => i.TotalAmount);
+        builder.OwnsOne(i => i.Address, li=>li.OwnsOne(i=>i.Postcode));
+
+
         
         // Relationships
         builder.HasOne<Booking>()

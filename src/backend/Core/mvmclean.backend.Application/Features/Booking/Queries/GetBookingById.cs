@@ -21,7 +21,7 @@ public class GetBookingByIdResponse
 
     public Guid? ContractorId { get; set; }
 
-    public IReadOnlyList<BookingItem> ServiceItems { get; set; } = new List<BookingItem>();
+    public IReadOnlyList<ServiceItemDto> ServiceItems { get; set; } = new List<ServiceItemDto>();
 
     public decimal TotalPrice { get; set; }
     public string Currency { get; set; }
@@ -69,7 +69,14 @@ public class GetBookingByIdHandler : IRequestHandler<GetBookingByIdRequest, GetB
 
             ContractorId = booking.ContractorId,
 
-            ServiceItems = booking.ServiceItems.ToList(),
+            ServiceItems = booking.ServiceItems.Select(item => new ServiceItemDto
+            {
+                ServiceName = item.ServiceName,
+                ServiceId = item.ServiceId,
+                UnitPrice = item.UnitAdjustedPrice.Amount,
+                Quantity = item.Quantity,
+                TotalPrice = item.UnitAdjustedPrice.Amount * item.Quantity
+            }).ToList(),
 
             TotalPrice = booking.TotalPrice.Amount,
             Currency = booking.TotalPrice.Currency,

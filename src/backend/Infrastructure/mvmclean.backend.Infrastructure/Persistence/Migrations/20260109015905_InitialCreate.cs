@@ -13,26 +13,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Category",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeletedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Category", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Contractors",
                 columns: table => new
                 {
@@ -165,7 +145,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     Description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     Shortcut = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     EstimatedDuration = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Category = table.Column<string>(type: "text", nullable: false),
                     BasePrice_Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     BasePrice_Currency = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -179,12 +159,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Services", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Services_Category_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Category",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -633,6 +607,16 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     InvoiceNumber = table.Column<string>(type: "text", nullable: false),
+                    CustomerName = table.Column<string>(type: "text", nullable: false),
+                    Address_Street = table.Column<string>(type: "text", nullable: false),
+                    Address_City = table.Column<string>(type: "text", nullable: false),
+                    Address_Postcode_Value = table.Column<string>(type: "text", nullable: false),
+                    Address_Postcode_Area = table.Column<string>(type: "text", nullable: false),
+                    Address_Postcode_District = table.Column<string>(type: "text", nullable: false),
+                    Address_Postcode_Sector = table.Column<string>(type: "text", nullable: false),
+                    Address_AdditionalInfo = table.Column<string>(type: "text", nullable: true),
+                    Address_Latitude = table.Column<double>(type: "double precision", nullable: true),
+                    Address_Longitude = table.Column<double>(type: "double precision", nullable: true),
                     BookingId = table.Column<Guid>(type: "uuid", nullable: false),
                     CustomerId = table.Column<Guid>(type: "uuid", nullable: true),
                     IssueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -701,21 +685,22 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InvoiceLineItems",
+                name: "InvoiceLineItem",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    InvoiceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Description = table.Column<string>(type: "text", nullable: false),
                     UnitPrice_Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     UnitPrice_Currency = table.Column<string>(type: "text", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
-                    InvoiceId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InvoiceLineItems", x => x.Id);
+                    table.PrimaryKey("PK_InvoiceLineItem", x => new { x.InvoiceId, x.Id });
                     table.ForeignKey(
-                        name: "FK_InvoiceLineItems_Invoices_InvoiceId",
+                        name: "FK_InvoiceLineItem_Invoices_InvoiceId",
                         column: x => x.InvoiceId,
                         principalTable: "Invoices",
                         principalColumn: "Id",
@@ -746,11 +731,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 name: "IX_ContractorCoverage_ContractorId",
                 table: "ContractorCoverage",
                 column: "ContractorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_InvoiceLineItems_InvoiceId",
-                table: "InvoiceLineItems",
-                column: "InvoiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoices_BookingId",
@@ -804,11 +784,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 column: "SeoPageId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Services_CategoryId",
-                table: "Services",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SupportTickets_AssignedToId",
                 table: "SupportTickets",
                 column: "AssignedToId");
@@ -837,7 +812,7 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 name: "Contractors_UnavailableSlots");
 
             migrationBuilder.DropTable(
-                name: "InvoiceLineItems");
+                name: "InvoiceLineItem");
 
             migrationBuilder.DropTable(
                 name: "Message");
@@ -889,9 +864,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Bookings");
-
-            migrationBuilder.DropTable(
-                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "Contractors");

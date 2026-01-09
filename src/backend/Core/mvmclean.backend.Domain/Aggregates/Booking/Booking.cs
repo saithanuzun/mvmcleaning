@@ -150,6 +150,10 @@ public class Booking : Core.BaseClasses.AggregateRoot
 
         UpdatedAt = DateTime.UtcNow;
     }
+    public void AssignServiceAddress(Address address)
+    {
+        ServiceAddress = address;
+    }
 
     public void AssignCustomer(Email? email, string? FirstName, string? LastName, string? street, string? city, string? additionalInfo)
     {
@@ -204,7 +208,7 @@ public class Booking : Core.BaseClasses.AggregateRoot
         Status = BookingStatus.Confirmed;
         UpdatedAt = DateTime.UtcNow;
 
-        AddDomainEvent(new BookingConfirmedEvent(Id, ContractorId, TotalPrice, ScheduledSlot));
+        AddDomainEvent(new BookingConfirmedEvent(Id, ContractorId, TotalPrice,ScheduledSlot, ServiceItems, Customer.FullName,ServiceAddress));
     }
 
     public void Start()

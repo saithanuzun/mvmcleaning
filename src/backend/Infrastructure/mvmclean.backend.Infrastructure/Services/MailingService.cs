@@ -1,28 +1,99 @@
+using Microsoft.Extensions.Logging;
 using mvmclean.backend.Application.Services;
+using mvmclean.backend.Infrastructure.MailingService;
+using Resend;
 
 namespace mvmclean.backend.Infrastructure.Services;
 
 /// <summary>
-/// Stub implementation of Mailing service - to be implemented with actual email provider (SendGrid, SMTP, etc.)
+/// Mailing service implementation using email templates
+/// Handles all transactional emails for the booking system
 /// </summary>
 public class MailingService : IMailingService
 {
-    public Task SendBookingConfirmationAsync(
-        string recipientEmail,
-        string recipientName,
-        Guid bookingId,
-        DateTime bookingDate,
-        List<string> services,
-        decimal totalAmount)
+    private readonly ILogger<MailingService> _logger;
+    private readonly IResend _resendClient;
+
+    public MailingService(ILogger<MailingService> logger, IResend resendClient)
     {
-        // TODO: Implement actual email sending
-        Console.WriteLine($"[MOCK EMAIL] Booking confirmation sent to {recipientEmail}");
-        Console.WriteLine($"  Recipient: {recipientName}");
-        Console.WriteLine($"  Booking ID: {bookingId}");
-        Console.WriteLine($"  Date: {bookingDate:yyyy-MM-dd HH:mm}");
-        Console.WriteLine($"  Services: {string.Join(", ", services)}");
-        Console.WriteLine($"  Total: £{totalAmount:F2}");
-        return Task.CompletedTask;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _resendClient = resendClient ?? throw new ArgumentNullException(nameof(resendClient));
+    }
+
+    /// <summary>
+    /// Sends booking confirmation email after payment is completed
+    /// </summary>
+    public async Task SendBookingConfirmationAsync(
+        string recipientEmail,
+        Guid bookingId,
+        string customerName,
+        string address,
+        List<string> services,
+        decimal totalAmount,
+        DateTime bookingDate,
+        string? invoiceHtml = null)
+    {
+        try
+        {
+            // Generate email template
+            var template = new BookingConfirmedEmailTemplate(
+                bookingId.ToString(),
+                customerName,
+                address,
+                services,
+                totalAmount,
+                bookingDate,
+                invoiceHtml
+            );
+
+            await SendEmailAsync(recipientEmail, template.Subject, template.HtmlBody, template.PlainTextBody);
+            
+            _logger.LogInformation(
+                "Booking confirmation email sent to {Email} for booking {BookingId}",
+                recipientEmail, bookingId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Failed to send booking confirmation email to {Email} for booking {BookingId}",
+                recipientEmail, bookingId);
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Sends booking created notification (before payment)
+    /// Shows postcode and telephone number
+    /// </summary>
+    public async Task SendBookingCreatedNotificationAsync(
+        string recipientEmail,
+        Guid bookingId,
+        string postcode,
+        string telephoneNumber)
+    {
+        try
+        {
+            var template = new BookingCreatedEmailTemplate(
+                bookingId.ToString(),
+                postcode,
+                telephoneNumber
+            );
+
+            await SendEmailAsync(recipientEmail, template.Subject, template.HtmlBody, template.PlainTextBody);
+            
+            _logger.LogInformation(
+                "Booking created email sent to {Email} for booking {BookingId}",
+                recipientEmail, bookingId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Failed to send booking created email to {Email} for booking {BookingId}",
+                recipientEmail, bookingId);
+            throw;
+        }
     }
 
     public Task SendContractorBookingNotificationAsync(
@@ -33,13 +104,10 @@ public class MailingService : IMailingService
         string customerName,
         string customerAddress)
     {
-        // TODO: Implement actual email sending
-        Console.WriteLine($"[MOCK EMAIL] Contractor notification sent to {contractorEmail}");
-        Console.WriteLine($"  Contractor: {contractorName}");
-        Console.WriteLine($"  Booking ID: {bookingId}");
-        Console.WriteLine($"  Date: {bookingDate:yyyy-MM-dd HH:mm}");
-        Console.WriteLine($"  Customer: {customerName}");
-        Console.WriteLine($"  Address: {customerAddress}");
+        // TODO: Implement contractor notification email template
+        _logger.LogInformation(
+            "Contractor notification queued for {Email} regarding booking {BookingId}",
+            contractorEmail, bookingId);
         return Task.CompletedTask;
     }
 
@@ -51,13 +119,10 @@ public class MailingService : IMailingService
         string paymentMethod,
         DateTime paymentDate)
     {
-        // TODO: Implement actual email sending
-        Console.WriteLine($"[MOCK EMAIL] Payment receipt sent to {recipientEmail}");
-        Console.WriteLine($"  Recipient: {recipientName}");
-        Console.WriteLine($"  Booking ID: {bookingId}");
-        Console.WriteLine($"  Amount: £{amount:F2}");
-        Console.WriteLine($"  Method: {paymentMethod}");
-        Console.WriteLine($"  Date: {paymentDate:yyyy-MM-dd HH:mm}");
+        // TODO: Implement payment receipt email template
+        _logger.LogInformation(
+            "Payment receipt queued for {Email} regarding booking {BookingId}",
+            recipientEmail, bookingId);
         return Task.CompletedTask;
     }
 
@@ -68,12 +133,10 @@ public class MailingService : IMailingService
         DateTime bookingDate,
         string reason)
     {
-        // TODO: Implement actual email sending
-        Console.WriteLine($"[MOCK EMAIL] Booking cancellation sent to {recipientEmail}");
-        Console.WriteLine($"  Recipient: {recipientName}");
-        Console.WriteLine($"  Booking ID: {bookingId}");
-        Console.WriteLine($"  Date: {bookingDate:yyyy-MM-dd HH:mm}");
-        Console.WriteLine($"  Reason: {reason}");
+        // TODO: Implement booking cancellation email template
+        _logger.LogInformation(
+            "Cancellation email queued for {Email} regarding booking {BookingId}",
+            recipientEmail, bookingId);
         return Task.CompletedTask;
     }
 
@@ -85,26 +148,53 @@ public class MailingService : IMailingService
         List<string> services,
         string address)
     {
-        // TODO: Implement actual email sending
-        Console.WriteLine($"[MOCK EMAIL] Booking reminder sent to {recipientEmail}");
-        Console.WriteLine($"  Recipient: {recipientName}");
-        Console.WriteLine($"  Booking ID: {bookingId}");
-        Console.WriteLine($"  Date: {bookingDate:yyyy-MM-dd HH:mm}");
-        Console.WriteLine($"  Services: {string.Join(", ", services)}");
-        Console.WriteLine($"  Address: {address}");
+        // TODO: Implement booking reminder email template
+        _logger.LogInformation(
+            "Reminder email queued for {Email} regarding booking {BookingId}",
+            recipientEmail, bookingId);
         return Task.CompletedTask;
     }
 
-    public Task SendEmailAsync(
+    /// <summary>
+    /// Generic email sending method using Resend email provider
+    /// </summary>
+    public async Task SendEmailAsync(
         string recipientEmail,
         string subject,
         string htmlBody,
-        string textBody = null)
+        string? textBody = null)
     {
-        // TODO: Implement actual email sending
-        Console.WriteLine($"[MOCK EMAIL] Email sent to {recipientEmail}");
-        Console.WriteLine($"  Subject: {subject}");
-        Console.WriteLine($"  Body: {htmlBody}");
-        return Task.CompletedTask;
+        try
+        {
+            var emailRequest = new EmailMessage
+            {
+                From = "noreply@mvmcleaning.com", // Replace with your verified sender email
+                To = new[] { recipientEmail },
+                Subject = subject,
+                HtmlBody = htmlBody,
+                TextBody = textBody ?? StripHtmlTags(htmlBody)
+            };
+
+            var response = await _resendClient.EmailSendAsync(emailRequest);
+            
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Exception occurred while sending email to {To} with subject {Subject}",
+                recipientEmail, subject);
+            throw;
+        }
+    }
+
+   
+    private static string StripHtmlTags(string html)
+    {
+        if (string.IsNullOrEmpty(html))
+            return html;
+
+        var regex = new System.Text.RegularExpressions.Regex("<[^>]+>");
+        return regex.Replace(html, "").Replace("&nbsp;", " ");
     }
 }

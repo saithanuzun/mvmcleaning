@@ -81,7 +81,7 @@ public class GetServicesByPostcodeHandler : IRequestHandler<GetServicesByPostcod
                         ServiceName = service.Name,
                         Description = service.Description,
                         AdjustedPrice = adjustedPrice.Amount,
-                        Category = service.Category?.Name ?? "Uncategorized",
+                        Category = service.Category ?? "Uncategorized",
                         EstimatedDurationMinutes = (int)service.EstimatedDuration.TotalMinutes
                     });
                 }

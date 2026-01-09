@@ -10,7 +10,6 @@ public class DatabaseSeeder
 {
     private readonly IMediator _mediator;
     private readonly ILogger<DatabaseSeeder> _logger;
-    private readonly string _seederFilePath;
 
     private readonly bool _seed = true;
 
@@ -18,7 +17,6 @@ public class DatabaseSeeder
     {
         _mediator = mediator;
         _logger = logger;
-        _seederFilePath = Path.Combine(AppContext.BaseDirectory, ".seeded");
     }
 
     public async Task SeedAsync()
@@ -54,8 +52,6 @@ public class DatabaseSeeder
             // Seed past bookings
             await SeedBookingsAsync(serviceIds, contractorIds);
 
-            // Mark as seeded
-            File.WriteAllText(_seederFilePath, DateTime.UtcNow.ToString("o"));
 
             _logger.LogInformation("Database seeding completed successfully.");
         }
@@ -75,218 +71,238 @@ public class DatabaseSeeder
             var serviceIds = new List<Guid>();
 
             // Carpet Cleaning Services
-            var carpetCleaningServices = new List<CreateServiceRequest>
+            var AllServices = new List<CreateServiceRequest>
             {
                 new CreateServiceRequest
                 {
-                    Name = "1 Bed Carpet Cleaning",
-                    Description = "Professional deep cleaning for 1 bedroom carpets including living room and hallway",
-                    Shortcut = "1BED_CARPET",
-                    BasePrice = 79.99m,
-                    EstimatedDurationMinutes = 60,
+                    Name = "Lounge Carpet Cleaning",
+                    Description = "Professional deep cleaning for lounge carpets",
+                    Shortcut = "CRP-LNG",
+                    BasePrice = 49.99m,
+                    EstimatedDurationMinutes = 50,
                     Category = "Carpet Cleaning"
                 },
                 new CreateServiceRequest
                 {
-                    Name = "2 Bed Carpet Cleaning",
-                    Description = "Professional deep cleaning for 2 bedroom carpets including living room, hallway and stairs",
-                    Shortcut = "2BED_CARPET",
-                    BasePrice = 119.99m,
-                    EstimatedDurationMinutes = 90,
+                    Name = "Bedroom Carpet Cleaning",
+                    Description = "Professional deep cleaning for bedroom carpets",
+                    Shortcut = "CRP-BDRM",
+                    BasePrice = 39.99m,
+                    EstimatedDurationMinutes = 45,
                     Category = "Carpet Cleaning"
                 },
                 new CreateServiceRequest
                 {
-                    Name = "3 Bed Carpet Cleaning",
-                    Description = "Professional deep cleaning for 3 bedroom carpets including all living areas and stairs",
-                    Shortcut = "3BED_CARPET",
-                    BasePrice = 159.99m,
-                    EstimatedDurationMinutes = 120,
-                    Category = "Carpet Cleaning"
-                }
-            };
-
-            // Sofa Cleaning Services
-            var sofaCleaningServices = new List<CreateServiceRequest>
-            {
-                new CreateServiceRequest
-                {
-                    Name = "1 Seater Sofa Cleaning",
-                    Description = "Deep clean and sanitize for 1 seater sofas including fabric protection",
-                    Shortcut = "1SEAT_SOFA",
+                    Name = "Stairs and Landing Carpet Cleaning",
+                    Description = "Professional deep cleaning for stairs and landing carpets",
+                    Shortcut = "CRP-STR-LND",
                     BasePrice = 49.99m,
                     EstimatedDurationMinutes = 45,
-                    Category = "Sofa Cleaning"
+                    Category = "Carpet Cleaning"
                 },
                 new CreateServiceRequest
                 {
-                    Name = "2 Seater Sofa Cleaning",
-                    Description = "Deep clean and sanitize for 2 seater sofas including fabric protection",
-                    Shortcut = "2SEAT_SOFA",
-                    BasePrice = 69.99m,
-                    EstimatedDurationMinutes = 60,
-                    Category = "Sofa Cleaning"
-                },
-                new CreateServiceRequest
-                {
-                    Name = "3 Seater Sofa Cleaning",
-                    Description = "Deep clean and sanitize for 3 seater sofas including fabric protection",
-                    Shortcut = "3SEAT_SOFA",
+                    Name = "Corner Sofa Cleaning",
+                    Description = "Professional deep cleaning for corner sofas",
+                    Shortcut = "SFA-CRNR",
                     BasePrice = 89.99m,
                     EstimatedDurationMinutes = 75,
-                    Category = "Sofa Cleaning"
-                }
-            };
-
-            // Jet Washing Services
-            var jetWashingServices = new List<CreateServiceRequest>
-            {
-                new CreateServiceRequest
-                {
-                    Name = "50m² Jet Wash",
-                    Description = "Professional jet washing for 50 square meters including driveway, patio and paths",
-                    Shortcut = "50M2_JW",
-                    BasePrice = 89.99m,
-                    EstimatedDurationMinutes = 90,
-                    Category = "Jet Washing"
+                    Category = "Upholstery Cleaning"
                 },
                 new CreateServiceRequest
                 {
-                    Name = "100m² Jet Wash",
-                    Description = "Professional jet washing for 100 square meters including large driveway, patio and extensive paths",
-                    Shortcut = "100M2_JW",
-                    BasePrice = 149.99m,
-                    EstimatedDurationMinutes = 150,
-                    Category = "Jet Washing"
-                }
-            };
-
-            // End of Tenancy Cleaning Services
-            var eotCleaningServices = new List<CreateServiceRequest>
-            {
-                new CreateServiceRequest
-                {
-                    Name = "2 Bed End of Tenancy Cleaning",
-                    Description = "Complete deep clean for 2 bed properties - full house clean including carpets, windows, and all surfaces",
-                    Shortcut = "2BED_EOT",
-                    BasePrice = 249.99m,
-                    EstimatedDurationMinutes = 240,
-                    Category = "End of Tenancy Cleaning"
-                },
-                new CreateServiceRequest
-                {
-                    Name = "3 Bed End of Tenancy Cleaning",
-                    Description = "Complete deep clean for 3 bed properties - full house clean including carpets, windows, and all surfaces",
-                    Shortcut = "3BED_EOT",
-                    BasePrice = 349.99m,
-                    EstimatedDurationMinutes = 300,
-                    Category = "End of Tenancy Cleaning"
-                },
-                new CreateServiceRequest
-                {
-                    Name = "4 Bed End of Tenancy Cleaning",
-                    Description = "Complete deep clean for 4 bed properties - full house deep clean with all surfaces, windows and carpets",
-                    Shortcut = "4BED_EOT",
-                    BasePrice = 449.99m,
-                    EstimatedDurationMinutes = 360,
-                    Category = "End of Tenancy Cleaning"
-                }
-            };
-
-            // Window Cleaning Services
-            var windowCleaningServices = new List<CreateServiceRequest>
-            {
-                new CreateServiceRequest
-                {
-                    Name = "Residential Window Cleaning",
-                    Description = "Professional window cleaning for residential properties including frames and sills",
-                    Shortcut = "WINDOW_RES",
-                    BasePrice = 89.99m,
-                    EstimatedDurationMinutes = 90,
-                    Category = "Window Cleaning"
-                },
-                new CreateServiceRequest
-                {
-                    Name = "Commercial Window Cleaning",
-                    Description = "Professional window cleaning for commercial properties and office buildings",
-                    Shortcut = "WINDOW_COM",
-                    BasePrice = 149.99m,
-                    EstimatedDurationMinutes = 120,
-                    Category = "Window Cleaning"
-                },
-                new CreateServiceRequest
-                {
-                    Name = "Conservatory Roof Cleaning",
-                    Description = "Specialist cleaning for conservatory roofs and glass panels including protective treatment",
-                    Shortcut = "CONSERV_ROOF",
-                    BasePrice = 129.99m,
-                    EstimatedDurationMinutes = 100,
-                    Category = "Window Cleaning"
-                }
-            };
-
-            // Oven Cleaning Services
-            var ovenCleaningServices = new List<CreateServiceRequest>
-            {
-                new CreateServiceRequest
-                {
-                    Name = "Single Oven Cleaning",
-                    Description = "Professional oven cleaning including interior deep clean and racks",
-                    Shortcut = "OVEN_SINGLE",
-                    BasePrice = 59.99m,
-                    EstimatedDurationMinutes = 60,
-                    Category = "Oven Cleaning"
-                },
-                new CreateServiceRequest
-                {
-                    Name = "Double Oven Cleaning",
-                    Description = "Professional cleaning for double ovens including interiors and racks",
-                    Shortcut = "OVEN_DOUBLE",
-                    BasePrice = 99.99m,
-                    EstimatedDurationMinutes = 90,
-                    Category = "Oven Cleaning"
-                },
-                new CreateServiceRequest
-                {
-                    Name = "Oven + Hob + Extractor Cleaning",
-                    Description = "Complete kitchen appliance cleaning - ovens, hobs and extractor hoods",
-                    Shortcut = "KITCHEN_SUITE",
-                    BasePrice = 159.99m,
-                    EstimatedDurationMinutes = 120,
-                    Category = "Oven Cleaning"
-                }
-            };
-
-            // Gutter Cleaning Services
-            var gutterCleaningServices = new List<CreateServiceRequest>
-            {
-                new CreateServiceRequest
-                {
-                    Name = "Single Story Gutter Cleaning",
-                    Description = "Professional gutter cleaning and clearing for single story properties",
-                    Shortcut = "GUTTER_1STORY",
+                    Name = "L-Shape Sofa Cleaning",
+                    Description = "Professional deep cleaning for L-shape sofas",
+                    Shortcut = "SFA-LSH",
                     BasePrice = 79.99m,
                     EstimatedDurationMinutes = 75,
-                    Category = "Gutter Cleaning"
+                    Category = "Upholstery Cleaning"
                 },
                 new CreateServiceRequest
                 {
-                    Name = "Two Story Gutter Cleaning",
-                    Description = "Professional gutter cleaning and clearing for two story properties including downpipes",
-                    Shortcut = "GUTTER_2STORY",
+                    Name = "2-3 Seater Sofa Cleaning",
+                    Description = "Professional deep cleaning for 2-3 seater sofas",
+                    Shortcut = "SFA-3ST",
+                    BasePrice = 49.99m,
+                    EstimatedDurationMinutes = 45,
+                    Category = "Upholstery Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Armchair Cleaning",
+                    Description = "Professional deep cleaning for armchairs",
+                    Shortcut = "SFA-ARM",
+                    BasePrice = 29.99m,
+                    EstimatedDurationMinutes = 30,
+                    Category = "Upholstery Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Footstool Cleaning",
+                    Description = "Professional deep cleaning for footstools",
+                    Shortcut = "SFA-FTST",
+                    BasePrice = 19.99m,
+                    EstimatedDurationMinutes = 20,
+                    Category = "Upholstery Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Rug Cleaning",
+                    Description = "Professional deep cleaning for rugs",
+                    Shortcut = "CRP-RUG",
+                    BasePrice = 39.99m,
+                    EstimatedDurationMinutes = 45,
+                    Category = "Carpet Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Single Mattress Cleaning",
+                    Description = "Professional deep cleaning for single mattresses",
+                    Shortcut = "UPH-SMTRS",
+                    BasePrice = 39.99m,
+                    EstimatedDurationMinutes = 45,
+                    Category = "Upholstery Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Double Mattress Cleaning",
+                    Description = "Professional deep cleaning for double mattresses",
+                    Shortcut = "UPH-DMTRS",
+                    BasePrice = 44.99m,
+                    EstimatedDurationMinutes = 45,
+                    Category = "Upholstery Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "4-6 Dining Chairs Cleaning",
+                    Description = "Professional deep cleaning for 4-6 dining chairs",
+                    Shortcut = "CHA-6DC",
+                    BasePrice = 39.99m,
+                    EstimatedDurationMinutes = 45,
+                    Category = "Upholstery Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "5 Seater Car Interior Cleaning",
+                    Description = "Professional deep cleaning for 5-seater car interiors",
+                    Shortcut = "CAR-5SEAT",
+                    BasePrice = 49.99m,
+                    EstimatedDurationMinutes = 50,
+                    Category = "Vehicle Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Hard Floor Cleaning (1 Room)",
+                    Description = "Professional cleaning for hard floors",
+                    Shortcut = "FLR-HARD",
+                    BasePrice = 49.99m,
+                    EstimatedDurationMinutes = 50,
+                    Category = "Floor Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Special Cleaning Product",
+                    Description = "Specialized cleaning product application",
+                    Shortcut = "PROD-SPEC",
+                    BasePrice = 7.99m,
+                    EstimatedDurationMinutes = 1,
+                    Category = "Additional Services"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Jet Wash Cleaning (Up to 30m²)",
+                    Description =
+                        "High-pressure jet wash cleaning for driveways, patios, and outdoor surfaces up to 30 square meters",
+                    Shortcut = "JET-30M2",
+                    BasePrice = 119.99m,
+                    EstimatedDurationMinutes = 60,
+                    Category = "Jet Wash Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Jet Wash Cleaning (30-60m²)",
+                    Description =
+                        "High-pressure jet wash cleaning for medium-sized outdoor areas between 30-60 square meters",
+                    Shortcut = "JET-60M2",
+                    BasePrice = 149.99m,
+                    EstimatedDurationMinutes = 90,
+                    Category = "Jet Wash Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Jet Wash Cleaning (60-100m²)",
+                    Description =
+                        "High-pressure jet wash cleaning for large outdoor areas between 60-100 square meters",
+                    Shortcut = "JET-100M2",
+                    BasePrice = 179.99m,
+                    EstimatedDurationMinutes = 120,
+                    Category = "Jet Wash Cleaning"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Any 2 Rooms/Upholstery",
+                    Description =
+                        "Choose any 2 rooms or upholstery items for deep steam cleaning. Premium service included. +£15 for L-Shape/Corner Sofas.",
+                    Shortcut = "BUNDLE-ANY2",
+                    BasePrice = 79.99m,
+                    EstimatedDurationMinutes = 60,
+                    Category = "Cleaning Packages"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Any 3 Rooms/Upholstery",
+                    Description =
+                        "Choose any 3 rooms or upholstery items for deep steam cleaning. Premium service included. +£15 for L-Shape/Corner Sofas.",
+                    Shortcut = "BUNDLE-ANY3",
+                    BasePrice = 94.99m,
+                    EstimatedDurationMinutes = 90,
+                    Category = "Cleaning Packages"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "2-Bed House Carpet Cleaning",
+                    Description =
+                        "Full house carpet cleaning including: 2 bedrooms + stairs + landing + lounge. Deep cleaning included.",
+                    Shortcut = "BUNDLE-2BED",
                     BasePrice = 129.99m,
                     EstimatedDurationMinutes = 120,
-                    Category = "Gutter Cleaning"
+                    Category = "Cleaning Packages"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "3-Bed House Carpet Cleaning",
+                    Description =
+                        "Full house carpet cleaning including: 3 bedrooms + stairs + landing + lounge. Deep cleaning included.",
+                    Shortcut = "BUNDLE-3BED",
+                    BasePrice = 149.99m,
+                    EstimatedDurationMinutes = 150,
+                    Category = "Cleaning Packages"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "4-Bed House Carpet Cleaning",
+                    Description =
+                        "Full house carpet cleaning including: 4 bedrooms + stairs + landing + lounge. Deep cleaning included.",
+                    Shortcut = "BUNDLE-4BED",
+                    BasePrice = 169.99m,
+                    EstimatedDurationMinutes = 180,
+                    Category = "Cleaning Packages"
+                },
+                new CreateServiceRequest
+                {
+                    Name = "Day Rate Cleaning Service",
+                    Description =
+                        "Full day cleaning service (9 AM - 5 PM). Includes any rooms, upholstery, or commercial areas. 1-hour break included. Comprehensive cleaning. +£100 for extra staff with machine.",
+                    Shortcut = "BUNDLE-DAYRATE",
+                    BasePrice = 349.99m,
+                    EstimatedDurationMinutes = 400, 
+                    Category = "Cleaning Packages"
                 }
             };
 
+
             // Combine all services
-            var allServices = carpetCleaningServices.Concat(sofaCleaningServices)
-                .Concat(jetWashingServices)
-                .Concat(eotCleaningServices)
-                .Concat(windowCleaningServices)
-                .Concat(ovenCleaningServices)
-                .Concat(gutterCleaningServices).ToList();
+            var allServices = AllServices.ToList();
 
             foreach (var service in allServices)
             {
@@ -372,8 +388,9 @@ public class DatabaseSeeder
                 {
                     var response = await _mediator.Send(contractor);
                     contractorIds.Add(response.ContractorId.ToString());
-                    _logger.LogInformation($"Contractor created: {contractor.FirstName} {contractor.LastName} (ID: {response.ContractorId}) - {contractor.Street}, {contractor.City} {contractor.PostcodeValue}");
-                    
+                    _logger.LogInformation(
+                        $"Contractor created: {contractor.FirstName} {contractor.LastName} (ID: {response.ContractorId}) - {contractor.Street}, {contractor.City} {contractor.PostcodeValue}");
+
                     // Activate the contractor
                     var activateRequest = new UpdateContractorStatusRequest
                     {
@@ -388,7 +405,8 @@ public class DatabaseSeeder
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning($"Contractor '{contractor.FirstName} {contractor.LastName}' may already exist or error occurred: {ex.Message}");
+                    _logger.LogWarning(
+                        $"Contractor '{contractor.FirstName} {contractor.LastName}' may already exist or error occurred: {ex.Message}");
                 }
             }
 
@@ -412,30 +430,36 @@ public class DatabaseSeeder
             var coverageAreaMap = new Dictionary<int, List<string>>
             {
                 // Sait Han Uzun covers London postcodes
-                { 0, new List<string> 
-                { 
-                    "SW1A 0AA", "SW1A 1AA", "SW1A 2AA",
-                    "N1 1AA", "N1 2AA", "N1 3AA",
-                    "E1 6AN", "E1 7AA", "E1 8AA",
-                    "W1A 1AA", "W1A 2AA", "W1B 1AA"
-                } },
+                {
+                    0, new List<string>
+                    {
+                        "SW1A 0AA", "SW1A 1AA", "SW1A 2AA",
+                        "N1 1AA", "N1 2AA", "N1 3AA",
+                        "E1 6AN", "E1 7AA", "E1 8AA",
+                        "W1A 1AA", "W1A 2AA", "W1B 1AA"
+                    }
+                },
                 // Ahmed Hassan covers Leicester postcodes
-                { 1, new List<string> 
-                { 
-                    "LE1 3RA", "LE1 4TA", "LE1 5AA",
-                    "LE2 0AA", "LE2 1AA", "LE2 2AA",
-                    "LE3 1AA", "LE3 2AA",
-                    "LE4 4AA", "LE4 5AA",
-                    "LE5 0AA", "LE5 1AA"
-                } },
+                {
+                    1, new List<string>
+                    {
+                        "LE1 3RA", "LE1 4TA", "LE1 5AA",
+                        "LE2 0AA", "LE2 1AA", "LE2 2AA",
+                        "LE3 1AA", "LE3 2AA",
+                        "LE4 4AA", "LE4 5AA",
+                        "LE5 0AA", "LE5 1AA"
+                    }
+                },
                 // Emily Thompson covers both London and Leicester
-                { 2, new List<string> 
-                { 
-                    "SW2 1AA", "SW2 2AA", "SW2 3AA",
-                    "SW3 1AA", "SW3 2AA", "SW3 3AA",
-                    "LE1 6AA", "LE1 7AA",
-                    "LE2 3AA", "LE2 4AA"
-                } }
+                {
+                    2, new List<string>
+                    {
+                        "SW2 1AA", "SW2 2AA", "SW2 3AA",
+                        "SW3 1AA", "SW3 2AA", "SW3 3AA",
+                        "LE1 6AA", "LE1 7AA",
+                        "LE2 3AA", "LE2 4AA"
+                    }
+                }
             };
 
             for (int i = 0; i < contractorIds.Count && i < coverageAreaMap.Count; i++)
@@ -451,7 +475,8 @@ public class DatabaseSeeder
                         };
 
                         await _mediator.Send(request);
-                        _logger.LogInformation($"Coverage area added: Contractor {contractorIds[i]} - Postcode {postcode}");
+                        _logger.LogInformation(
+                            $"Coverage area added: Contractor {contractorIds[i]} - Postcode {postcode}");
                     }
                     catch (Exception ex)
                     {
@@ -476,7 +501,8 @@ public class DatabaseSeeder
             _logger.LogInformation("Seeding working hours...");
 
             // Working hours for all contractors: Monday to Friday, 8:30 AM to 6:30 PM
-            var workingDays = new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday };
+            var workingDays = new List<DayOfWeek>
+                { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday };
             var startTime = new TimeOnly(8, 30);
             var endTime = new TimeOnly(18, 30);
 
@@ -496,7 +522,8 @@ public class DatabaseSeeder
                         };
 
                         await _mediator.Send(request);
-                        _logger.LogInformation($"Working day set: Contractor {contractorId} - {day} ({startTime:HH:mm} - {endTime:HH:mm})");
+                        _logger.LogInformation(
+                            $"Working day set: Contractor {contractorId} - {day} ({startTime:HH:mm} - {endTime:HH:mm})");
                     }
                     catch (Exception ex)
                     {
@@ -538,7 +565,8 @@ public class DatabaseSeeder
                     };
 
                     await _mediator.Send(request);
-                    _logger.LogInformation($"Unavailability slot created: Contractor {contractorId} - {unavailableStart:yyyy-MM-dd HH:mm} to {unavailableEnd:yyyy-MM-dd HH:mm}");
+                    _logger.LogInformation(
+                        $"Unavailability slot created: Contractor {contractorId} - {unavailableStart:yyyy-MM-dd HH:mm} to {unavailableEnd:yyyy-MM-dd HH:mm}");
                 }
                 catch (Exception ex)
                 {
@@ -562,16 +590,16 @@ public class DatabaseSeeder
             _logger.LogInformation("Seeding postcode pricing...");
 
             // Central London postcodes - premium pricing (1.3x multiplier, +£30 fixed)
-            var centralLondonPostcodes = new List<string> 
-            { 
+            var centralLondonPostcodes = new List<string>
+            {
                 "SW1A 0AA", "SW1A 1AA", "SW1A 2AA",
                 "W1A 1AA", "W1A 2AA", "W1B 1AA",
                 "EC1A 1AA", "EC1A 2AA", "EC1B 1AA"
             };
 
             // Greater London postcodes - standard London pricing (1.2x multiplier, +£20 fixed)
-            var londonPostcodes = new List<string> 
-            { 
+            var londonPostcodes = new List<string>
+            {
                 "N1 1AA", "N1 2AA", "N1 3AA",
                 "E1 6AN", "E1 7AA", "E1 8AA",
                 "SW2 1AA", "SW2 2AA", "SW2 3AA",
@@ -622,7 +650,8 @@ public class DatabaseSeeder
                             FixedAdjustment = 30m
                         };
                         await _mediator.Send(request);
-                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (1.3x multiplier, +£30)");
+                        _logger.LogInformation(
+                            $"Postcode pricing added: Service {serviceId} - {postcode} (1.3x multiplier, +£30)");
                     }
                     catch (Exception ex)
                     {
@@ -646,7 +675,8 @@ public class DatabaseSeeder
                             FixedAdjustment = 20m
                         };
                         await _mediator.Send(request);
-                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (1.2x multiplier, +£20)");
+                        _logger.LogInformation(
+                            $"Postcode pricing added: Service {serviceId} - {postcode} (1.2x multiplier, +£20)");
                     }
                     catch (Exception ex)
                     {
@@ -670,7 +700,8 @@ public class DatabaseSeeder
                             FixedAdjustment = 10m
                         };
                         await _mediator.Send(request);
-                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (1.1x multiplier, +£10)");
+                        _logger.LogInformation(
+                            $"Postcode pricing added: Service {serviceId} - {postcode} (1.1x multiplier, +£10)");
                     }
                     catch (Exception ex)
                     {
@@ -694,7 +725,8 @@ public class DatabaseSeeder
                             FixedAdjustment = 0m
                         };
                         await _mediator.Send(request);
-                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (1.0x multiplier, no adjustment)");
+                        _logger.LogInformation(
+                            $"Postcode pricing added: Service {serviceId} - {postcode} (1.0x multiplier, no adjustment)");
                     }
                     catch (Exception ex)
                     {
@@ -718,7 +750,8 @@ public class DatabaseSeeder
                             FixedAdjustment = -10m
                         };
                         await _mediator.Send(request);
-                        _logger.LogInformation($"Postcode pricing added: Service {serviceId} - {postcode} (0.85x multiplier, -£10)");
+                        _logger.LogInformation(
+                            $"Postcode pricing added: Service {serviceId} - {postcode} (0.85x multiplier, -£10)");
                     }
                     catch (Exception ex)
                     {
@@ -759,7 +792,11 @@ public class DatabaseSeeder
                     TotalAmount = 89.99m,
                     ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
                     {
-                        new() { ServiceId = serviceIds[0], ServiceName = "1 Bed Carpet Cleaning", Quantity = 1, Price = 89.99m }
+                        new()
+                        {
+                            ServiceId = serviceIds[0], ServiceName = "1 Bed Carpet Cleaning", Quantity = 1,
+                            Price = 89.99m
+                        }
                     }
                 },
                 new CreateBookingCompleteRequest
@@ -775,7 +812,11 @@ public class DatabaseSeeder
                     TotalAmount = 149.99m,
                     ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
                     {
-                        new() { ServiceId = serviceIds[1], ServiceName = "2 Bed Carpet Cleaning", Quantity = 1, Price = 149.99m }
+                        new()
+                        {
+                            ServiceId = serviceIds[1], ServiceName = "2 Bed Carpet Cleaning", Quantity = 1,
+                            Price = 149.99m
+                        }
                     }
                 },
                 new CreateBookingCompleteRequest
@@ -791,7 +832,11 @@ public class DatabaseSeeder
                     TotalAmount = 79.99m,
                     ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
                     {
-                        new() { ServiceId = serviceIds[4], ServiceName = "2 Seater Sofa Cleaning", Quantity = 1, Price = 79.99m }
+                        new()
+                        {
+                            ServiceId = serviceIds[4], ServiceName = "2 Seater Sofa Cleaning", Quantity = 1,
+                            Price = 79.99m
+                        }
                     }
                 },
                 // Leicester bookings
@@ -808,7 +853,11 @@ public class DatabaseSeeder
                     TotalAmount = 69.99m,
                     ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
                     {
-                        new() { ServiceId = serviceIds[4], ServiceName = "2 Seater Sofa Cleaning", Quantity = 1, Price = 69.99m }
+                        new()
+                        {
+                            ServiceId = serviceIds[4], ServiceName = "2 Seater Sofa Cleaning", Quantity = 1,
+                            Price = 69.99m
+                        }
                     }
                 },
                 new CreateBookingCompleteRequest
@@ -824,7 +873,11 @@ public class DatabaseSeeder
                     TotalAmount = 149.99m,
                     ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
                     {
-                        new() { ServiceId = serviceIds[8], ServiceName = "Residential Window Cleaning", Quantity = 1, Price = 149.99m }
+                        new()
+                        {
+                            ServiceId = serviceIds[8], ServiceName = "Residential Window Cleaning", Quantity = 1,
+                            Price = 149.99m
+                        }
                     }
                 },
                 new CreateBookingCompleteRequest
@@ -840,7 +893,11 @@ public class DatabaseSeeder
                     TotalAmount = 59.99m,
                     ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
                     {
-                        new() { ServiceId = serviceIds[10], ServiceName = "Single Oven Cleaning", Quantity = 1, Price = 59.99m }
+                        new()
+                        {
+                            ServiceId = serviceIds[10], ServiceName = "Single Oven Cleaning", Quantity = 1,
+                            Price = 59.99m
+                        }
                     }
                 },
                 // Mixed location bookings
@@ -873,7 +930,11 @@ public class DatabaseSeeder
                     TotalAmount = 99.99m,
                     ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
                     {
-                        new() { ServiceId = serviceIds[11], ServiceName = "Double Oven Cleaning", Quantity = 1, Price = 99.99m }
+                        new()
+                        {
+                            ServiceId = serviceIds[11], ServiceName = "Double Oven Cleaning", Quantity = 1,
+                            Price = 99.99m
+                        }
                     }
                 },
                 new CreateBookingCompleteRequest
@@ -889,7 +950,11 @@ public class DatabaseSeeder
                     TotalAmount = 159.99m,
                     ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
                     {
-                        new() { ServiceId = serviceIds[2], ServiceName = "3 Bed Carpet Cleaning", Quantity = 1, Price = 159.99m }
+                        new()
+                        {
+                            ServiceId = serviceIds[2], ServiceName = "3 Bed Carpet Cleaning", Quantity = 1,
+                            Price = 159.99m
+                        }
                     }
                 },
                 new CreateBookingCompleteRequest
@@ -905,7 +970,11 @@ public class DatabaseSeeder
                     TotalAmount = 79.99m,
                     ServiceItems = new List<CreateBookingCompleteRequest.ServiceItemDto>
                     {
-                        new() { ServiceId = serviceIds[15], ServiceName = "Single Story Gutter Cleaning", Quantity = 1, Price = 79.99m }
+                        new()
+                        {
+                            ServiceId = serviceIds[15], ServiceName = "Single Story Gutter Cleaning", Quantity = 1,
+                            Price = 79.99m
+                        }
                     }
                 }
             };
@@ -917,11 +986,13 @@ public class DatabaseSeeder
                     var response = await _mediator.Send(bookingRequest);
                     if (response != null && response.Success)
                     {
-                        _logger.LogInformation($"Past booking created: {bookingRequest.CustomerName} - {bookingRequest.Postcode} (ID: {response.BookingId})");
+                        _logger.LogInformation(
+                            $"Past booking created: {bookingRequest.CustomerName} - {bookingRequest.Postcode} (ID: {response.BookingId})");
                     }
                     else if (response != null)
                     {
-                        _logger.LogWarning($"Failed to create booking for '{bookingRequest.CustomerName}': {response.Message}");
+                        _logger.LogWarning(
+                            $"Failed to create booking for '{bookingRequest.CustomerName}': {response.Message}");
                     }
                     else
                     {
@@ -930,7 +1001,8 @@ public class DatabaseSeeder
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning($"Booking for '{bookingRequest.CustomerName}' may already exist or error occurred: {ex.Message}");
+                    _logger.LogWarning(
+                        $"Booking for '{bookingRequest.CustomerName}' may already exist or error occurred: {ex.Message}");
                 }
             }
 

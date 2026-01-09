@@ -72,7 +72,7 @@ public class AddServiceToContractorHandler : IRequestHandler<AddServiceToContrac
             Contractor = contractor,
             ServiceId = serviceId,
             ServiceName = service.Name,
-            Category = service.Category?.Name ?? "Uncategorized",
+            Category = service.Category ?? "Uncategorized",
             Description = service.Description
         };
 

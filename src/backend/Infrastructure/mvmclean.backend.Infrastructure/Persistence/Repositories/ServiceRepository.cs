@@ -15,7 +15,6 @@ public class ServiceRepository : GenericRepository<Service>, IServiceRepository
     public override async Task<Service> GetByIdAsync(Guid id, bool noTracking = true, params System.Linq.Expressions.Expression<Func<Service, object>>[] includes)
     {
         var query = _dbContext.Services
-            .Include(s => s.Category)
             .Include(s => s.PostcodePricings)
             .AsQueryable();
 
