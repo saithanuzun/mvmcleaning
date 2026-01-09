@@ -1,0 +1,37 @@
+name: Deploy MVMCleaning
+
+on:
+  push:
+    branches: [ "main" ]   
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'   
+
+      - name: Publish Release Build
+        run: dotnet publish --configuration Release --output ./publish
+
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Remove old files on server
+        run: ssh -o StrictHostKeyChecking=no root@146.190.234.3 'rm -rf /var/www/MVMCleaning/*'
+
+      - name: Upload new build
+        run: scp -o StrictHostKeyChecking=no -r ./publish/* root@146.190.234.3:/var/www/MVMCleaning/
+
+      - name: Restart services
+        run: |
+          ssh -o StrictHostKeyChecking=no root@146.190.234.3 "sudo systemctl restart mvmcleaning.service"
+          ssh -o StrictHostKeyChecking=no root@146.190.234.3 "sudo systemctl restart nginx"
