@@ -27,6 +27,7 @@ public class MailingService : IMailingService
         string recipientEmail,
         Guid bookingId,
         string customerName,
+        string phoneNumber,
         string address,
         List<string> services,
         decimal totalAmount,
@@ -39,6 +40,7 @@ public class MailingService : IMailingService
             var template = new BookingConfirmedEmailTemplate(
                 bookingId.ToString(),
                 customerName,
+                phoneNumber,
                 address,
                 services,
                 totalAmount,

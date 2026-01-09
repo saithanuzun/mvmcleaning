@@ -19,6 +19,7 @@ public interface IMailingService
         string recipientEmail,
         Guid bookingId,
         string customerName,
+        string phoneNumber,
         string address,
         List<string> services,
         decimal totalAmount,

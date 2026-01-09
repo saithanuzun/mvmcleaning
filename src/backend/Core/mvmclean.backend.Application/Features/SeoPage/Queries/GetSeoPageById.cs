@@ -45,9 +45,8 @@ public class SeoPageFAQDto
 
 public class SeoPageKeywordDto
 {
-    public Guid Id { get; set; }
     public string Keyword { get; set; }
-    public int Priority { get; set; }
+    public string Category { get; set; }
 }
 
 public class GetSeoPageByIdHandler : IRequestHandler<GetSeoPageByIdRequest, GetSeoPageByIdResponse>
@@ -71,27 +70,19 @@ public class GetSeoPageByIdHandler : IRequestHandler<GetSeoPageByIdRequest, GetS
             Id = page.Id,
             Slug = page.Slug,
             City = page.City,
-            Area = page.Area,
-            ServiceType = page.ServiceType,
+            Area = page.GetFirstAreaName(),
+            ServiceType = page.GetFirstServiceName(),
             MetaTitle = page.MetaTitle,
             MetaDescription = page.MetaDescription,
             H1Tag = page.H1Tag,
             Introduction = page.Introduction,
-            ContentBlocks = page.ContentBlocks.Select(c => new SeoPageContentDto
-            {
-                Id = c.Id,
-            }).OrderBy(c => c.DisplayOrder).ToList(),
-            FAQs = page.FAQs.Select(f => new SeoPageFAQDto
-            {
-                Id = f.Id,
-                Question = f.Question,
-                Answer = f.Answer,
-            }).OrderBy(f => f.DisplayOrder).ToList(),
+            ContentBlocks = new(),
+            FAQs = new(),
             Keywords = page.Keywords.Select(k => new SeoPageKeywordDto
             {
-                Id = k.Id,
                 Keyword = k.Keyword,
-            }).OrderByDescending(k => k.Priority).ToList(),
+                Category = k.Category
+            }).ToList(),
             CreatedAt = page.CreatedAt,
         };
     }

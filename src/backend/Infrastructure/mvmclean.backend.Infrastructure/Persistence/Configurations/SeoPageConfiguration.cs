@@ -10,20 +10,31 @@ public class SeoPageConfiguration : EntityConfiguration<SeoPage>
     {
         base.Configure(builder);
         
-        
-        builder.HasMany(s => s.ContentBlocks)
-            .WithOne(c => c.SeoPage)
-            .HasForeignKey(c => c.SeoPageId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.HasMany(s => s.FAQs)
-            .WithOne(f => f.SeoPage)
-            .HasForeignKey(f => f.SeoPageId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.HasMany(s => s.Keywords)
-            .WithOne()
-            .HasForeignKey("SeoPageId")
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.OwnsMany(s => s.Areas, navBuilder =>
+        {
+            navBuilder.ToTable("SeoPage_Areas");
+            navBuilder.HasKey("Id");
+            navBuilder.Property(a => a.Name).IsRequired();
+            navBuilder.Property(a => a.Slug).IsRequired();
+            navBuilder.WithOwner().HasForeignKey("SeoPageId");
+        });
+
+        builder.OwnsMany(s => s.Services, navBuilder =>
+        {
+            navBuilder.ToTable("SeoPage_Services");
+            navBuilder.HasKey("Id");
+            navBuilder.Property(st => st.Name).IsRequired();
+            navBuilder.Property(st => st.Slug).IsRequired();
+            navBuilder.WithOwner().HasForeignKey("SeoPageId");
+        });
+
+        builder.OwnsMany(s => s.Keywords, navBuilder =>
+        {
+            navBuilder.ToTable("SeoPage_Keywords");
+            navBuilder.HasKey("Id");
+            navBuilder.Property(k => k.Keyword).IsRequired();
+            navBuilder.Property(k => k.Category).IsRequired();
+            navBuilder.WithOwner().HasForeignKey("SeoPageId");
+        });
     }
 }

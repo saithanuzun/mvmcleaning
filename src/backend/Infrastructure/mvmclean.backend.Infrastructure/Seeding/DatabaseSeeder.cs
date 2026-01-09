@@ -3,6 +3,8 @@ using mvmclean.backend.Application.Features.Services.Commands;
 using mvmclean.backend.Application.Features.Contractor.Commands;
 using mvmclean.backend.Application.Features.Booking.Commands;
 using mvmclean.backend.Application.Features.Promotion.Commands;
+using mvmclean.backend.Application.Features.SeoPage.Commands;
+using mvmclean.backend.Domain.Aggregates.SeoPage;
 using Microsoft.Extensions.Logging;
 
 namespace mvmclean.backend.Infrastructure.Seeding;
@@ -52,6 +54,9 @@ public class DatabaseSeeder
 
             // Seed promotions
             await SeedPromotionsAsync();
+
+            // Seed SEO pages
+            await SeedSeoPagesAsync();
 
             // Seed past bookings
             await SeedBookingsAsync(serviceIds, contractorIds);
@@ -1085,6 +1090,59 @@ public class DatabaseSeeder
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error seeding promotions.");
+            throw;
+        }
+    }
+
+    private async Task SeedSeoPagesAsync()
+    {
+        try
+        {
+            _logger.LogInformation("Seeding SEO pages...");
+
+            var seoPages = SeoPageSeedData.GenerateAllSeoPages();
+            _logger.LogInformation($"Generated {seoPages.Count} SEO pages to seed");
+
+            if (seoPages.Count == 0)
+            {
+                _logger.LogWarning("No SEO pages generated!");
+                return;
+            }
+
+            int createdCount = 0;
+            foreach (var page in seoPages)
+            {
+                try
+                {
+                    var request = new BulkCreateSeoPageRequest
+                    {
+                        Pages = new List<Domain.Aggregates.SeoPage.SeoPage> { page }
+                    };
+                    
+                    var response = await _mediator.Send(request);
+                    if (response != null && response.CreatedIds.Any())
+                    {
+                        _logger.LogInformation(
+                            $"✅ SEO Page created: {page.Slug} ({page.Level}) - ID: {response.CreatedIds.First()}");
+                        createdCount++;
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"⚠️ Response was null or no IDs returned for {page.Slug}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(
+                        $"❌ SEO Page '{page.Slug}' error: {ex.Message}");
+                }
+            }
+
+            _logger.LogInformation($"✅ SEO pages seeding completed. Created: {createdCount}/{seoPages.Count}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "❌ Error seeding SEO pages.");
             throw;
         }
     }

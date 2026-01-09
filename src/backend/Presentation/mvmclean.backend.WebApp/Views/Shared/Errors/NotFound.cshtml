@@ -1,5 +1,5 @@
 @{
-    var code = ViewData["StatusCode"] as int? ?? 0;
+    var code = (ViewData["StatusCode"] as int?) ?? 404;
     var title = code == 404 ? "Page Not Found" : $"Error {code}";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -10,30 +10,21 @@
             <h1 class="display-4 text-primary">@title</h1>
             @if (code == 404)
             {
-                <p class="lead">Sorry — the page you were looking for could not be found.</p>
+                <p class="lead">Sorry - the page you were looking for could not be found.</p>
                 <p>Here are some helpful places to continue:</p>
-                <div class="d-flex justify-content-center mb-4">
-                    <a class="btn btn-primary mx-2" href="/">Home</a>
-                    <a class="btn btn-outline-primary mx-2" href="/Areas-We-Serve">Areas We Serve</a>
-                    <a class="btn btn-outline-primary mx-2" href="/gallery">Gallery</a>
-                    <a class="btn btn-outline-primary mx-2" href="/contact">Contact Us</a>
+                <div class="d-flex justify-content-center mb-4 flex-wrap">
+                    <a class="btn btn-primary mx-2 my-2" href="/">Home</a>
+                    <a class="btn btn-outline-primary mx-2 my-2" href="/about-us">About Us</a>
+                    <a class="btn btn-outline-primary mx-2 my-2" href="/gallery">Gallery</a>
+                    <a class="btn btn-outline-primary mx-2 my-2" href="/contact">Contact Us</a>
                 </div>
                 <p>If you followed a link from elsewhere, please <a href="/contact">let us know</a> so we can fix it.</p>
             }
             else
             {
-                <p class="lead">An unexpected error occurred (status code @@code ). Please try again later.</p>
+                <p class="lead">An unexpected error occurred (status code @code). Please try again later.</p>
                 <p>If the problem persists, contact <a href="/contact">support</a>.</p>
             }
-
-            <hr />
-
-            <form class="form-inline justify-content-center" method="get" action="/">
-                <div class="form-group mb-2">
-                    <input type="search" name="q" class="form-control" placeholder="Search the site" aria-label="Search" />
-                </div>
-                <button type="submit" class="btn btn-secondary mb-2 ml-2">Search</button>
-            </form>
         </div>
     </div>
 </div>

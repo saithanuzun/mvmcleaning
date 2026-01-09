@@ -68,6 +68,7 @@ public class BookingConfirmedEventHandler : INotificationHandler<BookingConfirme
                 recipientEmail: "saithan.uzun@gmail.com", // admin email address //todo get admin email from config or database
                 bookingId: notification.BookingId,
                 customerName: notification.CustomerName,
+                phoneNumber: booking.PhoneNumber?.Value ?? "N/A",
                 address: string.Concat(notification.Address.City," ", notification.Address.Street," ",notification.Address.Postcode) ?? "N/A",
                 services: services,
                 totalAmount: notification.Total.Amount,
@@ -93,6 +94,7 @@ public class BookingConfirmedEventHandler : INotificationHandler<BookingConfirme
                 recipientEmail: booking.Customer.Email, 
                 bookingId: notification.BookingId,
                 customerName: notification.CustomerName,
+                phoneNumber: booking.PhoneNumber?.Value ?? "N/A",
                 address: string.Concat(notification.Address.City," ", notification.Address.Street," ",notification.Address.Postcode) ?? "N/A",
                 services: services,
                 totalAmount: notification.Total.Amount,

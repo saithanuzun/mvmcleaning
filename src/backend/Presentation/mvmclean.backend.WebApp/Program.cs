@@ -84,6 +84,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapFallbackToController(
+    action: "GetBySlug",
+    controller: "SeoPage");
+
 // Configure SPA to serve React app under /shop route
 app.Map("/shop", appBuilder =>
 {

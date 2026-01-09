@@ -7,7 +7,7 @@
             <!-- LEFT SIDE -->
             <div class="col-lg-5 col-md-12 mb-4">
                 <h6 class="text-secondary text-uppercase font-weight-medium mb-3">Our Coverage</h6>
-                <h2 class="display-4 mb-4">Professional Cleaning Across Leicestershire</h2>
+                <h2 class="display-4 mb-4">Professional Cleaning Across UK</h2>
                 <p class="mb-3">
                     At <strong>MVM Cleaning</strong>, we proudly serve homes and businesses throughout Leicestershire. 
                     <strong>Carpet cleaning</strong>, <strong>sofa cleaning</strong>, and <strong>jet washing</strong> are just some of the services we provide, ensuring every space looks and feels fresh.
@@ -117,7 +117,7 @@
         let bookings = [];
 
         try {
-            const response = await fetch('/bookings-csv'); // path in wwwroot
+            const response = await fetch('/bookings.csv'); // path in wwwroot
             const csvText = await response.text();
 
             // Parse CSV

@@ -12,7 +12,7 @@ using mvmclean.backend.Infrastructure.Persistence;
 namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MVMdbContext))]
-    [Migration("20260109111947_InitialCreate")]
+    [Migration("20260109161938_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -578,162 +578,10 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.ToTable("Promotions");
                 });
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.Entities.SeoPageContent", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Heading")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Paragraph")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("SeoPageId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SeoPageId");
-
-                    b.ToTable("SeoPageContent");
-                });
-
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.Entities.SeoPageFAQ", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Question")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("SeoPageId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SeoPageId");
-
-                    b.ToTable("SeoPageFAQ");
-                });
-
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.Entities.SeoPageKeyword", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal>("Competition")
-                        .HasColumnType("numeric");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Keyword")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("SearchVolume")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("SeoPageId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SeoPageId1")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ServiceType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SeoPageId");
-
-                    b.HasIndex("SeoPageId1");
-
-                    b.ToTable("SeoPageKeyword");
-                });
-
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.SeoPage", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("Area")
-                        .HasColumnType("text");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -766,15 +614,16 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("MetaDescription")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("MetaTitle")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ServiceType")
                         .HasColumnType("text");
 
                     b.Property<string>("Slug")
@@ -1894,43 +1743,100 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.Entities.SeoPageContent", b =>
+            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.SeoPage", b =>
                 {
-                    b.HasOne("mvmclean.backend.Domain.Aggregates.SeoPage.SeoPage", "SeoPage")
-                        .WithMany("ContentBlocks")
-                        .HasForeignKey("SeoPageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.OwnsMany("mvmclean.backend.Domain.Aggregates.SeoPage.ValueObjects.Area", "Areas", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
 
-                    b.Navigation("SeoPage");
-                });
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.Entities.SeoPageFAQ", b =>
-                {
-                    b.HasOne("mvmclean.backend.Domain.Aggregates.SeoPage.SeoPage", "SeoPage")
-                        .WithMany("FAQs")
-                        .HasForeignKey("SeoPageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("text");
 
-                    b.Navigation("SeoPage");
-                });
+                            b1.Property<Guid>("SeoPageId")
+                                .HasColumnType("uuid");
 
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.Entities.SeoPageKeyword", b =>
-                {
-                    b.HasOne("mvmclean.backend.Domain.Aggregates.SeoPage.SeoPage", null)
-                        .WithMany("Keywords")
-                        .HasForeignKey("SeoPageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b1.Property<string>("Slug")
+                                .IsRequired()
+                                .HasColumnType("text");
 
-                    b.HasOne("mvmclean.backend.Domain.Aggregates.SeoPage.SeoPage", "SeoPage")
-                        .WithMany()
-                        .HasForeignKey("SeoPageId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b1.HasKey("Id");
 
-                    b.Navigation("SeoPage");
+                            b1.HasIndex("SeoPageId");
+
+                            b1.ToTable("SeoPage_Areas", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("SeoPageId");
+                        });
+
+                    b.OwnsMany("mvmclean.backend.Domain.Aggregates.SeoPage.ValueObjects.SeoPageKeyword", "Keywords", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("Category")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Keyword")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<Guid>("SeoPageId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("SeoPageId");
+
+                            b1.ToTable("SeoPage_Keywords", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("SeoPageId");
+                        });
+
+                    b.OwnsMany("mvmclean.backend.Domain.Aggregates.SeoPage.ValueObjects.ServiceType", "Services", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<Guid>("SeoPageId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Slug")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("SeoPageId");
+
+                            b1.ToTable("SeoPage_Services", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("SeoPageId");
+                        });
+
+                    b.Navigation("Areas");
+
+                    b.Navigation("Keywords");
+
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.Service.Service", b =>
@@ -2064,15 +1970,6 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("WorkingHours");
-                });
-
-            modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SeoPage.SeoPage", b =>
-                {
-                    b.Navigation("ContentBlocks");
-
-                    b.Navigation("FAQs");
-
-                    b.Navigation("Keywords");
                 });
 
             modelBuilder.Entity("mvmclean.backend.Domain.Aggregates.SupportTicket.SupportTicket", b =>

@@ -1,164 +1,286 @@
-using mvmclean.backend.Domain.Aggregates.SeoPage.Entities;
+using mvmclean.backend.Domain.Aggregates.SeoPage.Enums;
+using mvmclean.backend.Domain.Aggregates.SeoPage.ValueObjects;
 using mvmclean.backend.Domain.Core.BaseClasses;
-using mvmclean.backend.Domain.Core.Interfaces;
 
 namespace mvmclean.backend.Domain.Aggregates.SeoPage;
 
 public class SeoPage : AggregateRoot
 {
+    // Route hierarchy
+    public SeoPageLevel Level { get; private set; }
+    
     // Core identity
-    public string Slug { get; private set; }
     public string City { get; private set; }
-    public string? Area { get; private set; }
-    public string? ServiceType { get; private set; }
-
+    
+    // Collections of value objects
+    private readonly List<Area> _areas = new();
+    public IReadOnlyCollection<Area> Areas => _areas.AsReadOnly();
+    
+    private readonly List<ServiceType> _services = new();
+    public IReadOnlyCollection<ServiceType> Services => _services.AsReadOnly();
+    
+    // SEO Data properties
+    public string Slug { get; private set; }
     public string MetaTitle { get; private set; }
     public string MetaDescription { get; private set; }
     public string H1Tag { get; private set; }
-
     public string Introduction { get; private set; }
-
-
-    private readonly List<SeoPageContent> _contentBlocks = new();
-    public IReadOnlyCollection<SeoPageContent> ContentBlocks => _contentBlocks.AsReadOnly();
-
-    private readonly List<SeoPageFAQ> _faqs = new();
-    public IReadOnlyCollection<SeoPageFAQ> FAQs => _faqs.AsReadOnly();
-
+    
+    // Keywords
     private readonly List<SeoPageKeyword> _keywords = new();
     public IReadOnlyCollection<SeoPageKeyword> Keywords => _keywords.AsReadOnly();
 
     private SeoPage() { }
 
-    // Factory
-    public static SeoPage Create(string city, string area, string? serviceType)
+    /// <summary>
+    /// Factory method - Create a SEO page for a city (required)
+    /// Areas and services are optional and can be added via AddArea() and AddService()
+    /// </summary>
+    public static SeoPage CreateSeoPage(string city)
     {
+        if (string.IsNullOrWhiteSpace(city))
+            throw new ArgumentException("City cannot be empty", nameof(city));
+
         var page = new SeoPage
         {
             Id = Guid.NewGuid(),
+            Level = SeoPageLevel.CityOnly,
             City = city.Trim(),
-            Area = area.Trim(),
-            ServiceType = serviceType?.Trim(),
+            Slug = city.ToLower().Replace(" ", "-"),
             CreatedAt = DateTime.UtcNow
         };
 
-        page.Slug = GenerateSlug(page.City, page.Area, page.ServiceType);
-        page.GenerateSeoMeta();
-        page.GeneratePageContent();
-        page.GenerateFaqs();
-        page.GenerateKeywords();
-
+        page.UpdateContent();
         return page;
     }
 
-    private static string GenerateSlug(string city, string? area, string? service)
+    /// <summary>
+    /// Add an area to the SEO page and update level/slug/content accordingly
+    /// </summary>
+    public void AddArea(string areaName)
     {
-        return area is not null ? $"{city.ToLower().Replace(" ", "-")}/{area.ToLower().Replace(" ","-")}/{service.ToLower().Replace(" ", "-")}" 
-            : $"{city.ToLower().Replace(" ", "-")}/{service.ToLower().Replace(" ", "-")}";
+        if (string.IsNullOrWhiteSpace(areaName))
+            throw new ArgumentException("Area name cannot be empty", nameof(areaName));
+
+        var areaObj = Area.Create(areaName);
+        
+        // Check if area already exists
+        if (_areas.Any(a => a.Name.Equals(areaName, StringComparison.OrdinalIgnoreCase)))
+            return;
+
+        _areas.Add(areaObj);
+        UpdateLevelAndSlug();
+        UpdateContent();
     }
 
-    private void GenerateSeoMeta()
+    /// <summary>
+    /// Add a service to the SEO page and update level/slug/content accordingly
+    /// </summary>
+    public void AddService(string serviceName)
     {
-        MetaTitle =
-            $"{ServiceType} in {City} | BOOK ONLINE | Rated 4.9/5 · 10+ Years Experience  ";
+        if (string.IsNullOrWhiteSpace(serviceName))
+            throw new ArgumentException("Service name cannot be empty", nameof(serviceName));
 
-        MetaDescription =
-            $"Professional {ServiceType.ToLower()} services in {Area}, {City}. " +
-            $"2000+ jobs completed. Same-day availability and free quotes.";
+        var serviceObj = ServiceType.Create(serviceName);
+        
+        // Check if service already exists
+        if (_services.Any(s => s.Name.Equals(serviceName, StringComparison.OrdinalIgnoreCase)))
+            return;
 
-        H1Tag = $"{ServiceType} in {Area}, {City}";
+        _services.Add(serviceObj);
+        UpdateLevelAndSlug();
+        UpdateContent();
     }
 
-    // MAIN CONTENT
-    private void GeneratePageContent()
+    /// <summary>
+    /// Helper to get area names as a comma-separated string
+    /// </summary>
+    public string GetAreasAsString() => string.Join(", ", _areas.Select(a => a.Name));
+
+    /// <summary>
+    /// Helper to get service names as a comma-separated string
+    /// </summary>
+    public string GetServicesAsString() => string.Join(", ", _services.Select(s => s.Name));
+
+    /// <summary>
+    /// Helper to get first area name (for route construction)
+    /// </summary>
+    public string? GetFirstAreaName() => _areas.FirstOrDefault()?.Name;
+
+    /// <summary>
+    /// Helper to get first service name (for route construction)
+    /// </summary>
+    public string? GetFirstServiceName() => _services.FirstOrDefault()?.Name;
+
+    /// <summary>
+    /// Update the page level based on current state of areas and services
+    /// Level determination logic:
+    /// - CityOnly: No areas or services
+    /// - CityService: Has service(s) but no areas
+    /// - CityArea: Has area(s) but no services
+    /// - CityAreaService: Has both area(s) and service(s)
+    /// </summary>
+    private void UpdateLevelAndSlug()
     {
-        Introduction =
-            $"Looking for reliable {ServiceType.ToLower()} in {Area}, {City}? " +
-            $"With over 10 years of experience and 2000+ completed jobs, " +
-            $"we deliver high-quality results every time.";
+        var citySlug = City.ToLower().Replace(" ", "-");
 
-        _contentBlocks.Clear();
-
-        _contentBlocks.Add(SeoPageContent.Create(
-            $"Professional {ServiceType} Services in {Area}",
-            $"Our expert team provides professional {ServiceType.ToLower()} services across {Area}, {City}. " +
-            $"We use advanced equipment and safe cleaning solutions to achieve outstanding results."
-        ));
-
-        _contentBlocks.Add(SeoPageContent.Create(
-            $"Why Choose Us for {ServiceType}?",
-            $"Customers in {Area} trust us for our fast response, competitive pricing, and proven results. " +
-            $"All work is carried out by trained professionals with a satisfaction guarantee."
-        ));
-
-        _contentBlocks.Add(SeoPageContent.Create(
-            $"{ServiceType} Prices in {Area}",
-            $"Our pricing is clear and affordable. {ServiceType} costs in {Area} depend on room size and condition, " +
-            $"with free, no-obligation quotes available."
-        ));
-
-        _contentBlocks.Add(SeoPageContent.Create(
-            $"Areas We Cover Around {City}",
-            $"We provide {ServiceType.ToLower()} services throughout {Area} and nearby locations in {City}. " +
-            $"Contact us to check availability in your postcode."
-        ));
-    }
-
-    private void GenerateFaqs()
-    {
-        _faqs.Clear();
-
-        _faqs.AddRange(new[]
+        if (_areas.Count == 0 && _services.Count == 0)
         {
-            SeoPageFAQ.Create(
-                $"How much does {ServiceType.ToLower()} cost in {Area}?",
-                $"Prices vary depending on size and condition. Contact us for a free quote in {Area}."
-            ),
-            SeoPageFAQ.Create(
-                $"How long does {ServiceType.ToLower()} take?",
-                $"Most jobs in {Area} take between 1–3 hours, with drying times of 4–6 hours."
-            ),
-            SeoPageFAQ.Create(
-                $"Do you cover all areas of {City}?",
-                $"Yes, we serve {Area} and surrounding areas across {City}."
-            ),
-            SeoPageFAQ.Create(
-                $"Can you remove stains?",
-                $"Yes, we treat common stains including pet accidents, food spills, and general wear."
-            )
-        });
+            Level = SeoPageLevel.CityOnly;
+            Slug = citySlug;
+        }
+        else if (_areas.Count == 0 && _services.Count > 0)
+        {
+            Level = SeoPageLevel.CityService;
+            var firstService = _services.First();
+            Slug = $"{citySlug}/{firstService.Slug}";
+        }
+        else if (_areas.Count > 0 && _services.Count == 0)
+        {
+            Level = SeoPageLevel.CityArea;
+            var firstArea = _areas.First();
+            Slug = $"{citySlug}/{firstArea.Slug}";
+        }
+        else
+        {
+            Level = SeoPageLevel.CityAreaService;
+            var firstArea = _areas.First();
+            var firstService = _services.First();
+            Slug = $"{citySlug}/{firstArea.Slug}/{firstService.Slug}";
+        }
+    }
+
+    /// <summary>
+    /// Update SEO content (MetaTitle, MetaDescription, H1Tag, Introduction) and keywords based on current state
+    /// </summary>
+    private void UpdateContent()
+    {
+        var areasString = GetAreasAsString();
+        var servicesString = GetServicesAsString();
+
+        switch (Level)
+        {
+            case SeoPageLevel.CityOnly:
+                MetaTitle = $"{City} Cleaning Services | Professional Cleaners | Rated 4.9/5";
+                MetaDescription = $"Professional cleaning services in {City}. Same-day availability, free quotes. Book online today!";
+                H1Tag = $"Professional Cleaning Services in {City}";
+                Introduction = $"Welcome to our {City} cleaning services. With 2000+ completed jobs and 10+ years of experience, we're your trusted cleaning partner.";
+                break;
+
+            case SeoPageLevel.CityService:
+                var firstService = GetFirstServiceName();
+                MetaTitle = $"{firstService} in {City} | Professional Cleaners | Rated 4.9/5";
+                MetaDescription = $"Professional {firstService?.ToLower()} services in {City}. Same-day availability, free quotes. Book online today!";
+                H1Tag = $"{firstService} in {City}";
+                Introduction = $"Looking for reliable {firstService?.ToLower()} in {City}? We specialize in professional cleaning. With 10+ years of experience and 2000+ completed jobs, we deliver exceptional results.";
+                break;
+
+            case SeoPageLevel.CityArea:
+                var firstArea = GetFirstAreaName();
+                MetaTitle = $"Cleaning Services in {firstArea}, {City} | Book Online";
+                MetaDescription = $"Professional cleaning services in {firstArea}, {City}. Same-day availability, free quotes. 2000+ jobs completed. Rated 4.9/5.";
+                H1Tag = $"Cleaning Services in {firstArea}, {City}";
+                Introduction = $"Looking for reliable cleaning services in {firstArea}, {City}? We specialize in professional cleaning. With 10+ years of experience and 2000+ completed jobs, we deliver exceptional results.";
+                break;
+
+            case SeoPageLevel.CityAreaService:
+                var areaName = GetFirstAreaName();
+                var serviceName = GetFirstServiceName();
+                MetaTitle = $"{serviceName} in {areaName}, {City} | BOOK ONLINE | Rated 4.9/5";
+                MetaDescription = $"Professional {serviceName?.ToLower()} services in {areaName}, {City}. 2000+ jobs completed. Same-day availability and free quotes.";
+                H1Tag = $"{serviceName} in {areaName}, {City}";
+                Introduction = $"Looking for reliable {serviceName?.ToLower()} in {areaName}, {City}? With over 10 years of experience and 2000+ completed jobs, we deliver high-quality results every time.";
+                break;
+        }
+
+        GenerateKeywords();
     }
 
     private void GenerateKeywords()
     {
         _keywords.Clear();
 
-        var keywords = new List<string>
+        var keywords = new List<string>();
+        var areasString = GetAreasAsString();
+        var servicesString = GetServicesAsString();
+        var firstAreaName = GetFirstAreaName();
+        var firstServiceName = GetFirstServiceName();
+
+        switch (Level)
         {
-            // Service + Location variations
-            $"{ServiceType} {City}",
-            $"{ServiceType} in {City}",
-            $"{City} {ServiceType} services",
-        
-            // Professional qualifiers
-            $"professional {ServiceType} {City}",
-            $"certified {ServiceType} {City}",
-            $"licensed {ServiceType} {City}",
-        
-            // "Best" variations (high commercial intent)
-            $"best {ServiceType} {City}",
-            $"top {ServiceType} {City}",
-            $"affordable {ServiceType} {City}",
-        
-            // Service-specific with area
-            $"{ServiceType} near {Area}",
-            $"{Area} {ServiceType} company"
-        };
+            case SeoPageLevel.CityOnly:
+                // Keywords for city-level pages (e.g., /leicester)
+                keywords = new List<string>
+                {
+                    $"cleaning services {City}",
+                    $"professional cleaning {City}",
+                    $"{City} cleaning services",
+                    $"best cleaning {City}",
+                    $"carpet cleaning {City}",
+                    $"sofa cleaning {City}",
+                    $"affordable cleaning {City}",
+                    $"trusted cleaners {City}",
+                    $"{servicesString} in {City}",
+                    $"{City} {areasString}"
+                };
+                break;
+
+            case SeoPageLevel.CityService:
+                // Keywords for city + service pages (e.g., /leicester/carpet-cleaning)
+                keywords = new List<string>
+                {
+                    $"{firstServiceName} {City}",
+                    $"{firstServiceName} in {City}",
+                    $"professional {firstServiceName} {City}",
+                    $"{firstServiceName} services {City}",
+                    $"best {firstServiceName} {City}",
+                    $"affordable {firstServiceName} {City}",
+                    $"{City} {firstServiceName}",
+                    $"trusted {firstServiceName} {City}",
+                    $"{firstServiceName} {areasString}",
+                    $"certified {firstServiceName} {City}"
+                };
+                break;
+
+            case SeoPageLevel.CityArea:
+                // Keywords for city + area pages (e.g., /leicester/wigston)
+                keywords = new List<string>
+                {
+                    $"cleaning services {firstAreaName}",
+                    $"professional cleaning {firstAreaName}",
+                    $"{firstAreaName} cleaning services",
+                    $"best cleaning {firstAreaName}",
+                    $"cleaning {firstAreaName} {City}",
+                    $"{servicesString} in {firstAreaName}",
+                    $"{City} {firstAreaName} cleaning",
+                    $"affordable cleaning {firstAreaName}",
+                    $"trusted cleaners {firstAreaName}",
+                    $"{firstAreaName} {City} services"
+                };
+                break;
+
+            case SeoPageLevel.CityAreaService:
+                // Keywords for city + area + service pages (e.g., /leicester/wigston/carpet-cleaning)
+                keywords = new List<string>
+                {
+                    $"{firstServiceName} {firstAreaName}",
+                    $"{firstServiceName} in {firstAreaName}, {City}",
+                    $"{firstAreaName} {firstServiceName}",
+                    $"professional {firstServiceName} {firstAreaName}",
+                    $"{firstServiceName} services {firstAreaName}",
+                    $"best {firstServiceName} {City}",
+                    $"certified {firstServiceName} {firstAreaName}",
+                    $"affordable {firstServiceName} {firstAreaName}",
+                    $"top {firstServiceName} {firstAreaName}",
+                    $"{firstServiceName} {City}"
+                };
+                break;
+        }
 
         foreach (var keyword in keywords)
         {
-            _keywords.Add(SeoPageKeyword.Create(keyword, ServiceType));
+            _keywords.Add(SeoPageKeyword.Create(keyword, Level.ToString()));
         }
     }
-
 }
+

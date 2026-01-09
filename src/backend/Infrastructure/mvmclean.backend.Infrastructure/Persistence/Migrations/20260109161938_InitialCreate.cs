@@ -115,10 +115,9 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Slug = table.Column<string>(type: "text", nullable: false),
+                    Level = table.Column<string>(type: "text", nullable: false),
                     City = table.Column<string>(type: "text", nullable: false),
-                    Area = table.Column<string>(type: "text", nullable: true),
-                    ServiceType = table.Column<string>(type: "text", nullable: true),
+                    Slug = table.Column<string>(type: "text", nullable: false),
                     MetaTitle = table.Column<string>(type: "text", nullable: false),
                     MetaDescription = table.Column<string>(type: "text", nullable: false),
                     H1Tag = table.Column<string>(type: "text", nullable: false),
@@ -432,26 +431,20 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SeoPageContent",
+                name: "SeoPage_Areas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    SeoPageId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Heading = table.Column<string>(type: "text", nullable: false),
-                    Paragraph = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeletedBy = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Slug = table.Column<string>(type: "text", nullable: false),
+                    SeoPageId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SeoPageContent", x => x.Id);
+                    table.PrimaryKey("PK_SeoPage_Areas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SeoPageContent_SeoPages_SeoPageId",
+                        name: "FK_SeoPage_Areas_SeoPages_SeoPageId",
                         column: x => x.SeoPageId,
                         principalTable: "SeoPages",
                         principalColumn: "Id",
@@ -459,64 +452,42 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SeoPageFAQ",
+                name: "SeoPage_Keywords",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    SeoPageId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Question = table.Column<string>(type: "text", nullable: false),
-                    Answer = table.Column<string>(type: "text", nullable: false),
-                    Order = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeletedBy = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SeoPageFAQ", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SeoPageFAQ_SeoPages_SeoPageId",
-                        column: x => x.SeoPageId,
-                        principalTable: "SeoPages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SeoPageKeyword",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    SeoPageId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Keyword = table.Column<string>(type: "text", nullable: false),
-                    ServiceType = table.Column<string>(type: "text", nullable: false),
-                    SearchVolume = table.Column<int>(type: "integer", nullable: false),
-                    Competition = table.Column<decimal>(type: "numeric", nullable: false),
-                    SeoPageId1 = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeletedBy = table.Column<string>(type: "text", nullable: true)
+                    Category = table.Column<string>(type: "text", nullable: false),
+                    SeoPageId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SeoPageKeyword", x => x.Id);
+                    table.PrimaryKey("PK_SeoPage_Keywords", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SeoPageKeyword_SeoPages_SeoPageId",
+                        name: "FK_SeoPage_Keywords_SeoPages_SeoPageId",
                         column: x => x.SeoPageId,
                         principalTable: "SeoPages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SeoPage_Services",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Slug = table.Column<string>(type: "text", nullable: false),
+                    SeoPageId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeoPage_Services", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SeoPageKeyword_SeoPages_SeoPageId1",
-                        column: x => x.SeoPageId1,
+                        name: "FK_SeoPage_Services_SeoPages_SeoPageId",
+                        column: x => x.SeoPageId,
                         principalTable: "SeoPages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -764,24 +735,19 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 column: "ContractorId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SeoPageContent_SeoPageId",
-                table: "SeoPageContent",
+                name: "IX_SeoPage_Areas_SeoPageId",
+                table: "SeoPage_Areas",
                 column: "SeoPageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SeoPageFAQ_SeoPageId",
-                table: "SeoPageFAQ",
+                name: "IX_SeoPage_Keywords_SeoPageId",
+                table: "SeoPage_Keywords",
                 column: "SeoPageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SeoPageKeyword_SeoPageId",
-                table: "SeoPageKeyword",
+                name: "IX_SeoPage_Services_SeoPageId",
+                table: "SeoPage_Services",
                 column: "SeoPageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SeoPageKeyword_SeoPageId1",
-                table: "SeoPageKeyword",
-                column: "SeoPageId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SupportTickets_AssignedToId",
@@ -830,13 +796,13 @@ namespace mvmclean.backend.Infrastructure.Persistence.Migrations
                 name: "Review");
 
             migrationBuilder.DropTable(
-                name: "SeoPageContent");
+                name: "SeoPage_Areas");
 
             migrationBuilder.DropTable(
-                name: "SeoPageFAQ");
+                name: "SeoPage_Keywords");
 
             migrationBuilder.DropTable(
-                name: "SeoPageKeyword");
+                name: "SeoPage_Services");
 
             migrationBuilder.DropTable(
                 name: "ServiceItem");

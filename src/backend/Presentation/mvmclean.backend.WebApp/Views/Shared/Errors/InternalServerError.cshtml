@@ -1,1 +1,26 @@
-ienternal servereror
+@{
+    var code = (ViewData["StatusCode"] as int?) ?? 500;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .error-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="error-icon text-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h1 class="display-4 text-danger">Internal Server Error</h1>
+            <p class="lead">An unexpected error occurred on our server. Our team has been notified.</p>
+            <p>Please try again later or contact support if the issue persists.</p>
+            <hr class="my-4">
+            <a class="btn btn-primary btn-lg" href="/">Return Home</a>
+        </div>
+    </div>
+</div>

@@ -4,24 +4,27 @@ namespace mvmclean.backend.WebApp.Controllers;
 
 public class HomeController : BaseController
 {
+    [Route("/")]
     public IActionResult Index() => View();
     
-    [Route("contact")]
+    [Route("/contact")]
     public IActionResult Contact() => View();
     
+    [Route("/book-now")]
+    public IActionResult BookNow() => RedirectPermanent("/shop");
     
-    [Route("gallery")]
+    [Route("/gallery")]
     public IActionResult Gallery() => View();
     
     
-    [Route("about-us")]
+    [Route("/about-us")]
     public IActionResult About() => View();
     
     
-    [Route("faqs")]
+    [Route("/faqs")]
     public IActionResult FAQs() => View();
     
     
-    [Route("terms-and-conditions")]
+    [Route("/terms-and-conditions")]
     public IActionResult TermsAndConditions() => View();
 }

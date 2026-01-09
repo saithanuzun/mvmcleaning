@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="Aggregates\SeoPage\Entities\" />
       <Folder Include="Aggregates\SeoPage\ValueObjects\" />
       <Folder Include="Core\" />
     </ItemGroup>

@@ -45,6 +45,7 @@ public class ErrorController : Controller
     public IActionResult Status(int statusCode)
     {
         Response.StatusCode = statusCode;
+        ViewData["StatusCode"] = statusCode;
 
         var reExecuteFeature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
         if (reExecuteFeature != null)

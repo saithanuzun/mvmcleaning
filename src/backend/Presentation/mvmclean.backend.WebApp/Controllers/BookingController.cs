@@ -4,7 +4,7 @@ using mvmclean.backend.Application.Features.Booking.Queries;
 
 namespace mvmclean.backend.WebApp.Controllers;
 
-public class BookingController : Controller
+public class BookingController : BaseController
 {
     private readonly IMediator _mediator;
 
@@ -13,20 +13,17 @@ public class BookingController : Controller
         _mediator = mediator;
     }
 
-    /// <summary>
-    /// Display the search/find booking page
-    /// </summary>
+
     [HttpGet]
+    [Route("/booking/find")]
     public IActionResult Find()
     {
         return View();
     }
-
-    /// <summary>
-    /// Search for booking by phone and postcode
-    /// </summary>
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Route("/booking/find")]
     public async Task<IActionResult> Find(string phoneNumber, string postcode)
     {
         if (string.IsNullOrWhiteSpace(phoneNumber) || string.IsNullOrWhiteSpace(postcode))
@@ -59,11 +56,9 @@ public class BookingController : Controller
             return View();
         }
     }
-
-    /// <summary>
-    /// Display booking details
-    /// </summary>
+    
     [HttpGet]
+    [Route("/booking/{id}")]
     public async Task<IActionResult> Details(string id)
     {
         if (string.IsNullOrWhiteSpace(id))

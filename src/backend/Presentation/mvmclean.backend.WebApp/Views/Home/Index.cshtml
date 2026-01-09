@@ -65,7 +65,7 @@
                     <div class="p-3 text-center" style="max-width: 1000px;">
                         <h4 class="text-white text-uppercase mb-md-3">MvM Carpet &amp; Sofa Cleaning</h4>
                         <h2 class="display-4 text-white mb-md-4">Carpet & Upholstery Care</h2>
-                        <a href="/get-a-quote" class="btn btn-primary py-md-3 px-md-5 mt-2">Book NOW!</a>
+                        <a href="/shop" class="btn btn-primary py-md-3 px-md-5 mt-2">Book NOW!</a>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                     <div class="p-3 text-center" style="max-width: 1000px;">
                         <h4 class="text-white text-uppercase mb-md-3">MvM Carpet & Sofa Cleaning</h4>
                         <h2 class="display-4 text-white mb-md-4">Highly Skilled Technicians</h2>
-                        <a href="/get-a-quote" class="btn btn-primary py-md-3 px-md-5 mt-2">Book NOW!</a>
+                        <a href="/shop" class="btn btn-primary py-md-3 px-md-5 mt-2">Book NOW!</a>
                     </div>
                 </div>
             </div>
@@ -173,13 +173,9 @@
             <!-- Text Column - Right Side -->
             <div class="col-lg-6">
                 <h6 class="text-secondary text-uppercase font-weight-medium mb-3">Learn About Us</h6>
-                <h1 class="mb-4">Professional Carpet Cleaning and Sofa Cleaning in Leicestershire</h1>
-                <h5 class="font-weight-medium font-italic mb-4">We specialize in top-quality residential and
-                    commercial carpet, upholstery, and exterior cleaning services.</h5>
-                <p class="mb-4">At MvM - Cleaning Services, we proudly serve Leicester, Leicestershire, and the
-                    surrounding areas with professional, high-quality cleaning solutions tailored to your home or
-                    business. Specialising in deep carpet cleaning, sofa cleaning, and expert upholstery cleaning,
-                    our team at MvM - Carpet & Sofa Cleaning is dedicated to transforming your interior spaces.</p>
+                <h1 class="mb-4">Professional Carpet & Sofa Cleaning Services Across the UK</h1>
+                <h5 class="font-weight-medium font-italic mb-4">We specialize in top-quality residential and commercial carpet, upholstery, and exterior cleaning services nationwide.</h5>
+                <p class="mb-4">At MvM Cleaning Services, we proudly serve customers throughout the UK with professional, high-quality cleaning solutions tailored to your home or business. Specialising in deep carpet cleaning, sofa cleaning, and expert upholstery cleaning, our team is dedicated to transforming your interior spaces into spotless, fresh environments that you'll love.</p>
 
                 <div class="row mb-4">
                     <div class="col-sm-6 mb-3 mb-sm-0">
@@ -191,7 +187,7 @@
                     <div class="col-sm-6 mb-3 mb-sm-0">
                         <div class="d-flex align-items-start">
                             <i class="fa fa-check text-primary mr-2 mt-1"></i>
-                            <p class="text-secondary font-weight-medium m-0">Highly Professional Staff</p>
+                            <p class="text-secondary font-weight-medium m-0">Highly Trained Professionals</p>
                         </div>
                     </div>
                 </div>
@@ -203,17 +199,10 @@
 
 <div class="container mt-5">
     <div class="row">
-        <!-- Get a Quote Button -->
-        <div class="col-md-6 mb-3">
-            <a href="/get-a-quote" class="btn btn-primary btn-block py-3 px-5 w-100 text-uppercase font-weight-medium">
-                Book Online!
-            </a>
-        </div>
-
-        <!-- See Packages Button -->
-        <div class="col-md-6 mb-3">
-            <a href="/packages" class="btn btn-secondary btn-block py-3 px-5 w-100 text-uppercase font-weight-medium">
-                See Packages!
+        <!-- Book Now Button -->
+        <div class="col-md-8 mx-auto mb-3">
+            <a href="/shop" class="btn btn-primary btn-block py-3 px-5 w-100 text-uppercase font-weight-medium">
+                📅 Book Now!
             </a>
         </div>
     </div>
@@ -330,21 +319,16 @@
         <div class="row align-items-center">
             <div class="col-lg-7 mb-5">
                 <h6 class="text-primary text-uppercase font-weight-bold mb-3">Why MvM?</h6>
-                <h2 class="mb-4">Your Trusted Cleaning Experts</h2>
-                <p>At MvM Cleaning Services, we believe a clean space is a happy space. Specializing in carpet
-                    cleaning in Leicester and the surrounding areas of Leicestershire, we provide thorough,
-                    efficient, and eco-friendly cleaning solutions for homes and businesses. Our services include
-                    sofa cleaning, upholstery cleaning, and mattress cleaning, ensuring every surface in
-                    your home or office looks fresh and revitalized. With a professional touch and attention to
-                    detail, our dedicated team delivers top-quality results you can trust.</p>
+                <h2 class="mb-4">Your Trusted Cleaning Experts Across the UK</h2>
+                <p>At MvM Cleaning Services, we believe a clean space is a happy space. Operating nationwide, we provide thorough, efficient, and eco-friendly cleaning solutions for homes and businesses everywhere. Our services include carpet cleaning, sofa cleaning, upholstery cleaning, mattress cleaning, and professional pressure washing, ensuring every surface in your home or office looks fresh and revitalized. With a professional touch and attention to detail, our dedicated team delivers top-quality results you can trust.</p>
                 <div class="row">
                     <div class="col-sm-6 mb-4">
                         <h2 class="text-primary">99%</h2>
                         <h5 class="font-weight-bold">Customer Satisfaction</h5>
                     </div>
                     <div class="col-sm-6 mb-4">
-                        <h2 class="text-primary">2500+</h2>
-                        <h5 class="font-weight-bold">Businesses & Homes Served</h5>
+                        <h2 class="text-primary">5000+</h2>
+                        <h5 class="font-weight-bold">Happy Clients Nationwide</h5>
                     </div>
                 </div>
             </div>
@@ -416,26 +400,253 @@
     </div>
 </div>
 
-
-@await Html.PartialAsync("PartialViews/_Reviews")
-
-<div class="container-fluid bg-primary py-3">
+<!-- Testimonial Start -->
+<script>
+    $(document).ready(function () {
+        $(".testimonial-carousel").owlCarousel({
+            loop: true,
+            margin: 30,
+            nav: false,
+            dots: true,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            smartSpeed: 800,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                992: {
+                    items: 3
+                }
+            }
+        });
+    });
+</script>
+<div class="container-fluid py-5">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8 text-center text-md-start mb-3 mb-md-0">
-                <h4 class="text-white fw-bold mb-2">We're Hiring Professional Cleaners!</h4>
-                <p class="text-white mb-0 d-none d-md-block">
-                    Join our growing team of cleaning experts and be part of something great.
-                </p>
+        <h6 class="text-secondary text-uppercase text-center font-weight-medium mb-3">Testimonial</h6>
+        <h2 class="display-4 text-center mb-5">Our Clients Say</h2>
+        <div class="owl-carousel testimonial-carousel">
+            <div class="testimonial-item">
+                <img class="position-relative rounded-circle bg-white shadow mx-auto" src="img/r1.png"
+                     style="width: 100px; height: 100px; padding: 12px; margin-bottom: -50px; z-index: 1;"
+                     alt="Client Image">
+                <div class="bg-light text-center p-4 pt-0">
+                    <h5 class="font-weight-medium mt-5">Parag Doshi</h5>
+                    <p class="text-muted font-italic">
+                        <img src="img/google.png" alt="Google Logo" style="width: 150px; /* Adjust as needed */
+                                                                               height: auto; /* Maintains aspect ratio */
+                                                                               display: block; /* Centers the image */
+                                                                               margin: 0 auto;"> Review from Google
+                    </p>
+                    <div class="stars mb-3">
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                    </div>
+                    <p class="m-0">
+                        “Excellent job. They came on the same day even though I booked their service at the last
+                        minute notice. They did fantastic job, all of my guest liked the clean and nice ambience.
+                        The party went so nice. Thanks MvM team for your service!!!
+
+                        Highly Recommended!!!!
+
+                        :):):)”
+                    </p>
+                </div>
             </div>
-            <div class="col-md-4 text-center text-md-end">
-                <a href="/contact" class="btn btn-secondary btn-lg px-5 py-3 shadow-sm">
-                    Apply Now
-                </a>
+
+            <div class="testimonial-item">
+                <img class="position-relative rounded-circle bg-white shadow mx-auto" src="img/r3.png"
+                     style="width: 100px; height: 100px; padding: 12px; margin-bottom: -50px; z-index: 1;"
+                     alt="Client Image">
+                <div class="bg-light text-center p-4 pt-0">
+                    <h5 class="font-weight-medium mt-5">Bobby James</h5>
+                    <p class="text-muted font-italic">
+                        <img src="img/google.png" alt="Google Logo"
+                             style="width: 150px; /* Adjust as needed */
+                                                                                                       height: auto; /* Maintains aspect ratio */
+                                                                                                       display: block; /* Centers the image */
+                                                                                                       margin: 0 auto;">
+                        Review from Google
+                    </p>
+                    <div class="stars mb-3">
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                    </div>
+                    <p class="m-0">“The team's professionalism and courtesy impressed me from the initial phone call
+                        to the final walk-through. They took great care in protecting my furniture and belongings,
+                        and their expertise in cleaning my carpet and sofa was evident. Thanks!”</p>
+                </div>
             </div>
+
+            <div class="testimonial-item">
+                <img class="position-relative rounded-circle bg-white shadow mx-auto" src="img/r6.png"
+                     style="width: 100px; height: 100px; padding: 12px; margin-bottom: -50px; z-index: 1;"
+                     alt="Client Image">
+                <div class="bg-light text-center p-4 pt-0">
+                    <h5 class="font-weight-medium mt-5">Chhaya Singh</h5>
+                    <p class="text-muted font-italic">
+                        <img src="img/google.png" alt="Google Logo" style="width: 150px; /* Adjust as needed */
+                                                                                           height: auto; /* Maintains aspect ratio */
+                                                                                           display: block; /* Centers the image */
+                                                                                           margin: 0 auto;"> Review
+                        from Google
+                    </p>
+                    <div class="stars mb-3">
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                    </div>
+                    <p class="m-0">
+                        “I was impressed by the professionalism and attention to detail shown by the team during my
+                        recent carpet and sofa cleaning service. They did an outstanding job and I highly recommend
+                        them.
+                        ”
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="testimonial-item">
+                <img class="position-relative rounded-circle bg-white shadow mx-auto" src="img/r2.png"
+                     style="width: 100px; height: 100px; padding: 12px; margin-bottom: -50px; z-index: 1;"
+                     alt="Client Image">
+                <div class="bg-light text-center p-4 pt-0">
+                    <h5 class="font-weight-medium mt-5">Sara Jenkins</h5>
+                    <p class="text-muted font-italic">
+                        <img src="img/google.png" alt="Google Logo" style="width: 150px; /* Adjust as needed */
+                                                                               height: auto; /* Maintains aspect ratio */
+                                                                               display: block; /* Centers the image */
+                                                                               margin: 0 auto;"> Review from Google
+                    </p>
+                    <div class="stars mb-3">
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                    </div>
+                    <p class="m-0">
+                        “Fantastic job cleaning our sofas and cream carpet - came up like new! Wouldn’t hesitate to
+                        use them again!
+                        Thank you so much!”
+                    </p>
+                </div>
+            </div>
+            <div class="testimonial-item">
+                <img class="position-relative rounded-circle bg-white shadow mx-auto" src="img/r7.png"
+                     style="width: 100px; height: 100px; padding: 12px; margin-bottom: -50px; z-index: 1;"
+                     alt="Client Image">
+                <div class="bg-light text-center p-4 pt-0">
+                    <h5 class="font-weight-medium mt-5">Maria Luiza</h5>
+                    <p class="text-muted font-italic">
+                        <img src="img/google.png" alt="Google Logo" style="width: 150px; /* Adjust as needed */
+                                                                               height: auto; /* Maintains aspect ratio */
+                                                                               display: block; /* Centers the image */
+                                                                               margin: 0 auto;"> Review from Google
+                    </p>
+                    <div class="stars mb-3">
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                    </div>
+                    <p class="m-0">“Recommend!!! They came in the same day and did a great job . And very affordable
+                        prices.”</p>
+                </div>
+            </div>
+            <div class="testimonial-item">
+                <img class="position-relative rounded-circle bg-white shadow mx-auto" src="img/r5.png"
+                     style="width: 100px; height: 100px; padding: 12px; margin-bottom: -50px; z-index: 1;"
+                     alt="Client Image">
+                <div class="bg-light text-center p-4 pt-0">
+                    <h5 class="font-weight-medium mt-5">Hakan Unsal</h5>
+                    <p class="text-muted font-italic">
+                        <img src="~/img/google.png" alt="Google Logo" style="width: 150px; /* Adjust as needed */
+                                                                                           height: auto; /* Maintains aspect ratio */
+                                                                                           display: block; /* Centers the image */
+                                                                                           margin: 0 auto;"> Review
+                        from Google
+                    </p>
+                    <div class="stars mb-3">
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                    </div>
+                    <p class="m-0">"They’re professional and punctual. They did the job as requested."</p>
+                </div>
+            </div>
+
+            <div class="testimonial-item">
+                <img class="position-relative rounded-circle bg-white shadow mx-auto" src="img/r9.png"
+                     style="width: 100px; height: 100px; padding: 12px; margin-bottom: -50px; z-index: 1;"
+                     alt="Client Image">
+                <div class="bg-light text-center p-4 pt-0">
+                    <h5 class="font-weight-medium mt-5">Genevieve Cooper</h5>
+                    <p class="text-muted font-italic">
+                        <img src="img/google.png" alt="Google Logo" style="width: 150px; /* Adjust as needed */
+                                                                                           height: auto; /* Maintains aspect ratio */
+                                                                                           display: block; /* Centers the image */
+                                                                                           margin: 0 auto;"> Review
+                        from Google
+                    </p>
+                    <div class="stars mb-3">
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                    </div>
+                    <p class="m-0">“Had a really good experience with this company. Did a brilliant job on my sofa
+                        and 3 bedroom house! My carpets look new again! Thank you so much!"</p>
+                </div>
+            </div>
+
+            <div class="testimonial-item">
+                <img class="position-relative rounded-circle bg-white shadow mx-auto" src="img/r8.png"
+                     style="width: 100px; height: 100px; padding: 12px; margin-bottom: -50px; z-index: 1;"
+                     alt="Client Image">
+                <div class="bg-light text-center p-4 pt-0">
+                    <h5 class="font-weight-medium mt-5">Steve Jones</h5>
+                    <p class="text-muted font-italic">
+                        <img src="img/google.png" alt="Google Logo"
+                             style="width: 150px; /* Adjust as needed */
+                                                                                                       height: auto; /* Maintains aspect ratio */
+                                                                                                       display: block; /* Centers the image */
+                                                                                                       margin: 0 auto;">
+                        Review from Google
+                    </p>
+                    <div class="stars mb-3">
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                        <span class="text-warning">&#9733;</span>
+                    </div>
+                    <p class="m-0">“Didn’t think the carpets in the house I’ve bought could be rescued. Looked like
+                        the previous owner had a serious pagan sacrifice habit. These guys brought them back from
+                        the dead."</p>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>
-
+<!-- Testimonial End -->
 
 
