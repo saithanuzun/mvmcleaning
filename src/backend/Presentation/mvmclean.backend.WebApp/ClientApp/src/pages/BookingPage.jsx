@@ -17,6 +17,10 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
     const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash' or 'card'
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [promoCode, setPromoCode] = useState('');
+    const [promoDiscount, setPromoDiscount] = useState(0);
+    const [promoError, setPromoError] = useState('');
+    const [promoApplied, setPromoApplied] = useState(false);
 
     // Redirect if incomplete booking data
     useEffect(() => {
@@ -40,6 +44,49 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(customerDetails.email)) return 'Invalid email address';
         return null;
+    };
+
+    const handleApplyPromo = async () => {
+        setPromoError('');
+        setPromoDiscount(0);
+        
+        if (!promoCode.trim()) {
+            setPromoError('Please enter a promo code');
+            return;
+        }
+
+        if (!bookingData.bookingId) {
+            setPromoError('Booking ID not found. Please complete your booking first.');
+            return;
+        }
+
+        try {
+            // Call the API to apply promotion
+            const response = await api.booking.applyPromotion(bookingData.bookingId, promoCode.toUpperCase());
+            
+            if (!response.success) {
+                setPromoError(response.message || 'Invalid promo code');
+                setPromoApplied(false);
+                return;
+            }
+
+            const discountAmount = response.data?.discountAmount || 0;
+            setPromoDiscount(discountAmount);
+            setPromoApplied(true);
+            setPaymentMethod('card'); // Force card payment when promo is applied
+            setPromoError('');
+        } catch (error) {
+            setPromoError(error.message || 'Error applying promo code. Please try again.');
+            setPromoApplied(false);
+        }
+    };
+
+    const handleRemovePromo = () => {
+        setPromoCode('');
+        setPromoDiscount(0);
+        setPromoApplied(false);
+        setPaymentMethod('cash'); // Reset to cash when promo is removed
+        setPromoError('');
     };
 
     const createDateTime = (date, timeString) => {
@@ -232,9 +279,18 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
                                 </div>
                                 <div className="text-right">
                                     <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Total</p>
-                                    <p className="font-bold text-2xl" style={{ color: '#194376' }}>
-                                        £{bookingData.totalAmount?.toFixed(2) || '0.00'}
-                                    </p>
+                                    <div>
+                                        <p className="font-bold text-2xl" style={{ color: '#194376' }}>
+                                            £{(bookingData.totalAmount && promoDiscount > 0 
+                                                ? (bookingData.totalAmount - promoDiscount).toFixed(2)
+                                                : bookingData.totalAmount?.toFixed(2)) || '0.00'}
+                                        </p>
+                                        {promoDiscount > 0 && (
+                                            <p className="text-xs text-green-600 font-semibold">
+                                                Saving: £{promoDiscount.toFixed(2)}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -345,6 +401,78 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
                         </div>
                     </div>
 
+                {/* Promo Code Section */}
+                <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <svg className="w-6 h-6 mr-2" style={{ color: '#194376' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h6a2 2 0 012 2m0 16H7a2 2 0 01-2-2m16 0a2 2 0 01-2 2h-6a2 2 0 01-2-2m0-4V9m0 4V5m0 16h6a2 2 0 002-2V5a2 2 0 00-2-2h-6a2 2 0 00-2 2" />
+                        </svg>
+                        Promo Code
+                    </h3>
+
+                    {promoApplied ? (
+                        <div className="bg-green-50 border-2 border-green-400 rounded-xl p-4 mb-4">
+                            <div className="flex items-start justify-between">
+                                <div className="flex items-start">
+                                    <svg className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                    </svg>
+                                    <div>
+                                        <p className="font-bold text-green-800">Promo Code Applied!</p>
+                                        <p className="text-sm text-green-700 mt-1">
+                                            Code <span className="font-mono font-bold">{promoCode.toUpperCase()}</span> - Save £{promoDiscount.toFixed(2)}
+                                        </p>
+                                    </div>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={handleRemovePromo}
+                                    className="text-green-600 hover:text-green-800 font-semibold text-sm"
+                                >
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex gap-3">
+                            <div className="flex-1">
+                                <input
+                                    type="text"
+                                    value={promoCode}
+                                    onChange={(e) => {
+                                        setPromoCode(e.target.value);
+                                        setPromoError('');
+                                    }}
+                                    placeholder="Enter promo code (e.g., SAVE10)"
+                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#46C6CE] focus:ring-2 focus:ring-[#46C6CE]/20 outline-none transition-all uppercase"
+                                />
+                                {promoError && (
+                                    <p className="text-red-600 text-sm mt-2 flex items-center gap-1">
+                                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                                        </svg>
+                                        {promoError}
+                                    </p>
+                                )}
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleApplyPromo}
+                                className="px-8 py-3 bg-[#46C6CE] text-white font-bold rounded-xl hover:bg-[#3ba4ac] transition-all flex items-center gap-2 whitespace-nowrap"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Apply
+                            </button>
+                        </div>
+                    )}
+
+                    <p className="text-xs text-gray-500 mt-4 italic">
+                        💡 Try these codes: <span className="font-mono font-semibold">SAVE10</span> (10% off), <span className="font-mono font-semibold">SAVE15</span> (15% off), or <span className="font-mono font-semibold">WELCOME5</span> (5% off)
+                    </p>
+                </div>
+
                 {/* Payment Method Selection */}
                 <div className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
                     <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
@@ -357,10 +485,12 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Cash Option */}
                         <div
-                            onClick={() => setPaymentMethod('cash')}
+                            onClick={() => !promoApplied && setPaymentMethod('cash')}
                             className={`
                                 p-4 rounded-xl border-2 cursor-pointer transition-all
-                                ${paymentMethod === 'cash'
+                                ${promoApplied 
+                                    ? 'border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed'
+                                    : paymentMethod === 'cash'
                                     ? 'border-[#194376] bg-blue-50'
                                     : 'border-gray-300 bg-gray-50 hover:border-gray-400'
                                 }
@@ -372,7 +502,8 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
                                     name="paymentMethod"
                                     value="cash"
                                     checked={paymentMethod === 'cash'}
-                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    onChange={(e) => !promoApplied && setPaymentMethod(e.target.value)}
+                                    disabled={promoApplied}
                                     className="mt-1 h-5 w-5 cursor-pointer"
                                     style={{ accentColor: '#194376' }}
                                 />
@@ -381,8 +512,15 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
                                     <p className="text-sm text-gray-600 mt-1">
                                         Pay in cash after the service is completed
                                     </p>
+                                    {promoApplied && (
+                                        <p className="text-xs text-red-600 mt-2 font-semibold">
+                                            💳 Card payment required with promo codes
+                                        </p>
+                                    )}
                                     <p className="text-xs text-gray-500 mt-2 font-semibold">
-                                        Total: £{bookingData.totalAmount?.toFixed(2) || '0.00'}
+                                        Total: £{(bookingData.totalAmount && promoDiscount > 0 
+                                            ? (bookingData.totalAmount - promoDiscount).toFixed(2)
+                                            : bookingData.totalAmount?.toFixed(2)) || '0.00'}
                                     </p>
                                 </div>
                             </div>
@@ -415,7 +553,9 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
                                         Secure payment via Stripe (card, Apple Pay, Google Pay)
                                     </p>
                                     <p className="text-xs text-gray-500 mt-2 font-semibold">
-                                        Total: £{bookingData.totalAmount?.toFixed(2) || '0.00'}
+                                        Total: £{(bookingData.totalAmount && promoDiscount > 0 
+                                            ? (bookingData.totalAmount - promoDiscount).toFixed(2)
+                                            : bookingData.totalAmount?.toFixed(2)) || '0.00'}
                                     </p>
                                 </div>
                             </div>

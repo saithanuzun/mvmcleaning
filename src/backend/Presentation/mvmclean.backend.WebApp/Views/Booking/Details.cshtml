@@ -8,12 +8,12 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-12">
-            <a href="@Url.Action("Find", "Booking")" class="btn btn-secondary mb-4">
+            <a href="@Url.Action("Find", "Booking")" class="btn btn-back mb-4">
                 <i class="fas fa-arrow-left me-2"></i> Back to Search
             </a>
 
             <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header details-header text-white">
                     <div class="row align-items-center">
                         <div class="col">
                             <h4 class="mb-0">Booking Details</h4>
@@ -161,7 +161,7 @@
                 <div class="card-footer bg-light">
                     <div class="row">
                         <div class="col">
-                            <a href="@Url.Action("Find", "Booking")" class="btn btn-secondary">
+                            <a href="@Url.Action("Find", "Booking")" class="btn btn-find-another">
                                 <i class="fas fa-search me-2"></i> Find Another Booking
                             </a>
                         </div>
@@ -174,8 +174,47 @@
 </div>
 
 <style>
+    .details-header {
+        background: linear-gradient(135deg, #194376 0%, #2d5fa3 100%);
+    }
+    
     .card {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 2px solid #f0f0f0;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .btn-back {
+        background-color: #46C6CE;
+        border-color: #46C6CE;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-back:hover {
+        background-color: #3bb3bb;
+        border-color: #3bb3bb;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(70, 198, 206, 0.3);
+    }
+    
+    .btn-find-another {
+        background-color: #46C6CE;
+        border-color: #46C6CE;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-find-another:hover {
+        background-color: #3bb3bb;
+        border-color: #3bb3bb;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(70, 198, 206, 0.3);
     }
 
     code {
@@ -183,10 +222,11 @@
         padding: 2px 6px;
         border-radius: 3px;
         font-size: 0.85rem;
+        color: #194376;
     }
 
     h5 {
-        color: #333;
+        color: #194376;
         font-weight: 600;
     }
 
@@ -194,5 +234,31 @@
         color: #6c757d !important;
         font-weight: 500;
         font-size: 0.9rem;
+    }
+    
+    .badge {
+        font-weight: 600;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+    }
+    
+    .table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .table-light {
+        background-color: #f8f9fa !important;
+        border-color: #dee2e6;
+    }
+    
+    .table th {
+        color: #194376;
+        font-weight: 600;
+        border-bottom: 2px solid #46C6CE;
+    }
+    
+    .card-footer {
+        background-color: #f8f9fa !important;
+        border-top: 2px solid #e9ecef;
     }
 </style>

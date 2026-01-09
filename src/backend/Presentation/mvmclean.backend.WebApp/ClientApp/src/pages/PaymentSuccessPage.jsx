@@ -26,8 +26,20 @@ const PaymentSuccessPage = () => {
     }, []);
 
     const handleBookAnother = () => {
-        localStorage.clear();
-        navigate('/');
+        // Reset localStorage
+        localStorage.removeItem('pending_booking_id');
+        localStorage.removeItem('booking_session_id');
+        localStorage.removeItem('booking_data');
+        
+        // Navigate to shop
+        window.location.href = '/shop';
+    };
+
+    const handleViewDetails = () => {
+        if (bookingDetails?.bookingId) {
+            // Navigate to MVC booking details page
+            window.location.href = `/booking/find`;
+        }
     };
 
 
@@ -119,15 +131,22 @@ const PaymentSuccessPage = () => {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <button
-                        onClick={() => navigate('/')}
-                        className="px-8 py-4 bg-white border-2 border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all"
+                        onClick={handleViewDetails}
+                        className="px-8 py-4 bg-white border-2 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+                        style={{ borderColor: '#194376', color: '#194376' }}
                     >
-                        Back to Home
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        View Booking Details
                     </button>
                     <button
-                        onClick={() => navigate('/')}
-                        className="px-8 py-4 bg-[#194376] text-white font-bold rounded-xl hover:shadow-xl transition-all transform hover:scale-105"
+                        onClick={handleBookAnother}
+                        className="px-8 py-4 bg-[#194376] text-white font-bold rounded-xl hover:shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-2"
                     >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
                         Book Another Service
                     </button>
                 </div>

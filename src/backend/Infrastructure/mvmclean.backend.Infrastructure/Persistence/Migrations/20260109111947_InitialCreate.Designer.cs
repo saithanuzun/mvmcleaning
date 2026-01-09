@@ -12,7 +12,7 @@ using mvmclean.backend.Infrastructure.Persistence;
 namespace mvmclean.backend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MVMdbContext))]
-    [Migration("20260109015905_InitialCreate")]
+    [Migration("20260109111947_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

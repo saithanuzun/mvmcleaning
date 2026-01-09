@@ -2,11 +2,58 @@
     ViewData["Title"] = "Find Your Booking";
 }
 
+<style>
+    .find-booking-header {
+        background: linear-gradient(135deg, #194376 0%, #2d5fa3 100%);
+    }
+    
+    .form-control:focus {
+        border-color: #46C6CE;
+        box-shadow: 0 0 0 0.2rem rgba(70, 198, 206, 0.25);
+    }
+    
+    .btn-find {
+        background-color: #194376;
+        border-color: #194376;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-find:hover {
+        background-color: #2d5fa3;
+        border-color: #2d5fa3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(25, 67, 118, 0.3);
+    }
+    
+    .card {
+        border: 2px solid #f0f0f0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #194376;
+    }
+    
+    .alert-info {
+        background-color: #e8f4f8;
+        border-left: 4px solid #46C6CE;
+        color: #194376;
+    }
+    
+    .alert-info .alert-heading {
+        color: #194376;
+    }
+</style>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header find-booking-header text-white">
                     <h4 class="mb-0">Find Your Booking</h4>
                 </div>
                 <div class="card-body">
@@ -61,7 +108,7 @@
                             </small>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <button type="submit" class="btn btn-find btn-lg w-100">
                             <i class="fas fa-search me-2"></i> Find Booking
                         </button>
                     </form>

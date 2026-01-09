@@ -88,7 +88,7 @@ public class GetBookingByPhoneAndPostcodeHandler : IRequestHandler<GetBookingByP
                 ServiceName = item.ServiceName,
                 UnitPrice = item.UnitAdjustedPrice.Amount,
                 Quantity = item.Quantity,
-                TotalPrice = item.UnitAdjustedPrice.Amount
+                TotalPrice = item.UnitAdjustedPrice.Amount * item.Quantity
             }).ToList() ?? new(),
             ServiceAddress = booking.ServiceAddress != null ? new AddressResponse
             {

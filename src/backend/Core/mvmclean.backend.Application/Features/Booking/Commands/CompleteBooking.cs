@@ -104,7 +104,7 @@ public class CompleteBookingHandler : IRequestHandler<CompleteBookingRequest, Co
 
                 paymentLink = await _stripeService.CreatePaymentLinkAsync(
                     bookingId,
-                    request.TotalAmount,
+                    booking.TotalPrice.Amount,
                     "gbp",
                     $"Booking payment for services",
                     successUrl,

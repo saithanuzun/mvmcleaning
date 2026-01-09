@@ -2,6 +2,7 @@ using MediatR;
 using mvmclean.backend.Application.Features.Services.Commands;
 using mvmclean.backend.Application.Features.Contractor.Commands;
 using mvmclean.backend.Application.Features.Booking.Commands;
+using mvmclean.backend.Application.Features.Promotion.Commands;
 using Microsoft.Extensions.Logging;
 
 namespace mvmclean.backend.Infrastructure.Seeding;
@@ -11,7 +12,7 @@ public class DatabaseSeeder
     private readonly IMediator _mediator;
     private readonly ILogger<DatabaseSeeder> _logger;
 
-    private readonly bool _seed = true;
+    private readonly bool _seed = false;
 
     public DatabaseSeeder(IMediator mediator, ILogger<DatabaseSeeder> logger)
     {
@@ -48,6 +49,9 @@ public class DatabaseSeeder
 
             // Seed unavailability slots
             await SeedUnavailabilitySlotsAsync(contractorIds);
+
+            // Seed promotions
+            await SeedPromotionsAsync();
 
             // Seed past bookings
             await SeedBookingsAsync(serviceIds, contractorIds);
@@ -1011,6 +1015,76 @@ public class DatabaseSeeder
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error seeding bookings.");
+            throw;
+        }
+    }
+
+    private async Task SeedPromotionsAsync()
+    {
+        try
+        {
+            _logger.LogInformation("Seeding promotions...");
+
+            var promotions = new List<CreatePromotionRequest>
+            {
+                new CreatePromotionRequest
+                {
+                    Code = "SAVE10",
+                    Description = "Save 10% on your booking",
+                    DiscountType = 0, // 0 = Percentage, 1 = Fixed Amount
+                    DiscountValue = 10,
+                    ValidFrom = DateTime.UtcNow.AddDays(-30),
+                    ValidTo = DateTime.UtcNow.AddDays(90),
+                    UsageLimit = 100,
+                    MinimumOrderAmount = 0
+                },
+                new CreatePromotionRequest
+                {
+                    Code = "SAVE20",
+                    Description = "Save 20% on your booking",
+                    DiscountType = 0, // 0 = Percentage
+                    DiscountValue = 20,
+                    ValidFrom = DateTime.UtcNow.AddDays(-30),
+                    ValidTo = DateTime.UtcNow.AddDays(90),
+                    UsageLimit = 50,
+                    MinimumOrderAmount = 0
+                },
+                new CreatePromotionRequest
+                {
+                    Code = "WELCOME5",
+                    Description = "Welcome discount - Save 5% on your first booking",
+                    DiscountType = 0, // 0 = Percentage
+                    DiscountValue = 5,
+                    ValidFrom = DateTime.UtcNow.AddDays(-30),
+                    ValidTo = DateTime.UtcNow.AddDays(90),
+                    UsageLimit = 200,
+                    MinimumOrderAmount = 0
+                }
+            };
+
+            foreach (var promotionRequest in promotions)
+            {
+                try
+                {
+                    var response = await _mediator.Send(promotionRequest);
+                    if (response != null)
+                    {
+                        _logger.LogInformation(
+                            $"Promotion created: {promotionRequest.Code} - {promotionRequest.Description} (ID: {response.PromotionId})");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(
+                        $"Promotion '{promotionRequest.Code}' may already exist or error occurred: {ex.Message}");
+                }
+            }
+
+            _logger.LogInformation("Promotions seeding completed.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error seeding promotions.");
             throw;
         }
     }

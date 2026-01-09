@@ -171,6 +171,17 @@ const api = {
                 message: response.data.message || '',
                 paymentUrl: responseData.paymentUrl || response.data.paymentUrl
             };
+        },
+        applyPromotion: async (bookingId, promotionCode) => {
+            const response = await apiClient.post('/booking/apply-promotion', {
+                bookingId,
+                promotionCode
+            });
+            return {
+                success: response.data?.success || false,
+                message: response.data?.message,
+                data: response.data?.data
+            };
         }
     }
 };

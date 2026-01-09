@@ -143,4 +143,42 @@ public class BookingController : BaseApiController
             return Error($"Error completing booking: {ex.Message}", 500);
         }
     }
+
+    /// <summary>
+    /// Apply a promotion code to a booking
+    /// </summary>
+    [HttpPost("apply-promotion")]
+    public async Task<IActionResult> ApplyPromotion([FromBody] ApplyPromotionToBookingRequest request)
+    {
+        if (!ModelState.IsValid)
+            return Error("Invalid request data");
+
+        if (string.IsNullOrWhiteSpace(request.BookingId))
+            return Error("Booking ID is required");
+
+        if (string.IsNullOrWhiteSpace(request.PromotionCode))
+            return Error("Promotion code is required");
+
+        try
+        {
+            var response = await _mediator.Send(request);
+            return Success(response, response.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return Error(ex.Message, 404);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Error(ex.Message, 400);
+        }
+        catch (ArgumentException ex)
+        {
+            return Error(ex.Message, 400);
+        }
+        catch (Exception ex)
+        {
+            return Error($"Error applying promotion: {ex.Message}", 500);
+        }
+    }
 }
