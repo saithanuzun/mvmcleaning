@@ -1,3 +1,4 @@
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using mvmclean.backend.Application;
 using mvmclean.backend.Infrastructure;
@@ -5,9 +6,24 @@ using mvmclean.backend.Infrastructure.Persistence;
 using mvmclean.backend.Infrastructure.Seeding;
 
 
+Env.Load();  // Loads from project root by default
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
+
+Console.WriteLine("=== Configuration Values ===");
+foreach (var kvp in builder.Configuration.AsEnumerable())
+{
+    if (kvp.Value != null && 
+        (kvp.Key.Contains("ConnectionStrings") || 
+         kvp.Key.Contains("Stripe") || 
+         kvp.Key.Contains("RESEND")))
+    {
+        Console.WriteLine($"{kvp.Key} = {kvp.Value}");
+    }
+}
+Console.WriteLine("===========================");
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();

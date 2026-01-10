@@ -26,7 +26,7 @@ public static class DependencyInjection
         var configuration = serviceCollection.BuildServiceProvider().GetRequiredService<IConfiguration>();
         
         var resend = configuration["RESEND:RESEND_APITOKEN"];
-        var connStr = configuration["ConnectionStrings:MyDbConnection"];
+        var connStr = configuration.GetConnectionString("MyDbConnection");
 
 
         serviceCollection.AddDbContext<MVMdbContext>(conf =>

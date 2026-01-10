@@ -1,0 +1,8 @@
+dotnet publish --configuration Release --output ./publish
+
+ssh -o StrictHostKeyChecking=no root@146.190.234.3 'rm -rf /var/www/MVMCleaning/*'
+
+scp -o StrictHostKeyChecking=no -r ./publish/* root@146.190.234.3:/var/www/MVMCleaning/
+
+ssh -o StrictHostKeyChecking=no root@146.190.234.3 "sudo systemctl restart mvmcleaning.service"
+ssh -o StrictHostKeyChecking=no root@146.190.234.3 "sudo systemctl restart nginx"

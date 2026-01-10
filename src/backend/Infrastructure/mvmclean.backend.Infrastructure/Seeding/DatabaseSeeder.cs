@@ -14,7 +14,7 @@ public class DatabaseSeeder
     private readonly IMediator _mediator;
     private readonly ILogger<DatabaseSeeder> _logger;
 
-    private readonly bool _seed = true;
+    private readonly bool _seed = false;
 
     public DatabaseSeeder(IMediator mediator, ILogger<DatabaseSeeder> logger)
     {

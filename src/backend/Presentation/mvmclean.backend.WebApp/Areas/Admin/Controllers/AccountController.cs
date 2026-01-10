@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using mvmclean.backend.Application.Encryptor;
 
 namespace mvmclean.backend.WebApp.Areas.Admin.Controllers;
 
@@ -17,7 +18,13 @@ public class AccountController : Controller
     [HttpPost("Login")]
     public async Task<IActionResult> Login(string username, string password)
     {
-        if (username == "saithanuzun" && password == "1234")
+        var hashedUsername = "4FC393062A8C1F95F0C8AB023F4F25D7"; // todo
+        var hashedPassword = "A9A624B3C4D4BE9146618BD94BEFF8E0";
+        
+        var _hashedUsernameLogin = PasswordEncryptor.Encrypt(username);
+        var _hashedPasswordLogin = PasswordEncryptor.Encrypt(password);
+        
+        if (_hashedUsernameLogin == hashedUsername && _hashedPasswordLogin == hashedPassword)
         {
             var claims = new List<Claim>
             {
