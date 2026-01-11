@@ -48,8 +48,6 @@ public class Booking : Core.BaseClasses.AggregateRoot
         PhoneNumber = number;
         Postcode = postcode ;
         CreationStatus = BookingCreationStatus.BasicInfo;
-
-        AddDomainEvent(new BookingCreatedEvent(Id, number, postcode));
     }
 
     protected Booking()
@@ -71,7 +69,7 @@ public class Booking : Core.BaseClasses.AggregateRoot
 
         if (!contractor.CoversPostcode(Postcode))
         {
-            throw new InvalidOperationException("Contractor is not available for this time slot");
+            throw new InvalidOperationException("Contractor is not available for this postcode");
         }
 
 
@@ -102,7 +100,7 @@ public class Booking : Core.BaseClasses.AggregateRoot
             };
             _serviceItems.Add(bookingItem);
 
-            AddDomainEvent(new ServiceAddedToCartEvent(serviceItemId, unitAdjustedPrice, quantity));
+            //AddDomainEvent(new ServiceAddedToCartEvent(serviceItemId, unitAdjustedPrice, quantity));
         }
 
         UpdateTotalPrice();

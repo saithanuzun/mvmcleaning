@@ -471,6 +471,9 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
                     <p className="text-xs text-gray-500 mt-4 italic">
                         💡 Try these codes: <span className="font-mono font-semibold">SAVE10</span> (10% off), <span className="font-mono font-semibold">SAVE15</span> (15% off), or <span className="font-mono font-semibold">WELCOME5</span> (5% off)
                     </p>
+                    <p className="text-xs text-amber-600 mt-2 italic font-medium">
+                        ⚠️ Promotion codes can only be applied to card payments. Cash payments will be disabled when using a promo code.
+                    </p>
                 </div>
 
                 {/* Payment Method Selection */}

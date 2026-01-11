@@ -99,8 +99,8 @@ public class CompleteBookingHandler : IRequestHandler<CompleteBookingRequest, Co
             try
             {
                 // Get redirect URLs from configuration (set via appsettings or user-secrets)
-                string successUrl = $"https://localhost:7035/shop/payment-success";
-                string cancelUrl = $"https://localhost:7035/shop/payment-failed";
+                string successUrl = $"https://mvmcleaning.com/shop/payment-success";
+                string cancelUrl = $"https://mvmcleaning.com/shop/payment-failed";
 
                 paymentLink = await _stripeService.CreatePaymentLinkAsync(
                     bookingId,

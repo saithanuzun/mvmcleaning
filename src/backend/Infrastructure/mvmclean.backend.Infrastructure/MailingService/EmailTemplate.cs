@@ -356,12 +356,12 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
         GenerateTemplate();
     }
 
-    public override void GenerateTemplate()
-    {
-        Subject = $"Booking Confirmed! Reference #{_bookingReference}";
+public override void GenerateTemplate()
+{
+    Subject = $"Booking Confirmed! Reference #{_bookingReference}";
 
-        // Build invoice section if invoiceHtml is provided
-        var invoiceSection = string.IsNullOrEmpty(_invoiceHtml) ? "" : $@"
+    // Build invoice section if invoiceHtml is provided
+    var invoiceSection = string.IsNullOrEmpty(_invoiceHtml) ? "" : $@"
             <div class='section'>
                 <div class='section-title'>
                     📋 Invoice Details
@@ -371,8 +371,8 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
                 </div>
             </div>";
 
-        // HTML Template
-        HtmlBody = $@"
+    // HTML Template
+    HtmlBody = $@"
 <!DOCTYPE html>
 <html>
 <head>
@@ -616,6 +616,16 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
             background-color: #e0e0e0;
             margin: 20px 0;
         }}
+        .time-badge {{
+            display: inline-block;
+            background-color: #46C6CE;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            margin-left: 8px;
+        }}
         @media (max-width: 600px) {{
             .container {{ margin: 10px; }}
             .header {{ padding: 25px 15px; }}
@@ -655,12 +665,15 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
                     <div class='info-icon'>📅</div>
                     <div class='info-content'>
                         <div class='info-label'>Scheduled Date</div>
-                        <div class='info-value'>{_bookingDate:dddd, MMMM d, yyyy}</div>
+                        <div class='info-value'>
+                            {_bookingDate:dddd, MMMM d, yyyy}
+                            <span class='time-badge'>{_bookingDate:hh:mm tt}</span>
+                        </div>
                     </div>
                 </div>
                 
                 <div class='info-card'>
-                    <div class='info-icon'>�</div>
+                    <div class='info-icon'>📞</div>
                     <div class='info-content'>
                         <div class='info-label'>Contact Number</div>
                         <div class='info-value'>{_phoneNumber}</div>
@@ -668,7 +681,7 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
                 </div>
                 
                 <div class='info-card'>
-                    <div class='info-icon'>�📍</div>
+                    <div class='info-icon'>📍</div>
                     <div class='info-content'>
                         <div class='info-label'>Service Address</div>
                         <div class='info-value'>{_address}</div>
@@ -730,7 +743,7 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
                         <div class='step-content'>
                             <div class='step-title'>Service Delivery</div>
                             <div class='step-description'>
-                                Our professional team will arrive on the scheduled date to provide your cleaning services.
+                                Our professional team will arrive on the scheduled date at <strong>{_bookingDate:hh:mm tt}</strong> to provide your cleaning services.
                             </div>
                         </div>
                     </div>
@@ -755,8 +768,8 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
 </body>
 </html>";
 
-        // Plain text template
-        PlainTextBody = $@"BOOKING CONFIRMED!
+    // Plain text template with booking time
+    PlainTextBody = $@"BOOKING CONFIRMED!
 
 Reference: #{_bookingReference}
 
@@ -767,6 +780,7 @@ Your booking has been confirmed! We're excited to serve you.
 BOOKING DETAILS:
 ────────────────
 Scheduled Date: {_bookingDate:dddd, MMMM d, yyyy}
+Scheduled Time: {_bookingDate:hh:mm tt}
 Contact Number: {_phoneNumber}
 Service Address: {_address}
 
@@ -785,7 +799,7 @@ WHAT HAPPENS NEXT?
    We'll prepare and ensure everything is ready for your scheduled appointment.
 
 3. Service Delivery
-   Our professional team will arrive on the scheduled date to provide your cleaning services.
+   Our professional team will arrive on the scheduled date at {_bookingDate:hh:mm tt} to provide your cleaning services.
 
 Have Questions?
 Our support team is available at support@mvmclean.com
@@ -795,5 +809,6 @@ We're here to ensure your experience is perfect.
 © 2026 MVM Clean. All rights reserved.
 support@mvmclean.com | 020 XXXX XXXX
 This is an automated message, please do not reply to this email.";
-    }
+}
+
 }
