@@ -1,8 +1,4 @@
-rm -rf src/backend/Infrastructure/mvmclean.backend.Infrastructure/Persistence/Migrations/
 
-dotnet ef database drop --force \
-  --project src/backend/Infrastructure/mvmclean.backend.Infrastructure \
-  --startup-project src/backend/Presentation/mvmclean.backend.WebApp
 
 dotnet ef migrations add InitialCreate \
     --project src/backend/Infrastructure/mvmclean.backend.Infrastructure \
