@@ -245,19 +245,19 @@
                             }
                             else if (isCityAreaLevel)
                             {
-                                <text>Cleaning Services in @Model.Area, @Model.City</text>
+                                <text>Carpet &amp; Sofa Cleaning in @Model.Area, @Model.City</text>
                             }
                             else if (isCityLevel)
                             {
-                                <text>Cleaning Services in @Model.City</text>
+                                <text>Carpet &amp; Sofa Cleaning in @Model.City</text>
                             }
                             else if (isAreaLevel)
                             {
-                                <text>Cleaning Services in @Model.Area</text>
+                                <text>Carpet &amp; Sofa Cleaning in @Model.Area</text>
                             }
                             else
                             {
-                                <text>Professional Cleaning Services</text>
+                                <text>Carpet & Sofa Cleaning </text>
                             }
                         </h2>
                         <a href="/shop" class="btn btn-primary py-md-3 px-md-5 mt-2">Book NOW!</a>
@@ -419,16 +419,16 @@
             <div class="col-lg-6">
                 <h6 class="text-secondary text-uppercase font-weight-medium mb-3">Learn About Us</h6>
                 <h1 class="mb-4">
-                    Professional@(!string.IsNullOrEmpty(Model.Service) ? $" {Model.Service}" : " Cleaning") Services @(!string.IsNullOrEmpty(Model.Area) ? $"in {Model.Area}, {Model.City}" : $"in {Model.City}")</h1>
+                    Professional@(!string.IsNullOrEmpty(Model.Service) ? $" {Model.Service}" : "Carpet & Sofa Cleaning") Services @(!string.IsNullOrEmpty(Model.Area) ? $"in {Model.Area}, {Model.City}" : $"in {Model.City}")</h1>
                 <h5 class="font-weight-medium font-italic mb-4">We specialize in top-quality residential and commercial
                     cleaning services in your area.</h5>
-                <p class="mb-4">@(isFullPageLevel ? Model.Introduction : $"At MvM Cleaning Services, we proudly serve customers in {Model.City} with professional, high-quality cleaning solutions tailored to your home or business. Our team is dedicated to transforming your spaces into spotless, fresh environments that you'll love.")</p>
+                <p class="mb-4">@(isFullPageLevel ? Model.Introduction : $"At MvM Cleaning Services, we proudly serve customers in {Model.City} with professional Carpet & Sofa cleaning, high-quality cleaning solutions tailored to your home or business. Our team is dedicated to transforming your spaces into spotless, fresh environments that you'll love.")</p>
 
                 <div class="row mb-4">
                     <div class="col-sm-6 mb-3 mb-sm-0">
                         <div class="d-flex align-items-start">
                             <i class="fa fa-check text-primary mr-2 mt-1"></i>
-                            <p class="text-secondary font-weight-medium m-0">Expert Professional Cleaning</p>
+                            <p class="text-secondary font-weight-medium m-0">Expert Carpet & Sofa Cleaning</p>
                         </div>
                     </div>
                     <div class="col-sm-6 mb-3 mb-sm-0">
@@ -810,4 +810,5 @@
     ],
     "image": "https://mvmcleaning.com/img/logo.png"
   }
+
 </script>

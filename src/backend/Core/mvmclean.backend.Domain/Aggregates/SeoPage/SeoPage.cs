@@ -212,10 +212,10 @@ public class SeoPage : AggregateRoot
                 // Keywords for city-level pages (e.g., /leicester)
                 keywords = new List<string>
                 {
-                    $"cleaning services {City}",
-                    $"professional cleaning {City}",
-                    $"{City} cleaning services",
-                    $"best cleaning {City}",
+                    $"Carpet Sofa cleaning services {City}",
+                    $"professional Carpet Sofa cleaning {City}",
+                    $"{City} Carpet Sofa cleaning services",
+                    $"best Carpet Sofa cleaning {City}",
                     $"carpet cleaning {City}",
                     $"sofa cleaning {City}",
                     $"affordable cleaning {City}",

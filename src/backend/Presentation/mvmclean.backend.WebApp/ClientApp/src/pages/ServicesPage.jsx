@@ -45,13 +45,14 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
                     // Define priority order for categories (start with these)
                     const startPriority = [
                         'carpet-cleaning',
-                        'upholstery-cleaning'
+                        'upholstery-cleaning',
+                        'cleaning-packages',
                     ];
                     
                     // Define categories that should be at the end
                     const endPriority = [
                         'additional-services',
-                        'cleaning packages'
+                        'all-services',
                     ];
                     
                     // Sort categories: priority first, then middle categories, then end categories
@@ -199,13 +200,14 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
         // Define priority order for categories (start with these)
         const startPriority = [
             'carpet-cleaning',
-            'upholstery-cleaning'
+            'upholstery-cleaning',
+            'cleaning-packages',
         ];
         
         // Define categories that should be at the end
         const endPriority = [
             'additional-services',
-            'cleaning packages'
+            'all-services',
         ];
         
         // Sort services by category order (if 'all'), then by price within category

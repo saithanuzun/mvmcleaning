@@ -34,7 +34,7 @@ public class BookingController : BaseAdminController
         try
         {
             var response = await _mediator.Send(new GetAllBookingsRequest());
-            return View(response);
+            return View(response.Where(i=>i.PhoneNumber!="07862265412").OrderByDescending(i=>i.CreatedAt).ToList());
         }
         catch (Exception ex)
         {   
