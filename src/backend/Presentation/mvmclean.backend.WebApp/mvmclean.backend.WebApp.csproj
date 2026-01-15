@@ -26,9 +26,6 @@
         <Content Include="ClientApp\dist\**" CopyToPublishDirectory="Always" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="wwwroot\img\.DS_Store" />
-    </ItemGroup>
 
     <ItemGroup>
       <DistFiles Include="ClientApp/dist/**" />

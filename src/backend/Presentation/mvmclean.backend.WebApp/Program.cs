@@ -12,21 +12,29 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
-Console.WriteLine("=== Configuration Values ===");
-foreach (var kvp in builder.Configuration.AsEnumerable())
+// Only log configuration in Development (contains sensitive data)
+if (builder.Environment.IsDevelopment())
 {
-    if (kvp.Value != null && 
-        (kvp.Key.Contains("ConnectionStrings") || 
-         kvp.Key.Contains("Stripe") || 
-         kvp.Key.Contains("RESEND")))
+    Console.WriteLine("=== Configuration Values ===");
+    foreach (var kvp in builder.Configuration.AsEnumerable())
     {
-        Console.WriteLine($"{kvp.Key} = {kvp.Value}");
+        if (kvp.Value != null &&
+            (kvp.Key.Contains("ConnectionStrings") ||
+             kvp.Key.Contains("Stripe") ||
+             kvp.Key.Contains("RESEND")))
+        {
+            Console.WriteLine($"{kvp.Key} = {kvp.Value}");
+        }
     }
+    Console.WriteLine("===========================");
 }
-Console.WriteLine("===========================");
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+});
 
 builder.Services.AddAuthentication()
     .AddCookie("AdminCookie", options =>
@@ -63,21 +71,34 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+else
+{
+    app.UseDeveloperExceptionPage();
+}
 
-
-app.UseExceptionHandler("/Error");
 app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
+
+app.UseResponseCompression();
 
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
+// Static files with 1-year cache for faster repeat visits
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        // Cache static assets for 1 year
+        ctx.Context.Response.Headers.CacheControl = "public, max-age=31536000";
+    }
+});
 
 var distPath = Path.Combine(builder.Environment.ContentRootPath, "ClientApp/dist");
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(distPath),
     RequestPath = "/shop",
-    OnPrepareResponse = ctx => 
+    OnPrepareResponse = ctx =>
     {
         if (ctx.File.Name.Contains("assets"))
         {

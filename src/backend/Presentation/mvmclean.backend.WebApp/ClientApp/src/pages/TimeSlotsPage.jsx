@@ -5,7 +5,7 @@ import api from '../services/api';
 
 const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
     const [timeSlots, setTimeSlots] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(bookingData.selectedDate || null);
     const [selectedSlot, setSelectedSlot] = useState(bookingData.selectedTimeSlot || null);
     const [loading, setLoading] = useState(false);
     const [loadingSlots, setLoadingSlots] = useState(false);
@@ -74,6 +74,14 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
         }
     }, [bookingData.postcode, bookingData.selectedServices, navigate]);
 
+    // Fetch time slots on mount if date was previously selected (for back navigation)
+    useEffect(() => {
+        if (selectedDate && bookingData.postcode && bookingData.totalDuration) {
+            fetchTimeSlots(selectedDate);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     // Fetch available time slots when date is selected
     const fetchTimeSlots = async (date) => {
         if (!date || !bookingData.postcode || !bookingData.totalDuration) return;
@@ -84,7 +92,7 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
 
             const dateStr = date.toISOString().split('T')[0];
             const contractorIds = bookingData.contractors || [];
-            
+
             const response = await api.availability.getSlots(
                 bookingData.postcode,
                 dateStr,
@@ -370,11 +378,10 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                             <button
                                 key={monthIndex}
                                 onClick={() => setCurrentMonth(monthIndex)}
-                                className={`h-2 rounded-full transition-all ${
-                                    currentMonth === monthIndex
-                                        ? 'w-8 bg-[#194376]'
-                                        : 'w-2 bg-gray-300 hover:bg-gray-400'
-                                }`}
+                                className={`h-2 rounded-full transition-all ${currentMonth === monthIndex
+                                    ? 'w-8 bg-[#194376]'
+                                    : 'w-2 bg-gray-300 hover:bg-gray-400'
+                                    }`}
                             />
                         ))}
                     </div>
@@ -421,11 +428,11 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                                             className={`
                                                 p-4 rounded-xl font-bold transition-all duration-300 relative
                                                 ${!slot.isAvailable
-                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-2 border-gray-200'
-                                                : isSelected
-                                                    ? 'bg-[#194376] text-white shadow-xl transform scale-105'
-                                                    : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-[#46C6CE] hover:shadow-lg hover:scale-105'
-                                            }
+                                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-2 border-gray-200'
+                                                    : isSelected
+                                                        ? 'bg-[#194376] text-white shadow-xl transform scale-105'
+                                                        : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-[#46C6CE] hover:shadow-lg hover:scale-105'
+                                                }
                                             `}
                                         >
                                             <div className="text-sm mb-1">
@@ -518,9 +525,9 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                         className={`
                             px-8 py-4 font-bold rounded-xl transition-all w-full sm:w-auto flex items-center justify-center gap-2
                             ${!selectedSlot
-                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                            : 'bg-[#46C6CE] text-white hover:shadow-2xl transform hover:scale-105 active:scale-95'
-                        }
+                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                : 'bg-[#46C6CE] text-white hover:shadow-2xl transform hover:scale-105 active:scale-95'
+                            }
                         `}
                     >
                         Continue to Payment
