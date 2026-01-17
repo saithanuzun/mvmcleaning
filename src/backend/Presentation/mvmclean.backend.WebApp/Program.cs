@@ -12,23 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
-// Only log configuration in Development (contains sensitive data)
-if (builder.Environment.IsDevelopment())
-{
-    Console.WriteLine("=== Configuration Values ===");
-    foreach (var kvp in builder.Configuration.AsEnumerable())
-    {
-        if (kvp.Value != null &&
-            (kvp.Key.Contains("ConnectionStrings") ||
-             kvp.Key.Contains("Stripe") ||
-             kvp.Key.Contains("RESEND")))
-        {
-            Console.WriteLine($"{kvp.Key} = {kvp.Value}");
-        }
-    }
-    Console.WriteLine("===========================");
-}
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddResponseCompression(options =>
