@@ -36,11 +36,12 @@ public class BookingController : BaseController
         {
             var request = new GetBookingByPhoneAndPostcodeRequest
             {
-                PhoneNumber = phoneNumber,
+                PhoneNumber = phoneNumber.Replace(" ",""),
                 Postcode = postcode
             };
 
             var booking = await _mediator.Send(request);
+            
             
             // Redirect to details page with booking ID
             return RedirectToAction(nameof(Details), new { id = booking.Id });

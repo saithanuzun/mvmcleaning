@@ -1,13 +1,11 @@
 User-agent: *
 Disallow: /admin
 Disallow: /api
-Disallow: /Admin
+Disallow: /contractor
+
 
 # Allow everything else
 Allow: /
 
 # Sitemap
 Sitemap: https://www.mvmcleaning.com/sitemap.xml
-
-# Crawl-delay can be added if you're concerned about server load (seconds)
-# Crawl-delay: 5

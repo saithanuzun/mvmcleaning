@@ -90,7 +90,7 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
             setLoadingSlots(true);
             setError('');
 
-            const dateStr = date.toISOString().split('T')[0];
+            const dateStr = date.toLocaleDateString('en-CA');
             const contractorIds = bookingData.contractors || [];
 
             const response = await api.availability.getSlots(

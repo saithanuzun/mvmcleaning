@@ -17,10 +17,11 @@ public class TimeSlot : ValueObject
 
         return new TimeSlot { StartTime = startTime, EndTime = endTime };
     }
-
     public bool OverlapsWith(TimeSlot other)
     {
-        return StartTime < other.EndTime && EndTime > other.StartTime;
+        if (other == null) return false;
+    
+        return StartTime <= other.EndTime && EndTime >= other.StartTime;
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

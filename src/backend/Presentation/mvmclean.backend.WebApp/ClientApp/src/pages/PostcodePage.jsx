@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import api from '../services/api';
 import Logo from '../assets/Logo.png'; 
@@ -10,10 +10,25 @@ const PostcodePage = ({bookingData, updateBookingData}) => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    // Reset all booking data when this page loads
+    useEffect(() => {
+        updateBookingData({
+            postcode: '',
+            phone: '',
+            bookingId: null,
+            selectedServices: [],
+            selectedTimeSlot: null,
+            customerDetails: {},
+            totalAmount: 0
+        });
+    }, []); // Empty array = runs only once on mount
+    
     const validatePostcode = (code) => {
         const postcodeRegex = /^[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}$/i;
         return postcodeRegex.test(code);
     };
+    
+    
 
     const validatePhone = (phoneNumber) => {
         const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;

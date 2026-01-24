@@ -101,18 +101,6 @@ const api = {
                 };
             }
         },
-        updateQuantity: async (bookingId, serviceItemId, quantity) => {
-            const response = await apiClient.post('/basket/add', {
-                bookingId: bookingId,
-                serviceItemId: serviceItemId,
-                quantity: parseInt(quantity)
-            });
-            return {
-                success: response.data?.success || false,
-                message: response.data?.message,
-                data: response.data?.data
-            };
-        },
         clear: async () => {
             const sessionId = getSessionId();
             const response = await apiClient.post(`/basket/clear/${sessionId}`);
@@ -136,28 +124,10 @@ const api = {
                 data: response.data?.data
             };
         },
-        getContractorAvailabilityByDay: async (contractorIds = [], date, durationMinutes) => {
-            const response = await apiClient.get('/contractor/availability/day', {
-                params: { contractorIds: contractorIds.join(','), date, durationMinutes }
-            });
-            return {
-                success: response.data?.success || false,
-                message: response.data?.message,
-                data: response.data?.data
-            };
-        }
     },
 
     // Booking API
     booking: {
-        getById: async (bookingId) => {
-            const response = await apiClient.get(`/booking/${bookingId}`);
-            return {
-                success: response.data?.success || false,
-                message: response.data?.message,
-                data: response.data?.data
-            };
-        },
         complete: async (bookingData) => {
             const response = await apiClient.post('/booking/complete', bookingData);
             const responseData = response.data.data || response.data;

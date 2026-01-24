@@ -66,14 +66,14 @@ public class GetBookingByPhoneAndPostcodeHandler : IRequestHandler<GetBookingByP
 
         var allBookings = _bookingRepository.Get(
             predicate: null,
-            noTracking: true,
+            noTracking: false,
             b => b.ServiceItems,
             b => b.Customer
         ).Where(i=>i.Status == BookingStatus.Confirmed).ToList();        
         
         var booking = allBookings.FirstOrDefault(b =>
             b.PhoneNumber.Value == request.PhoneNumber &&
-            b.Postcode.Value.Equals(request.Postcode, StringComparison.OrdinalIgnoreCase));
+            b.Postcode.ToString().Replace(" ", "") == request.Postcode);
 
         if (booking == null)
             throw new KeyNotFoundException($"No booking found for phone {request.PhoneNumber} and postcode {request.Postcode}");

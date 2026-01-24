@@ -92,9 +92,17 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
     const createDateTime = (date, timeString) => {
         // Parse time string (e.g., "09:00" or "09:00:00")
         const [hours, minutes] = timeString.split(':').map(Number);
-        const dateTime = new Date(date);
-        dateTime.setHours(hours, minutes, 0, 0);
-        return dateTime.toISOString();
+
+        // Create date in UTC (not local time)
+        const pad = (n) => String(n).padStart(2, '0');
+        const year = date.getFullYear();
+        const month = pad(date.getMonth() + 1);
+        const day = pad(date.getDate());
+        const hour = pad(hours);
+        const minute = pad(minutes);
+
+        // Send as UTC ISO string
+        return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
     };
 
     const handleSubmit = async (e) => {

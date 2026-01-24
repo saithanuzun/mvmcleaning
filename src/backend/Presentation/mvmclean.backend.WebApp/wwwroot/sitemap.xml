@@ -1,2505 +1,2510 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    <!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
 
     <url>
         <loc>https://mvmcleaning.com/</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>1.00</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/faqs</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/terms-and-conditions</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/contact</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/Contractor/Login?ReturnUrl=%2Fcontractor</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/about-us</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/gallery</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/booking/find</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/shop</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/contractor/register</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/areas-we-serve</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/Services/Jet-Washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/wigston</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/oadby</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/syston</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/birstall</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/groby</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/canley</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/quorn</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/shepshed</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/bedworth</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/rugby</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/rugby/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/earl-shilton</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/lutterworth</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/ibstock</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/long-eaton</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/west-bridgford</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/west-bridgford/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/swadlincote</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/westminster</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/soho</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/chelsea</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/kensington</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/mayfair</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.80</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/Contact</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/Contractor/Register</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/Contractor/Login</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/long-eaton/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/long-eaton/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/long-eaton/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/long-eaton/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/long-eaton/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/long-eaton/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/long-eaton/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/sawley/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/sawley/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/sawley/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/sawley/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/sawley/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/sawley/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/sawley/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/town-centre/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/town-centre/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/town-centre/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/town-centre/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/town-centre/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/town-centre/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/castle-donington/town-centre/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/heather/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/heather/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/heather/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/heather/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/heather/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/heather/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/heather/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/ibstock/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/ibstock/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/ibstock/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/ibstock/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/ibstock/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/ibstock/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/ibstock/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/town-centre/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/town-centre/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/town-centre/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/town-centre/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/town-centre/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/town-centre/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coalville/town-centre/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/canley/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/canley/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/canley/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/canley/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/canley/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/canley/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/canley/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/city-centre/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/city-centre/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/city-centre/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/city-centre/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/city-centre/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/city-centre/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/city-centre/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/earlsdon/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/earlsdon/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/earlsdon/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/earlsdon/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/earlsdon/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/earlsdon/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/earlsdon/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/holbrooks/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/holbrooks/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/holbrooks/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/holbrooks/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/holbrooks/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/holbrooks/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/holbrooks/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/keresley/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/keresley/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/keresley/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/keresley/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/keresley/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/keresley/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/keresley/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/whitley/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/whitley/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/whitley/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/whitley/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/whitley/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/whitley/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/coventry/whitley/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/barwell/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/barwell/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/barwell/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/barwell/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/barwell/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/barwell/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/barwell/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/desford/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/desford/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/desford/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/desford/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/desford/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/desford/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/desford/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/earl-shilton/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/earl-shilton/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/earl-shilton/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/earl-shilton/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/earl-shilton/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/earl-shilton/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/earl-shilton/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/kirby-muxloe/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/kirby-muxloe/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/kirby-muxloe/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/kirby-muxloe/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/kirby-muxloe/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/kirby-muxloe/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/kirby-muxloe/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/town-centre/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/town-centre/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/town-centre/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/town-centre/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/town-centre/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/town-centre/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/hinckley/town-centre/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/anstey/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/anstey/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/anstey/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/anstey/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/anstey/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/anstey/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/anstey/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/belgrave/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/belgrave/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/belgrave/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/belgrave/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/belgrave/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/belgrave/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/belgrave/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/birstall/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/birstall/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/birstall/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/birstall/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/birstall/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/birstall/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/birstall/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/city-centre/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/city-centre/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/city-centre/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/city-centre/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/city-centre/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/city-centre/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/city-centre/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/countesthorpe/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/countesthorpe/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/countesthorpe/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/countesthorpe/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/countesthorpe/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/countesthorpe/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/countesthorpe/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/glen-parva/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/glen-parva/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/glen-parva/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/glen-parva/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/glen-parva/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/glen-parva/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/glen-parva/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/groby/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/groby/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/groby/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/groby/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/groby/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/groby/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/groby/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/kirby-muxloe/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/kirby-muxloe/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/kirby-muxloe/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/kirby-muxloe/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/kirby-muxloe/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/kirby-muxloe/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/kirby-muxloe/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/knighton/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/knighton/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/knighton/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/knighton/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/knighton/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/knighton/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/knighton/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/oadby/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/oadby/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/oadby/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/oadby/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/oadby/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/oadby/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/oadby/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/syston/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/syston/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/syston/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/syston/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/syston/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/syston/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/syston/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/wigston/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/wigston/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/wigston/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/wigston/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/wigston/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/wigston/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/leicester/wigston/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/belgravia/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/belgravia/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/belgravia/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/belgravia/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/belgravia/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/belgravia/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/belgravia/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bethnal-green/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bethnal-green/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bethnal-green/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bethnal-green/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bethnal-green/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bethnal-green/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bethnal-green/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bloomsbury/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bloomsbury/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bloomsbury/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bloomsbury/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bloomsbury/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bloomsbury/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/bloomsbury/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/camden/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/camden/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/camden/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/camden/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/camden/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/camden/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/camden/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/chelsea/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/chelsea/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/chelsea/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/chelsea/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/chelsea/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/chelsea/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/chelsea/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/clerkenwell/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/clerkenwell/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/clerkenwell/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/clerkenwell/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/clerkenwell/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/clerkenwell/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/clerkenwell/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/hackney/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/hackney/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/hackney/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/hackney/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/hackney/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/hackney/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/hackney/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/islington/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/islington/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/islington/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/islington/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/islington/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/islington/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/islington/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/kensington/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/kensington/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/kensington/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/kensington/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/kensington/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/kensington/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/kensington/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/knightsbridge/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/knightsbridge/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/knightsbridge/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/knightsbridge/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/knightsbridge/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/knightsbridge/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/knightsbridge/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/mayfair/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/mayfair/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/mayfair/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/mayfair/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/mayfair/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/mayfair/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/mayfair/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/shoreditch/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/shoreditch/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/shoreditch/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/shoreditch/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/shoreditch/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/shoreditch/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/shoreditch/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/soho/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/soho/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/soho/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/soho/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/soho/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/soho/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/soho/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/stepney/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/stepney/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/stepney/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/stepney/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/stepney/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/stepney/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/stepney/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/tower-hamlets/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/tower-hamlets/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/tower-hamlets/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/tower-hamlets/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/tower-hamlets/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/tower-hamlets/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/tower-hamlets/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/westminster/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/westminster/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/westminster/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/westminster/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/westminster/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/westminster/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/westminster/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/whitechapel/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/whitechapel/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/whitechapel/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/whitechapel/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/whitechapel/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/whitechapel/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/london/whitechapel/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/quorn/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/quorn/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/quorn/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/quorn/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/quorn/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/quorn/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/quorn/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/shepshed/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/shepshed/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/shepshed/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/shepshed/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/shepshed/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/shepshed/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/shepshed/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/sileby/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/sileby/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/sileby/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/sileby/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/sileby/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/sileby/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/sileby/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/town-centre/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/town-centre/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/town-centre/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/town-centre/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/town-centre/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/town-centre/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/loughborough/town-centre/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/broughton-astley/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/broughton-astley/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/broughton-astley/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/broughton-astley/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/broughton-astley/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/broughton-astley/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/broughton-astley/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/lutterworth/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/lutterworth/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/lutterworth/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/lutterworth/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/lutterworth/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/lutterworth/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/lutterworth/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/town-centre/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/town-centre/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/town-centre/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/town-centre/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/town-centre/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/town-centre/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/market-harborough/town-centre/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/asfordby/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/asfordby/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/asfordby/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/asfordby/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/asfordby/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/asfordby/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/asfordby/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/bottesford/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/bottesford/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/bottesford/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/bottesford/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/bottesford/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/bottesford/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/bottesford/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/town-centre/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/town-centre/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/town-centre/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/town-centre/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/town-centre/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/town-centre/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/melton-mowbray/town-centre/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/arley/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/arley/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/arley/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/arley/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/arley/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/arley/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/arley/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/bedworth/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/bedworth/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/bedworth/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/bedworth/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/bedworth/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/bedworth/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/bedworth/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/stockingford/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/stockingford/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/stockingford/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/stockingford/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/stockingford/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/stockingford/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/stockingford/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/town-centre/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/town-centre/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/town-centre/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/town-centre/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/town-centre/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/town-centre/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/nuneaton/town-centre/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/rutland-water/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/rutland-water/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/rutland-water/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/rutland-water/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/rutland-water/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/rutland-water/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/rutland-water/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/town-centre/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/town-centre/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/town-centre/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/town-centre/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/town-centre/sofa-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/town-centre/stain-removal</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/town-centre/upholstery-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/uppingham/carpet-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/uppingham/jet-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/uppingham/mattress-cleaning</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
     <url>
         <loc>https://mvmcleaning.com/oakham/uppingham/pressure-washing</loc>
-        <lastmod>2026-01-10T18:09:49+00:00</lastmod>
+        <lastmod>2026-01-18T14:49:48+00:00</lastmod>
         <priority>0.64</priority>
     </url>
 
