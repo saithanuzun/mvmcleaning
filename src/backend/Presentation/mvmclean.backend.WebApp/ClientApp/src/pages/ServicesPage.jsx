@@ -117,13 +117,10 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
             const newQty = Math.max(0, currentQty + change);
 
             if (newQty === 0) {
-                // Remove from cart
-                const service = services.find(s => s.id === serviceId);
-                if (!service) return;
-
+                // Remove from cart when quantity reaches 0
                 const response = await api.basket.remove(bookingData.bookingId, serviceId);
                 console.log('Remove response:', response);
-                
+
                 if (response && response.success) {
                     setSelectedServices(prev => {
                         const { [serviceId]: removed, ...rest } = prev;
@@ -132,18 +129,10 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
                 } else {
                     setError(response?.message || 'Failed to remove service');
                 }
-            } else {
-                // Add to cart
+            } else if (change === 1) {
+                // Add one item to cart
                 const service = services.find(s => s.id === serviceId);
                 if (!service) return;
-
-                console.log('Adding service:', { 
-                    bookingId: bookingData.bookingId,
-                    serviceId,
-                    name: service.name,
-                    price: service.price,
-                    duration: service.duration
-                });
 
                 const response = await api.basket.add(
                     bookingData.bookingId,
@@ -152,7 +141,6 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
                     service.price,
                     service.duration
                 );
-                
                 console.log('Add response:', response);
 
                 if (response && response.success) {
@@ -161,16 +149,27 @@ const ServicesPage = ({ bookingData, updateBookingData }) => {
                         [serviceId]: newQty
                     }));
                 } else {
-                    setError(response?.message || 'Failed to update service');
+                    setError(response?.message || 'Failed to add service');
+                }
+            } else if (change === -1) {
+                // Decrement one item from cart
+                const response = await api.basket.remove(bookingData.bookingId, serviceId);
+                console.log('Remove response:', response);
+
+                if (response && response.success) {
+                    setSelectedServices(prev => ({
+                        ...prev,
+                        [serviceId]: newQty
+                    }));
+                } else {
+                    setError(response?.message || 'Failed to remove service');
                 }
             }
         } catch (err) {
-            console.error('Error updating cart - Full error:', err);
-            console.error('Error response:', err.response?.data);
+            console.error('Error updating cart:', err);
             setError(err.response?.data?.message || 'Failed to update cart. Please try again.');
         }
     };
-
     const handleAddService = (serviceId) => {
         handleQuantityChange(serviceId, 1);
     };

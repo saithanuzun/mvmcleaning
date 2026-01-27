@@ -21,6 +21,9 @@ public class BookingItem : ValueObject
 
     protected override IEnumerable<object?> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return ServiceName;
+        yield return ServiceId;
+        yield return UnitAdjustedPrice;
+        yield return Quantity;
     }
 }

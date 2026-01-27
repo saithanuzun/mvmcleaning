@@ -360,17 +360,6 @@ public override void GenerateTemplate()
 {
     Subject = $"Booking Confirmed! Reference #{_bookingReference}";
 
-    // Build invoice section if invoiceHtml is provided
-    var invoiceSection = string.IsNullOrEmpty(_invoiceHtml) ? "" : $@"
-            <div class='section'>
-                <div class='section-title'>
-                    📋 Invoice Details
-                </div>
-                <div class='invoice-container'>
-                    {_invoiceHtml}
-                </div>
-            </div>";
-
     // HTML Template
     HtmlBody = $@"
 <!DOCTYPE html>
@@ -584,17 +573,6 @@ public override void GenerateTemplate()
             font-size: 13px;
             line-height: 1.5;
         }}
-        .invoice-container {{
-            background-color: #fafbfc;
-            padding: 16px;
-            border-radius: 6px;
-            border: 1px solid #e0e0e0;
-            overflow-x: auto;
-        }}
-        .invoice-container table {{
-            width: 100%;
-            font-size: 13px;
-        }}
         .contact-box {{
             background-color: #e8f4f8;
             border: 1px solid #c6e6ff;
@@ -710,8 +688,6 @@ public override void GenerateTemplate()
                 </div>
             </div>
 
-            {invoiceSection}
-
             <div class='section'>
                 <div class='section-title'>
                     📋 What Happens Next?
@@ -753,7 +729,7 @@ public override void GenerateTemplate()
             <div class='contact-box'>
                 <p style='margin: 0 0 10px 0; color: #194376; font-weight: 600;'>Have Questions?</p>
                 <p style='margin: 0; color: #555555; font-size: 14px;'>
-                    Our support team is available at <strong>support@mvmclean.com</strong><br>
+                    Our support team is available at <strong>support@mvmcleaning.com</strong><br>
                     We're here to ensure your experience is perfect.
                 </p>
             </div>
@@ -761,7 +737,7 @@ public override void GenerateTemplate()
 
         <div class='footer'>
             <p>&copy; 2026 MVM Clean. All rights reserved.</p>
-            <p>support@mvmclean.com | 020 XXXX XXXX</p>
+            <p>support@mvmcleaning.com</p>
             <p>This is an automated message, please do not reply to this email.</p>
         </div>
     </div>
@@ -802,12 +778,12 @@ WHAT HAPPENS NEXT?
    Our professional team will arrive on the scheduled date at {_bookingDate:hh:mm tt} to provide your cleaning services.
 
 Have Questions?
-Our support team is available at support@mvmclean.com
+Our support team is available at support@mvmcleaning.com
 We're here to ensure your experience is perfect.
 
 ────────────────────
 © 2026 MVM Clean. All rights reserved.
-support@mvmclean.com | 020 XXXX XXXX
+support@mvmcleaning.com
 This is an automated message, please do not reply to this email.";
 }
 
