@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using mvmclean.backend.Application.Services;
+using mvmclean.backend.Domain.Aggregates.Booking.Enums;
 using mvmclean.backend.Infrastructure.MailingService;
 using Resend;
 
@@ -32,6 +33,7 @@ public class MailingService : IMailingService
         List<string> services,
         decimal totalAmount,
         DateTime bookingDate,
+        PaymentType paymentType,
         string? invoiceHtml = null)
     {
         try
@@ -45,6 +47,7 @@ public class MailingService : IMailingService
                 services,
                 totalAmount,
                 bookingDate,
+                paymentType,
                 invoiceHtml
             );
 

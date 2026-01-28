@@ -1,3 +1,5 @@
+using mvmclean.backend.Domain.Aggregates.Booking.Enums;
+
 namespace mvmclean.backend.Infrastructure.MailingService;
 
 /// <summary>
@@ -332,6 +334,7 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
     private List<string> _services;
     private decimal _totalAmount;
     private DateTime _bookingDate;
+    private PaymentType _paymentType;
     private string? _invoiceHtml;
 
     public BookingConfirmedEmailTemplate(
@@ -342,6 +345,7 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
         List<string> services,
         decimal totalAmount,
         DateTime bookingDate,
+        PaymentType paymentType,
         string? invoiceHtml = null)
     {
         _bookingReference = bookingId.Substring(0, 8).ToUpper();
@@ -351,17 +355,27 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
         _services = services ?? new List<string>();
         _totalAmount = totalAmount;
         _bookingDate = bookingDate;
+        _paymentType = paymentType;
         _invoiceHtml = invoiceHtml;
         
         GenerateTemplate();
     }
 
-public override void GenerateTemplate()
-{
-    Subject = $"Booking Confirmed! Reference #{_bookingReference}";
+    public override void GenerateTemplate()
+    {
+        Subject = $"Booking Confirmed! Reference #{_bookingReference}";
 
-    // HTML Template
-    HtmlBody = $@"
+        // Payment information based on payment type
+        string paymentInfo = _paymentType == PaymentType.Card 
+            ? "Your payment has been processed successfully."
+            : "Payment will be collected upon completion of service.";
+
+        string paymentBadge = _paymentType == PaymentType.Card 
+            ? "<span class='payment-badge'>💳 Card Payment</span>"
+            : "<span class='payment-badge'>💵 Cash Payment</span>";
+
+        // HTML Template
+        HtmlBody = $@"
 <!DOCTYPE html>
 <html>
 <head>
@@ -420,6 +434,17 @@ public override void GenerateTemplate()
             font-weight: 600;
             font-size: 12px;
             margin-top: 10px;
+        }}
+        .payment-badge {{
+            display: inline-block;
+            background-color: {(_paymentType == PaymentType.Card ? "#27ae60" : "#f39c12")};
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            margin-top: 10px;
+            margin-left: 8px;
         }}
         .content {{ 
             padding: 30px 20px; 
@@ -530,6 +555,24 @@ public override void GenerateTemplate()
             font-weight: 700;
             color: #46C6CE;
         }}
+        .payment-info {{
+            background-color: {(_paymentType == PaymentType.Card ? "#e8f6f3" : "#fef9e7")};
+            border: 1px solid {(_paymentType == PaymentType.Card ? "#27ae60" : "#f39c12")};
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }}
+        .payment-icon {{
+            font-size: 24px;
+            margin-bottom: 10px;
+        }}
+        .payment-text {{
+            color: {(_paymentType == PaymentType.Card ? "#27ae60" : "#d35400")};
+            font-weight: 600;
+            font-size: 14px;
+            margin: 0;
+        }}
         .next-steps {{
             background-color: #e8f4f8;
             border-radius: 6px;
@@ -626,6 +669,7 @@ public override void GenerateTemplate()
             <div class='header-subtitle'>Your booking reference:</div>
             <div class='reference-badge'>#{_bookingReference}</div>
             <div class='status-badge'>✓ Confirmed</div>
+            {paymentBadge}
         </div>
 
         <div class='content'>
@@ -684,6 +728,12 @@ public override void GenerateTemplate()
                     <div class='total-box'>
                         <div class='total-label'>Total Amount</div>
                         <div class='total-amount'>£{_totalAmount:F2}</div>
+                    </div>
+
+                    <div class='payment-info'>
+                        <div class='payment-icon'>{(_paymentType == PaymentType.Card ? "💳" : "💵")}</div>
+                        <p class='payment-text'>{(_paymentType == PaymentType.Card ? "✓ Payment Successful - Paid by Card" : "Payment Method: Cash - Pay upon completion")}</p>
+                        <p style='color: #555555; font-size: 13px; margin: 5px 0 0 0;'>{paymentInfo}</p>
                     </div>
                 </div>
             </div>
@@ -744,10 +794,12 @@ public override void GenerateTemplate()
 </body>
 </html>";
 
-    // Plain text template with booking time
-    PlainTextBody = $@"BOOKING CONFIRMED!
+        // Plain text template with payment information
+        PlainTextBody = $@"BOOKING CONFIRMED!
 
 Reference: #{_bookingReference}
+Payment Method: {_paymentType}
+Status: {(_paymentType == PaymentType.Card ? "Paid" : "Payment on completion")}
 
 Hello {_customerName},
 
@@ -759,6 +811,11 @@ Scheduled Date: {_bookingDate:dddd, MMMM d, yyyy}
 Scheduled Time: {_bookingDate:hh:mm tt}
 Contact Number: {_phoneNumber}
 Service Address: {_address}
+
+PAYMENT INFORMATION:
+────────────────────
+Payment Method: {(_paymentType == PaymentType.Card ? "Card" : "Cash")}
+{(_paymentType == PaymentType.Card ? "✓ Your payment has been initiated." : "Payment will be collected upon completion of service.")}
 
 SERVICES CONFIRMED:
 ───────────────────
@@ -785,6 +842,6 @@ We're here to ensure your experience is perfect.
 © 2026 MVM Clean. All rights reserved.
 support@mvmcleaning.com
 This is an automated message, please do not reply to this email.";
+    }
 }
 
-}

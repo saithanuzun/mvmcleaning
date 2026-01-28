@@ -73,6 +73,7 @@ public class BookingConfirmedEventHandler : INotificationHandler<BookingConfirme
                 services: services,
                 totalAmount: notification.Total.Amount,
                 bookingDate: notification.TimeSlot.StartTime,
+                paymentType: booking.Payment.PaymentType,
                 invoiceHtml: invoiceHtml
             );
 
@@ -99,6 +100,7 @@ public class BookingConfirmedEventHandler : INotificationHandler<BookingConfirme
                 services: services,
                 totalAmount: notification.Total.Amount,
                 bookingDate: notification.TimeSlot.StartTime,
+                paymentType: booking.Payment.PaymentType,
                 invoiceHtml: invoiceHtml
             );
 

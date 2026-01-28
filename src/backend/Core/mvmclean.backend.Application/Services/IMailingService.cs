@@ -1,3 +1,5 @@
+using mvmclean.backend.Domain.Aggregates.Booking.Enums;
+
 namespace mvmclean.backend.Application.Services;
 
 public interface IMailingService
@@ -24,6 +26,7 @@ public interface IMailingService
         List<string> services,
         decimal totalAmount,
         DateTime bookingDate,
+        PaymentType paymentType,
         string? invoiceHtml = null);
 
     /// <summary>
