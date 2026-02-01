@@ -247,9 +247,15 @@ const TimeSlotsPage = ({ bookingData, updateBookingData }) => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="bg-gray-50 p-4 rounded-xl">
                             <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Services</p>
-                            <p className="font-bold text-gray-800 text-sm leading-tight">
-                                {bookingData.basket?.items?.map(item => item.serviceName).join(', ') || 'No services'}
-                            </p>
+                            <div className="space-y-2">
+                                {(bookingData.selectedServicesData || bookingData.basket?.items) && (bookingData.selectedServicesData || bookingData.basket?.items).length > 0 ? (
+                                    (bookingData.selectedServicesData || bookingData.basket.items).map((item, index) => (
+                                        <p className="font-semibold text-gray-800 text-sm">{item.name || item.serviceName}</p>
+                                    ))
+                                ) : (
+                                    <p className="text-sm text-gray-600">No services selected</p>
+                                )}
+                            </div>
                         </div>
                         <div className="bg-gray-50 p-4 rounded-xl">
                             <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Duration</p>

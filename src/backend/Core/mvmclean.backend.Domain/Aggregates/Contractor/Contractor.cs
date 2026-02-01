@@ -136,8 +136,10 @@ public class Contractor : Core.BaseClasses.AggregateRoot
         
         if (_unavailableSlots.Any(s => s.OverlapsWith(timeSlot))) return false;
 
-        var dayOfWeek = (DayOfWeek)((int)timeSlot.StartTime.DayOfWeek == 0 ? 7 : (int)timeSlot.StartTime.DayOfWeek);
-        var workingHours = _workingHours.FirstOrDefault(w => w.DayOfWeek == dayOfWeek);
+        var dayOfWeek = timeSlot.StartTime.DayOfWeek;
+
+        var workingHours = _workingHours
+            .FirstOrDefault(w => w.DayOfWeek == dayOfWeek);
 
         if (workingHours == null) return false;
         
