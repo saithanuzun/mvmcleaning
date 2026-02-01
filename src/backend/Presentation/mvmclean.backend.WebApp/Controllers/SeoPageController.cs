@@ -24,13 +24,17 @@ public class SeoPageController : BaseController
     [HttpGet("/{**slug}")]
     public async Task<IActionResult> GetBySlug(string slug)
     {
+        // Don't match file extensions
+        if (slug.Contains("."))
+        {
+            return RedirectToAction("Index","Home");
+        }          
+        
         try
         {
-            _logger.LogInformation($"SeoPageController: Attempting to fetch slug: '{slug}'");
             
             if (string.IsNullOrWhiteSpace(slug))
             {
-                _logger.LogWarning("SeoPageController: Slug is empty");
                 return NotFound();
             }
 
@@ -39,19 +43,9 @@ public class SeoPageController : BaseController
             
             if (response?.Page == null)
             {
-                _logger.LogWarning($"SeoPageController: Page not found for slug: '{slug}'");
-                // Debug: Try to get all pages to verify data exists
-                var allPagesResponse = await _mediator.Send(new GetAllSeoPagesRequest());
-                _logger.LogWarning($"SeoPageController: Total pages in database: {allPagesResponse?.Pages?.Count ?? 0}");
-                if (allPagesResponse?.Pages?.Any() == true)
-                {
-                    var slugsInDb = string.Join(", ", allPagesResponse.Pages.Take(5).Select(p => $"'{p.Slug}'"));
-                    _logger.LogWarning($"SeoPageController: Sample slugs in database: {slugsInDb}");
-                }
                 return NotFound();
             }
 
-            _logger.LogInformation($"SeoPageController: Found page '{response.Page.Slug}' with level '{response.Page.Level}'");
             
             // Set ViewData for SEO meta tags
             ViewData["Title"] = response.Page.MetaTitle;
@@ -72,11 +66,7 @@ public class SeoPageController : BaseController
             return NotFound();
         }
     }
-    
-    /// <summary>
-    /// Debug endpoint to see all available SEO pages
-    /// Route: /seo-pages/debug
-    /// </summary>
+
     [HttpGet("debug")]
     public async Task<IActionResult> Debug()
     {

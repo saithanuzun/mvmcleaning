@@ -120,9 +120,9 @@ app.Map("/shop", appBuilder =>
     });
 });
 
+// Fallback should be LAST
 app.MapFallbackToController(
     action: "GetBySlug",
     controller: "SeoPage");
-
 
 app.Run();

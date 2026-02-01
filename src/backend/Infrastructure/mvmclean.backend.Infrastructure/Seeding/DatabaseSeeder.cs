@@ -35,7 +35,7 @@ public class DatabaseSeeder
             _logger.LogInformation("Starting database seeding...");
 
             // Seed services and get their IDs
-            var serviceIds = await SeedServicesAsync();
+            //var serviceIds = await SeedServicesAsync();
 
             // Seed postcode pricing
             //await SeedPostcodePricingAsync(serviceIds);
@@ -53,7 +53,7 @@ public class DatabaseSeeder
             //await SeedUnavailabilitySlotsAsync(contractorIds);
 
             // Seed promotions
-            await SeedPromotionsAsync();
+            //await SeedPromotionsAsync();
 
             // Seed SEO pages
             await SeedSeoPagesAsync();

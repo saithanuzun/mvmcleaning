@@ -40,12 +40,12 @@ public class GetSeoPageBySlugHandler : IRequestHandler<GetSeoPageBySlugRequest, 
         _seoPageRepository = seoPageRepository;
     }
 
-    public async Task<GetSeoPageBySlugResponse> Handle(GetSeoPageBySlugRequest request, CancellationToken cancellationToken)
+    public async Task<GetSeoPageBySlugResponse> Handle(GetSeoPageBySlugRequest request,
+        CancellationToken cancellationToken)
     {
-        var pages = await _seoPageRepository.GetAll(false);
-        
-        var page = pages.FirstOrDefault(p => p.Slug.Equals(request.Slug, StringComparison.OrdinalIgnoreCase));
-        
+        // Fetch the page by slug
+        var page = await _seoPageRepository.FirstOrDefaultAsync(i=>i.Slug == request.Slug,false,k=>k.Keywords);
+     
         if (page == null)
             return new GetSeoPageBySlugResponse { Page = null };
 
@@ -73,4 +73,6 @@ public class GetSeoPageBySlugHandler : IRequestHandler<GetSeoPageBySlugRequest, 
 
         return new GetSeoPageBySlugResponse { Page = pageDto };
     }
+
+
 }

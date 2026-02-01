@@ -8,29 +8,31 @@ public class SeoPage : AggregateRoot
 {
     // Route hierarchy
     public SeoPageLevel Level { get; private set; }
-    
+
     // Core identity
     public string City { get; private set; }
-    
+
     // Collections of value objects
     private readonly List<Area> _areas = new();
     public IReadOnlyCollection<Area> Areas => _areas.AsReadOnly();
-    
+
     private readonly List<ServiceType> _services = new();
     public IReadOnlyCollection<ServiceType> Services => _services.AsReadOnly();
-    
+
     // SEO Data properties
     public string Slug { get; private set; }
     public string MetaTitle { get; private set; }
     public string MetaDescription { get; private set; }
     public string H1Tag { get; private set; }
     public string Introduction { get; private set; }
-    
+
     // Keywords
     private readonly List<SeoPageKeyword> _keywords = new();
     public IReadOnlyCollection<SeoPageKeyword> Keywords => _keywords.AsReadOnly();
 
-    private SeoPage() { }
+    private SeoPage()
+    {
+    }
 
     /// <summary>
     /// Factory method - Create a SEO page for a city (required)
@@ -63,7 +65,7 @@ public class SeoPage : AggregateRoot
             throw new ArgumentException("Area name cannot be empty", nameof(areaName));
 
         var areaObj = Area.Create(areaName);
-        
+
         // Check if area already exists
         if (_areas.Any(a => a.Name.Equals(areaName, StringComparison.OrdinalIgnoreCase)))
             return;
@@ -82,7 +84,7 @@ public class SeoPage : AggregateRoot
             throw new ArgumentException("Service name cannot be empty", nameof(serviceName));
 
         var serviceObj = ServiceType.Create(serviceName);
-        
+
         // Check if service already exists
         if (_services.Any(s => s.Name.Equals(serviceName, StringComparison.OrdinalIgnoreCase)))
             return;
@@ -155,41 +157,60 @@ public class SeoPage : AggregateRoot
     /// </summary>
     private void UpdateContent()
     {
-        var areasString = GetAreasAsString();
-        var servicesString = GetServicesAsString();
+        if (string.IsNullOrWhiteSpace(City))
+        {
+            throw new InvalidOperationException("City must be set before updating content.");
+        }
+
+        var serviceName = GetFirstServiceName() ?? "Carpet & Sofa Cleaning";
+        var areaName = GetFirstAreaName() ?? City;
+        var serviceKeyword = serviceName.ToLowerInvariant();
+        var locationKeyword = areaName != City ? $"{areaName}, {City}" : City;
+
+        // Common SEO phrases for carpet and sofa cleaning industry
+        const string rating = "Rated 4.9/5 Stars";
+        const string experience = "10+ Years Experience";
+        const string jobsCompleted = "2000+ Satisfied Customers";
+        const string sameDay = "Same-Day Service Available";
+        const string ecoFriendly = "Eco-Friendly Cleaning Solutions";
+        const string freeQuote = "Free, No-Obligation Quotes";
 
         switch (Level)
         {
             case SeoPageLevel.CityOnly:
-                MetaTitle = $"{City} Cleaning Services | Professional Cleaners | Rated 4.9/5";
-                MetaDescription = $"Professional cleaning services in {City}. Same-day availability, free quotes. Book online today!";
-                H1Tag = $"Professional Cleaning Services in {City}";
-                Introduction = $"Welcome to our {City} cleaning services. With 2000+ completed jobs and 10+ years of experience, we're your trusted cleaning partner.";
+                MetaTitle = $"{City} Carpet & Sofa Cleaning | Professional {serviceName} Services | {rating}";
+                MetaDescription =
+                    $"Expert carpet cleaning and sofa cleaning services in {City}. Deep clean, stain removal, and odor elimination. {sameDay} with {experience}. {freeQuote}.";
+                H1Tag = $"Professional Carpet & Sofa Cleaning Services in {City}";
+                Introduction =
+                    $"Welcome to the leading carpet and sofa cleaning company in {City}. Our certified technicians use state-of-the-art equipment and eco-friendly cleaning solutions to revitalize your carpets, rugs, and upholstery. With {experience} and {jobsCompleted}, we guarantee exceptional results and complete satisfaction.";
                 break;
 
             case SeoPageLevel.CityService:
-                var firstService = GetFirstServiceName();
-                MetaTitle = $"{firstService} in {City} | Professional Cleaners | Rated 4.9/5";
-                MetaDescription = $"Professional {firstService?.ToLower()} services in {City}. Same-day availability, free quotes. Book online today!";
-                H1Tag = $"{firstService} in {City}";
-                Introduction = $"Looking for reliable {firstService?.ToLower()} in {City}? We specialize in professional cleaning. With 10+ years of experience and 2000+ completed jobs, we deliver exceptional results.";
+                MetaTitle = $"Best {serviceName} in {City} | Affordable & Professional Services | {rating}";
+                MetaDescription =
+                    $"Top-rated {serviceKeyword} services in {City}. Specialized cleaning for carpets, sofas, and upholstery. {sameDay}, {ecoFriendly}. {freeQuote} and satisfaction guaranteed.";
+                H1Tag = $"Professional {serviceName} Services in {City}";
+                Introduction =
+                    $"Searching for the most reliable {serviceKeyword} company in {City}? We specialize in comprehensive {serviceKeyword} using advanced steam cleaning and dry cleaning methods. Our trained professionals provide thorough deep cleaning, stain removal, and fabric protection services to extend the life of your furnishings.";
                 break;
 
             case SeoPageLevel.CityArea:
-                var firstArea = GetFirstAreaName();
-                MetaTitle = $"Cleaning Services in {firstArea}, {City} | Book Online";
-                MetaDescription = $"Professional cleaning services in {firstArea}, {City}. Same-day availability, free quotes. 2000+ jobs completed. Rated 4.9/5.";
-                H1Tag = $"Cleaning Services in {firstArea}, {City}";
-                Introduction = $"Looking for reliable cleaning services in {firstArea}, {City}? We specialize in professional cleaning. With 10+ years of experience and 2000+ completed jobs, we deliver exceptional results.";
+                MetaTitle = $"Carpet & Sofa Cleaning in {areaName}, {City} | Local Cleaners | {rating}";
+                MetaDescription =
+                    $"Local carpet and sofa cleaners serving {areaName}, {City}. Residential & commercial cleaning. Pet stain removal, allergy relief cleaning. {sameDay} service.";
+                H1Tag = $"Carpet & Sofa Cleaning Services in {areaName}, {City}";
+                Introduction =
+                    $"As your local carpet and sofa cleaning experts in {areaName}, {City}, we understand the specific needs of homes and businesses in our community. We offer personalized cleaning solutions including pet odor removal, allergy-friendly cleaning, and commercial maintenance programs. Serving {areaName} with pride for over 10 years.";
                 break;
 
             case SeoPageLevel.CityAreaService:
-                var areaName = GetFirstAreaName();
-                var serviceName = GetFirstServiceName();
-                MetaTitle = $"{serviceName} in {areaName}, {City} | BOOK ONLINE | Rated 4.9/5";
-                MetaDescription = $"Professional {serviceName?.ToLower()} services in {areaName}, {City}. 2000+ jobs completed. Same-day availability and free quotes.";
-                H1Tag = $"{serviceName} in {areaName}, {City}";
-                Introduction = $"Looking for reliable {serviceName?.ToLower()} in {areaName}, {City}? With over 10 years of experience and 2000+ completed jobs, we deliver high-quality results every time.";
+                MetaTitle = $"{serviceName} in {areaName}, {City} | Fast, Reliable Service | {rating}";
+                MetaDescription =
+                    $"Expert {serviceKeyword} in {areaName}, {City}. Immediate response, professional results. {ecoFriendly}, pet-safe solutions. Call now for {freeQuote}!";
+                H1Tag = $"{serviceName} Services in {areaName}, {City}";
+                Introduction =
+                    $"When you need professional {serviceKeyword} services in {areaName}, {City}, our local team is ready to help. We use truck-mounted steam cleaning systems and eco-certified products to deliver superior cleaning results while being safe for children, pets, and the environment. Emergency flood restoration and stain treatment available.";
                 break;
         }
 
@@ -200,87 +221,431 @@ public class SeoPage : AggregateRoot
     {
         _keywords.Clear();
 
-        var keywords = new List<string>();
-        var areasString = GetAreasAsString();
-        var servicesString = GetServicesAsString();
-        var firstAreaName = GetFirstAreaName();
-        var firstServiceName = GetFirstServiceName();
+        var firstAreaName = GetFirstAreaName() ?? City;
+        var firstServiceName = GetFirstServiceName() ?? "Carpet & Sofa Cleaning";
+        var serviceLower = firstServiceName.ToLowerInvariant();
+        var cityLower = City.ToLowerInvariant();
+        var areaLower = firstAreaName.ToLowerInvariant();
+
+        List<string> keywords = new List<string>();
+
+        // Core keyword groups for carpet and sofa cleaning industry
+        var coreServices = new List<string>
+        {
+            "carpet cleaning",
+            "sofa cleaning",
+            "upholstery cleaning",
+            "rug cleaning",
+            "furniture cleaning",
+            "deep cleaning",
+            "steam cleaning",
+            "dry cleaning",
+            "professional cleaning"
+        };
+
+        var problemKeywords = new List<string>
+        {
+            "stain removal",
+            "pet stain removal",
+            "odor elimination",
+            "mold removal",
+            "allergy cleaning",
+            "deep clean",
+            "flood restoration",
+            "emergency cleaning",
+            "spot cleaning"
+        };
+
+        var qualifierKeywords = new List<string>
+        {
+            "professional",
+            "best",
+            "affordable",
+            "cheap",
+            "local",
+            "certified",
+            "trusted",
+            "experienced",
+            "reliable",
+            "same day",
+            "emergency",
+            "eco friendly",
+            "green cleaning",
+            "commercial",
+            "residential"
+        };
+
+        var intentKeywords = new List<string>
+        {
+            "services",
+            "company",
+            "near me",
+            "prices",
+            "cost",
+            "quote",
+            "reviews",
+            "how to clean",
+            "cleaning tips",
+            "before and after"
+        };
+
+        var locationKeywords = new List<string>
+        {
+            City,
+            firstAreaName,
+            $"{firstAreaName} {City}",
+            $"{City} area",
+            $"{City} and surrounding areas"
+        };
 
         switch (Level)
         {
             case SeoPageLevel.CityOnly:
-                // Keywords for city-level pages (e.g., /leicester)
-                keywords = new List<string>
+                // City-wide keywords - broad match
+                keywords = GenerateKeywordCombinations(
+                    coreServices,
+                    problemKeywords,
+                    qualifierKeywords,
+                    intentKeywords,
+                    locationKeywords.Where(l => l.Contains(City)).ToList()
+                );
+
+                // Add specific high-value keywords
+                keywords.AddRange(new[]
                 {
-                    $"Carpet Sofa cleaning services {City}",
-                    $"professional Carpet Sofa cleaning {City}",
-                    $"{City} Carpet Sofa cleaning services",
-                    $"best Carpet Sofa cleaning {City}",
-                    $"carpet cleaning {City}",
-                    $"sofa cleaning {City}",
-                    $"affordable cleaning {City}",
-                    $"trusted cleaners {City}",
-                    $"{servicesString} in {City}",
-                    $"{City} {areasString}"
-                };
+                    $"professional carpet cleaners {City}",
+                    $"emergency sofa cleaning {City}",
+                    $"carpet cleaning companies {City}",
+                    $"best upholstery cleaning {City}",
+                    $"affordable rug cleaning {City}",
+                    $"same day cleaning service {City}",
+                    $"pet stain removal specialists {City}",
+                    $"eco friendly cleaning {City}",
+                    $"commercial carpet cleaning {City}",
+                    $"move in move out cleaning {City}",
+                    $"professional steam cleaning {City}",
+                    $"dry carpet cleaning {City}",
+                    $"flood damage restoration {City}",
+                    $"allergy relief cleaning {City}",
+                    $"fabric protection service {City}"
+                });
                 break;
 
             case SeoPageLevel.CityService:
-                // Keywords for city + service pages (e.g., /leicester/carpet-cleaning)
-                keywords = new List<string>
+                // Service-specific keywords in city
+                var serviceVariations = GetServiceKeywordVariations(firstServiceName);
+
+                keywords = GenerateServiceSpecificKeywords(
+                    serviceVariations,
+                    qualifierKeywords,
+                    problemKeywords,
+                    intentKeywords,
+                    locationKeywords,
+                    cityLower
+                );
+
+                // Add geo-modified service keywords
+                keywords.AddRange(new[]
                 {
-                    $"{firstServiceName} {City}",
-                    $"{firstServiceName} in {City}",
-                    $"professional {firstServiceName} {City}",
-                    $"{firstServiceName} services {City}",
-                    $"best {firstServiceName} {City}",
-                    $"affordable {firstServiceName} {City}",
-                    $"{City} {firstServiceName}",
-                    $"trusted {firstServiceName} {City}",
-                    $"{firstServiceName} {areasString}",
-                    $"certified {firstServiceName} {City}"
-                };
+                    $"{firstServiceName} cost {City}",
+                    $"{firstServiceName} prices {City}",
+                    $"{firstServiceName} near me {City}",
+                    $"{firstServiceName} companies {City}",
+                    $"{firstServiceName} reviews {City}",
+                    $"{firstServiceName} before and after {City}",
+                    $"how much does {firstServiceName} cost in {City}",
+                    $"best rated {firstServiceName} {City}",
+                    $"licensed {firstServiceName} {City}",
+                    $"emergency {firstServiceName} {City}"
+                });
                 break;
 
             case SeoPageLevel.CityArea:
-                // Keywords for city + area pages (e.g., /leicester/wigston)
-                keywords = new List<string>
+                // Area-specific keywords within city
+                keywords = GenerateAreaSpecificKeywords(
+                    coreServices,
+                    problemKeywords,
+                    qualifierKeywords,
+                    areaLower,
+                    cityLower
+                );
+
+                // Add neighborhood-specific keywords
+                keywords.AddRange(new[]
                 {
-                    $"cleaning services {firstAreaName}",
-                    $"professional cleaning {firstAreaName}",
-                    $"{firstAreaName} cleaning services",
-                    $"best cleaning {firstAreaName}",
-                    $"cleaning {firstAreaName} {City}",
-                    $"{servicesString} in {firstAreaName}",
-                    $"{City} {firstAreaName} cleaning",
-                    $"affordable cleaning {firstAreaName}",
-                    $"trusted cleaners {firstAreaName}",
-                    $"{firstAreaName} {City} services"
-                };
+                    $"local cleaners in {firstAreaName} {City}",
+                    $"{firstAreaName} carpet cleaning companies",
+                    $"{firstAreaName} sofa cleaning specialists",
+                    $"cleaning services near {firstAreaName}",
+                    $"best cleaners in {firstAreaName} {City}",
+                    $"same day cleaning {firstAreaName}",
+                    $"emergency cleaning {firstAreaName} {City}",
+                    $"residential cleaning {firstAreaName}",
+                    $"commercial cleaning {firstAreaName}",
+                    $"move out cleaning {firstAreaName} {City}"
+                });
                 break;
 
             case SeoPageLevel.CityAreaService:
-                // Keywords for city + area + service pages (e.g., /leicester/wigston/carpet-cleaning)
-                keywords = new List<string>
+                // Hyper-local service keywords
+                keywords = GenerateHyperLocalKeywords(
+                    firstServiceName,
+                    serviceLower,
+                    areaLower,
+                    cityLower,
+                    qualifierKeywords,
+                    problemKeywords
+                );
+
+                // Add specific transactional keywords
+                keywords.AddRange(new[]
                 {
-                    $"{firstServiceName} {firstAreaName}",
-                    $"{firstServiceName} in {firstAreaName}, {City}",
-                    $"{firstAreaName} {firstServiceName}",
-                    $"professional {firstServiceName} {firstAreaName}",
-                    $"{firstServiceName} services {firstAreaName}",
-                    $"best {firstServiceName} {City}",
-                    $"certified {firstServiceName} {firstAreaName}",
-                    $"affordable {firstServiceName} {firstAreaName}",
-                    $"top {firstServiceName} {firstAreaName}",
-                    $"{firstServiceName} {City}"
-                };
+                    $"{firstServiceName} quote {firstAreaName}",
+                    $"{firstServiceName} cost {firstAreaName} {City}",
+                    $"{firstServiceName} emergency service {firstAreaName}",
+                    $"{firstServiceName} same day {firstAreaName}",
+                    $"{firstServiceName} reviews {firstAreaName}",
+                    $"book {firstServiceName} {firstAreaName}",
+                    $"schedule {firstServiceName} {firstAreaName}",
+                    $"{firstServiceName} appointment {firstAreaName}",
+                    $"urgent {firstServiceName} {firstAreaName}",
+                    $"{firstServiceName} professionals {firstAreaName}"
+                });
                 break;
         }
+
+        // Remove duplicates and sort by search volume potential
+        keywords = keywords
+            .Distinct()
+            .Select(k => k.Trim().ToLowerInvariant())
+            .OrderByDescending(k => CalculateKeywordPriority(k))
+            .Take(50) // Limit to top 50 most relevant keywords
+            .ToList();
 
         foreach (var keyword in keywords)
         {
             _keywords.Add(SeoPageKeyword.Create(keyword, Level.ToString()));
         }
     }
-}
 
+    private List<string> GenerateKeywordCombinations(
+        List<string> services,
+        List<string> problems,
+        List<string> qualifiers,
+        List<string> intents,
+        List<string> locations)
+    {
+        var combinations = new List<string>();
+
+        foreach (var location in locations)
+        {
+            // Service + Location
+            foreach (var service in services)
+            {
+                combinations.Add($"{service} {location}");
+
+                // Service + Qualifier + Location
+                foreach (var qualifier in qualifiers.Take(5))
+                {
+                    combinations.Add($"{qualifier} {service} {location}");
+                }
+
+                // Service + Intent + Location
+                foreach (var intent in intents.Take(3))
+                {
+                    combinations.Add($"{service} {intent} {location}");
+                }
+            }
+
+            // Problem + Location
+            foreach (var problem in problems)
+            {
+                combinations.Add($"{problem} {location}");
+
+                // Problem + Qualifier + Location
+                foreach (var qualifier in qualifiers.Take(3))
+                {
+                    combinations.Add($"{qualifier} {problem} {location}");
+                }
+            }
+        }
+
+        return combinations;
+    }
+
+    private List<string> GetServiceKeywordVariations(string serviceName)
+    {
+        var variations = new List<string> { serviceName.ToLowerInvariant() };
+
+        // Common variations for carpet and sofa cleaning services
+        if (serviceName.Contains("Carpet", StringComparison.OrdinalIgnoreCase))
+        {
+            variations.AddRange(new[]
+            {
+                "carpet cleaners",
+                "carpet cleaning service",
+                "carpet cleaning company",
+                "professional carpet cleaning",
+                "carpet steam cleaning",
+                "carpet deep cleaning"
+            });
+        }
+
+        if (serviceName.Contains("Sofa", StringComparison.OrdinalIgnoreCase) ||
+            serviceName.Contains("Upholstery", StringComparison.OrdinalIgnoreCase))
+        {
+            variations.AddRange(new[]
+            {
+                "sofa cleaners",
+                "upholstery cleaning",
+                "furniture cleaning",
+                "couch cleaning",
+                "settee cleaning",
+                "sofa steam cleaning",
+                "chair cleaning"
+            });
+        }
+
+        return variations;
+    }
+
+    private List<string> GenerateServiceSpecificKeywords(
+        List<string> serviceVariations,
+        List<string> qualifiers,
+        List<string> problems,
+        List<string> intents,
+        List<string> locations,
+        string cityLower)
+    {
+        var keywords = new List<string>();
+
+        foreach (var service in serviceVariations)
+        {
+            foreach (var location in locations)
+            {
+                keywords.Add($"{service} {location}");
+
+                // Service + Qualifier + Location
+                foreach (var qualifier in qualifiers.Take(7))
+                {
+                    keywords.Add($"{qualifier} {service} {location}");
+                }
+
+                // Service + Problem + Location
+                foreach (var problem in problems.Take(5))
+                {
+                    keywords.Add($"{service} {problem} {location}");
+                }
+
+                // Service + Intent + Location
+                foreach (var intent in intents.Take(5))
+                {
+                    keywords.Add($"{service} {intent} {location}");
+                }
+            }
+        }
+
+        return keywords;
+    }
+
+    private List<string> GenerateAreaSpecificKeywords(
+        List<string> services,
+        List<string> problems,
+        List<string> qualifiers,
+        string areaLower,
+        string cityLower)
+    {
+        var keywords = new List<string>();
+
+        var locationVariations = new List<string>
+        {
+            areaLower,
+            $"{areaLower} {cityLower}",
+            $"{cityLower} {areaLower}"
+        };
+
+        foreach (var location in locationVariations)
+        {
+            foreach (var service in services)
+            {
+                keywords.Add($"{service} {location}");
+
+                // Service + Qualifier + Location
+                foreach (var qualifier in qualifiers.Take(5))
+                {
+                    keywords.Add($"{qualifier} {service} {location}");
+                }
+            }
+
+            // Problem + Location
+            foreach (var problem in problems)
+            {
+                keywords.Add($"{problem} {location}");
+            }
+        }
+
+        return keywords;
+    }
+
+    private List<string> GenerateHyperLocalKeywords(
+        string serviceName,
+        string serviceLower,
+        string areaLower,
+        string cityLower,
+        List<string> qualifiers,
+        List<string> problems)
+    {
+        var keywords = new List<string>();
+
+        var locationVariations = new List<string>
+        {
+            $"{areaLower}",
+            $"{areaLower} {cityLower}",
+            $"{cityLower} {areaLower}"
+        };
+
+        var serviceVariations = GetServiceKeywordVariations(serviceName);
+
+        foreach (var location in locationVariations)
+        {
+            foreach (var service in serviceVariations)
+            {
+                keywords.Add($"{service} {location}");
+
+                // Service + Qualifier + Location
+                foreach (var qualifier in qualifiers.Take(8))
+                {
+                    keywords.Add($"{qualifier} {service} {location}");
+                }
+
+                // Service + Problem + Location
+                foreach (var problem in problems.Take(6))
+                {
+                    keywords.Add($"{service} {problem} {location}");
+                }
+            }
+        }
+
+        return keywords;
+    }
+
+    private int CalculateKeywordPriority(string keyword)
+    {
+        // Priority calculation based on:
+        // 1. Contains city/area name (higher priority for local SEO)
+        // 2. Contains transactional intent words
+        // 3. Length (shorter = higher commercial intent)
+        // 4. Contains problem/solution keywords
+
+        int score = 0;
+
+        if (keyword.Contains(City, StringComparison.OrdinalIgnoreCase)) score += 3;
+        if (keyword.Contains("emergency") || keyword.Contains("same day")) score += 2;
+        if (keyword.Contains("quote") || keyword.Contains("cost") || keyword.Contains("book")) score += 2;
+        if (keyword.Contains("professional") || keyword.Contains("certified")) score += 1;
+        if (keyword.Length < 40) score += 1;
+        if (keyword.Contains("near me")) score += 2;
+
+        return score;
+    }
+}

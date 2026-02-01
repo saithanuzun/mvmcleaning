@@ -732,7 +732,7 @@ public class BookingConfirmedEmailTemplate : EmailTemplate
 
                     <div class='payment-info'>
                         <div class='payment-icon'>{(_paymentType == PaymentType.Card ? "💳" : "💵")}</div>
-                        <p class='payment-text'>{(_paymentType == PaymentType.Card ? "✓ Payment Successful - Paid by Card" : "Payment Method: Cash - Pay upon completion")}</p>
+                        <p class='payment-text'>{(_paymentType == PaymentType.Card ? "✓ Payment Initiated - by Card" : "Payment Method: Cash - Pay upon completion")}</p>
                         <p style='color: #555555; font-size: 13px; margin: 5px 0 0 0;'>{paymentInfo}</p>
                     </div>
                 </div>

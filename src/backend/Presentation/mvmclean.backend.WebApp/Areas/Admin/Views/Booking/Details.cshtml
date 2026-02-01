@@ -27,7 +27,7 @@
                 <i class="bi bi-calendar-check"></i> Booking Details
             </h2>
             <div class="btn-group" role="group">
-                <a area="Admin" controller="Booking" action="AllBookings" class="btn btn-secondary">
+                <a href="@Url.Action("AllBookings", "Booking", new { area = "Admin" })" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Back to Bookings
                 </a>
                 @if (Model.Status.ToString() != "Completed" && Model.Status.ToString() != "Cancelled")
