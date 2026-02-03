@@ -1,3 +1,4 @@
+using System.Text;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using mvmclean.backend.Application.Features.SeoPage.Queries;
@@ -51,4 +52,6 @@ public class HomeController : BaseController
         var response = await _mediator.Send(new GetAllSeoPagesRequest());
         return View(response);
     }
+    
+
 }

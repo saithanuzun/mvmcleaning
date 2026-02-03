@@ -162,12 +162,27 @@ const BookingPage = ({ bookingData, updateBookingData }) => {
                     paymentMethod: paymentMethod
                 }));
 
+                
+
                 // Update booking data
                 updateBookingData({
                     customerDetails,
                     bookingId: response.data.bookingId,
                     paymentMethod: paymentMethod
                 });
+                // ====================  ====================
+                // Trigger Google Ads conversion tracking
+                if (window.gtag) {
+                    window.gtag('event', 'conversion', {
+                        'send_to': 'AW-17424866501/uEZiCM-QzP0aEMW56fRA',
+                        'value': bookingData.totalAmount,
+                        'currency': 'GBP',
+                        'transaction_id': response.data.bookingId || '',
+                        // Uncomment and populate if you track new customers:
+                        // 'new_customer': true/false
+                    });
+                }
+                // ======================================================
 
                 // If cash payment, redirect to success page
                 if (paymentMethod === 'cash') {
