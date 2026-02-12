@@ -24,8 +24,15 @@ public class ContactController : BaseController
         [FromForm] string? email,
         [FromForm] string? phoneNumber,
         [FromForm] string? subject,
-        [FromForm] string? message)
+        [FromForm] string? message,
+        [FromForm] string? website
+        )
     {
+        if (!string.IsNullOrEmpty(website))
+        {
+            return BadRequest();
+        }
+
         // Validate required fields: email and message
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(message))
         {

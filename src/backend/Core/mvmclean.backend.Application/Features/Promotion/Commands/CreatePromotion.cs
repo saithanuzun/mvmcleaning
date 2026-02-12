@@ -48,6 +48,7 @@ public class CreatePromotionHandler : IRequestHandler<CreatePromotionRequest, Cr
 
     public async Task<CreatePromotionResponse> Handle(CreatePromotionRequest request, CancellationToken cancellationToken)
     {
+        
         if (request.ValidFrom >= request.ValidTo)
             throw new ArgumentException("ValidFrom must be before ValidTo");
 
